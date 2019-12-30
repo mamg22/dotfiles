@@ -130,9 +130,11 @@ XF86AudioMute
 XF86MonBrightness{Up,Down}
     brightnessctl set 10%{+,-}
 
-# the powermenu
+# the powermenu and information menu
 super + Pause
     powermenu
+super + alt + i
+    infomenu
 
 # rotate nodes
 super + {_,shift +} r
@@ -145,3 +147,4 @@ super + {_,shift +} Print
 # clipboard launcher
 super + alt + space
     dmenu-clipluncher
+
