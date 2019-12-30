@@ -1,0 +1,11 @@
+#!/bin/sh
+
+setxkbmap -layout latam,us -variant ,altgr-intl -option grp:ctrls_toggle -option caps:swapescape &
+$HOME/.fehbg &
+xsettingsd &
+# xfce4-power-manager &
+# lxpolkit &
+compton &
+# pcmanfm -d &
+dunst &
+unclutter &
