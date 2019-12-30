@@ -1,0 +1,84 @@
+#!/bin/sh
+# Copyright (C) 2012 Stefan Breunig <stefan+measure-net-speed@mathphys.fsk.uni-heidelberg.de>
+# Copyright (C) 2014 kaueraal
+# Copyright (C) 2015 Thiago Perrotta <perrotta dot thiago at poli dot ufrj dot br>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Use the provided interface, otherwise the device used for the default route.
+if [ -n "$BLOCK_INSTANCE" ]; then
+  INTERFACE=$BLOCK_INSTANCE
+else
+  INTERFACE=$(ip route | awk '/^default/ { print $5 ; exit }')
+fi
+# Issue #36 compliant.
+if ! [ -e "/sys/class/net/${INTERFACE}/operstate" ] || ! [ "$(cat /sys/class/net/"${INTERFACE}"/operstate)" = "up" ]
+then
+    echo "<span color='#6b7089'>D</span> <span color='#e98989'>NET</span> <span color='#6b7089'>U</span>"
+    exit 0
+fi
+
+# path to store the old results in
+path="/dev/shm/$(basename "$0")-${INTERFACE}"
+
+# grabbing data for each adapter.
+read rx < "/sys/class/net/${INTERFACE}/statistics/rx_bytes"
+read tx < "/sys/class/net/${INTERFACE}/statistics/tx_bytes"
+
+# get time
+time=$(date +%s)
+
+# write current data if file does not exist. Do not exit, this will cause
+# problems if this file is sourced instead of executed as another process.
+if ! [ -f "${path}" ]; then
+  echo "${time} ${rx} ${tx}" > "${path}"
+  chmod 0666 "${path}"
+fi
+
+# read previous state and update data storage
+read old < "${path}"
+echo "${time} ${rx} ${tx}" > "${path}"
+
+# parse old data and calc time passed
+old_time="$(echo "$old" | cut -d' ' -f1)"
+old_rx="$(echo "$old" | cut -d' ' -f2)"
+old_tx="$(echo "$old" | cut -d' ' -f3)"
+time_diff=$(( time - old_time ))
+
+# sanity check: has a positive amount of time passed
+[ "${time_diff}" -gt 0 ] || exit
+
+# calc bytes transferred, and their rate in byte/s
+rx_diff=$(( rx - old_rx ))
+tx_diff=$(( tx - old_tx ))
+rx_rate=$(( rx_diff / time_diff ))
+tx_rate=$(( tx_diff / time_diff ))
+
+in_color=
+# incoming
+if [ "$rx_rate" -gt 1024 ]; then
+    in_color="#84a0c6"
+else
+    in_color="#6b7089"
+fi
+
+out_color=
+# outgoing
+if [ "$tx_rate" -gt 1024 ]; then
+    out_color="#84a0c6"
+else
+    out_color="#6b7089"
+fi
+
+echo "<span color='$in_color'>D</span> NET <span color='$out_color'>U</span>"

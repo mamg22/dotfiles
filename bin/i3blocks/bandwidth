@@ -1,0 +1,13 @@
+#!/bin/sh
+INTERFACE=$(ip route | awk '/^default/ { print $5 ; exit }')
+
+if [ -e "/sys/class/net/"${INTERFACE}"/operstate" ] || [ "$(cat /sys/class/net/"${INTERFACE}"/operstate)" = "up" ]
+then
+    echo "NET"
+    exit 0
+else
+    echo "NET"
+    echo "NET"
+    echo "#e98989"
+    exit 0
+fi

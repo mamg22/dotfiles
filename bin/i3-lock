@@ -1,0 +1,8 @@
+#!/bin/sh
+
+scrot -d ${1:-0} /tmp/screen.png
+
+convert /tmp/screen.png -blur 0x5 \( $HOME/img/lock.png -geometry 33%x33% -gravity center \) -composite /tmp/screen.png
+
+i3lock -i /tmp/screen.png  
+

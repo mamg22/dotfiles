@@ -1,0 +1,10 @@
+#!/bin/sh
+MIXER_OUTPUT="$(amixer -D pulse get Master | sed -E '/Front Left:/ {s/.*\[([0-9]+)%\].*\[(on|off)\].*/\2 \1/;n}; d')"
+ENABLED="$(echo "$MIXER_OUTPUT" | cut -d' ' -f 1)"
+VOLUME="$(echo "$MIXER_OUTPUT" | cut -d' ' -f 2)"
+if [ "$ENABLED" = "off" ]; then
+    echo "VOL  OFF"
+else
+    printf "VOL %3i%%\n" "$VOLUME"
+fi
+

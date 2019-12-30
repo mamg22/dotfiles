@@ -1,0 +1,2 @@
+#!/bin/sh
+notify-send "Date and time:" "<span font='24'>$(date +%I:%M%p\\n%A\\n%x)</span>"
