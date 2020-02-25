@@ -28,4 +28,4 @@ bind-key x pb-delete
 
 bind-key | delete-article
 
-browser "qutebrowser-open %u -l warning"
+browser "qutebrowser %u"

@@ -37,21 +37,21 @@ c.colors.hints.fg = '#161821'
 #c.colors.keyhint.bg
 #c.colors.keyhint.fg
 #c.colors.keyhint.suffix.fg
-#c.colors.messages.error.bg
-#c.colors.messages.error.border
-#c.colors.messages.error.fg
-#c.colors.messages.info.bg
-#c.colors.messages.info.border
-#c.colors.messages.info.fg
-#c.colors.messages.warning.bg
-#c.colors.messages.warning.border
-#c.colors.messages.warning.fg
+c.colors.messages.error.bg = '#161821'
+c.colors.messages.error.border = '#161821'
+c.colors.messages.error.fg = '#e27878'
+c.colors.messages.info.bg = '#161821'
+c.colors.messages.info.border = '#161821'
+c.colors.messages.info.fg = '#d2d4de'
+c.colors.messages.warning.bg = '#161821'
+c.colors.messages.warning.border = '#161821'
+c.colors.messages.warning.fg = '#e9b189'
 c.colors.prompts.bg = '#161821'
 c.colors.prompts.border = '1px solid #6b7089'
 c.colors.prompts.fg = '#d2d4de'
 c.colors.prompts.selected.bg = '#6b7089'
-#c.colors.statusbar.caret.bg = '#d2d4de'
-#c.colors.statusbar.caret.fg = '#161821'
+c.colors.statusbar.caret.bg = '#d2d4de'
+c.colors.statusbar.caret.fg = '#161821'
 #c.colors.statusbar.caret.selection.bg
 #c.colors.statusbar.caret.selection.fg
 c.colors.statusbar.command.bg = '#161821'
@@ -279,6 +279,8 @@ c.url.searchengines = {
     'r':       'https://www.reddit.com/search?q={}',
     'yt':      'https://www.youtube.com/results?search_query={}',
     'gh':      'https://github.com/search?q={}',
+    'ud':      'https://www.urbandictionary.com/define.php?term={}',
+    'kym':     'https://knowyourmeme.com/search?q={}',
 }
 c.url.start_pages = '~/any/startpage/index.html'
 c.url.yank_ignored_parameters

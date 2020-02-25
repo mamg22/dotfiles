@@ -262,7 +262,7 @@ current_item_suffix = $/r
 ##   available.
 ##
 #
-song_columns_list_format = (25)[cyan]{a} (50)[white]{t|f:Title} (7f)[cyan]{lr} (1f)[cyan]{: }
+song_columns_list_format = (30)[cyan]{a} (70)[white]{t|f:Title} (7f)[cyan]{lr} (1f)[cyan]{: }
 #
 ##### various settings #####
 #

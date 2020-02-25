@@ -1,7 +1,7 @@
 #!/bin/sh
 
-setxkbmap -layout latam,us -variant ,altgr-intl -option grp:ctrls_toggle -option caps:swapescape &
 $HOME/.fehbg &
+setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle -option caps:swapescape &
 xsettingsd &
 # xfce4-power-manager &
 # lxpolkit &

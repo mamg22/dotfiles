@@ -1,6 +1,6 @@
 #!/bin/sh
 
-awk_script='\
+awk_script='
 /^\s*Front Left:/ {
     volume = substr($5, 2, length($5) - 2)
     enabled = substr($6, 2, length($6) - 2)

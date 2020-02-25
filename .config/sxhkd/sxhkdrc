@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + @space
-	dmenu_run
+	dmenu_run -p "dmenu:"
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -130,11 +130,18 @@ XF86AudioMute
 XF86MonBrightness{Up,Down}
     brightnessctl set 10%{+,-}
 
-# the powermenu and information menu
+# my dmenu scripts 
 super + Pause
     powermenu
+
 super + alt + i
     infomenu
+
+super + ctrl + Return
+    dmenu-term
+
+super + alt + space
+    dmenu-clipluncher
 
 # rotate nodes
 super + {_,shift +} r
@@ -144,7 +151,19 @@ super + {_,shift +} r
 super + {_,shift +} Print
     maim -{_,s}ou "$HOME/img/screenshot/$(date '+%y-%m-%d_%H.%M.%S').png"
 
-# clipboard launcher
-super + alt + space
-    dmenu-clipluncher
+# mpd control
+super + alt + {_,shift + } p
+    mpc {toggle,stop}
 
+super + {plus,minus}
+    mpc volume {+,-}2
+
+super + {less,greater}
+    mpc {prev,next}
+
+super + alt + {plus,minus}
+    mpc seek {+,-}5
+
+# Switch windows with dswitcher (don't remember where i got it)
+alt + Tab
+    dswitcher

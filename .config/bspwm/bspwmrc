@@ -22,3 +22,6 @@ bspc config focus_follows_pointer true
 
 bspc rule -r '*'
 bspc rule -a qutebrowser desktop='^2'
+bspc rule -a Firefox desktop='^2'
+bspc rule -a Gimp desktop='^7'
+bspc rule -a Zathura state=tiled
