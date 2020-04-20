@@ -5,7 +5,7 @@ setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle
 xsettingsd &
 # xfce4-power-manager &
 # lxpolkit &
-compton &
+compton >/dev/null 2>&1 &
 # pcmanfm -d &
 dunst &
 unclutter &

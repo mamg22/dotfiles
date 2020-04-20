@@ -34,9 +34,18 @@ alias l='ls -CF'
 alias za='zathura --fork >/dev/null 2>&1'
 alias ytdl='youtube-dl'
 
-alias podmpv='mpv --no-cache --no-video --save-position-on-quit'
+alias pmpv='mpv --no-cache --no-video --save-position-on-quit'
+alias vmpv='mpv --quiet'
 
 alias lynx='lynx --lss=~/.lynx/lynx.lss --cfg=~/.lynx/lynx.cfg'
+
+alias sc='systemctl'
+alias scu='systemctl --user'
+alias jc='journalctl'
+alias jcu='journalctl --user'
+
+
+alias sudo='sudo '
 
 alias config="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 # End of aliases

@@ -1,4 +1,3 @@
-set selection-clipboard clipboard
 set font "Hack 9"
 set recolor-lightcolor "#161821"
 set recolor-darkcolor  "#d2d4de"

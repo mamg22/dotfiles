@@ -1,11 +1,10 @@
-auto-reload yes
 color info cyan default
 color listnormal white default
 color listnormal_unread white default bold
 color listfocus cyan default standout
 color listfocus_unread cyan default bold standout
 download-timeout 60
-download-retries 10
+download-retries 15
 bind-key ^O open-all-unread-in-browser-and-mark-read
 
 # vi keybinds from Luke Smith's config
@@ -28,4 +27,4 @@ bind-key x pb-delete
 
 bind-key | delete-article
 
-browser "qutebrowser %u"
+browser "qutebrowser-open %u"

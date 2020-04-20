@@ -32,11 +32,12 @@ c.colors.downloads.stop.bg = '#c0ca8e'
 c.colors.downloads.stop.fg = '#161821'
 c.colors.downloads.system.bg = 'rgb'
 c.colors.downloads.system.fg = 'rgb'
-c.colors.hints.bg = 'rgba(149,196,206,.9)'
+c.colors.hints.bg = 'rgba(210,212,222,.9)'
 c.colors.hints.fg = '#161821'
-#c.colors.keyhint.bg
-#c.colors.keyhint.fg
-#c.colors.keyhint.suffix.fg
+c.colors.hints.match.fg = '#6b7089'
+c.colors.keyhint.bg = 'rgba(22, 24, 33, 90%)'
+c.colors.keyhint.fg = '#d2d4de'
+c.colors.keyhint.suffix.fg = '#95c4ce'
 c.colors.messages.error.bg = '#161821'
 c.colors.messages.error.border = '#161821'
 c.colors.messages.error.fg = '#e27878'
@@ -117,7 +118,7 @@ c.content.headers.accept_language = 'es-VE,es'
 #c.content.headers.custom
 #c.content.headers.do_not_track
 #c.content.headers.referer
-#c.content.headers.user_agent
+c.content.headers.user_agent = ''
 #c.content.host_blocking.enabled
 #c.content.host_blocking.lists
 #c.content.host_blocking.whitelist
@@ -165,7 +166,7 @@ c.fonts.completion.entry = '9pt monospace'
 #c.fonts.debug_console
 #c.fonts.downloads
 c.fonts.hints = 'bold 9pt monospace'
-#c.fonts.keyhint
+c.fonts.keyhint = '9pt monospace'
 #c.fonts.messages.error
 #c.fonts.messages.info
 #c.fonts.messages.warning
@@ -186,7 +187,7 @@ c.fonts.web.size.default = 15
 
 #c.hints.auto_follow
 #c.hints.auto_follow_timeout
-c.hints.border = '1px solid #65c4ce'
+c.hints.border = '1px solid #6b7089'
 c.hints.chars = 'asdfghjkl'
 #c.hints.dictionary
 #c.hints.find_implementation
@@ -249,7 +250,7 @@ c.tabs.background = True
 #c.tabs.indicator.padding
 c.tabs.indicator.width = 2
 c.tabs.last_close = 'default-page'
-#c.tabs.mousewheel_switching
+c.tabs.mousewheel_switching = False
 #c.tabs.new_position.related
 #c.tabs.new_position.unrelated
 #c.tabs.padding
@@ -260,10 +261,10 @@ c.tabs.position = 'top'
 c.tabs.show = 'multiple'
 #c.tabs.show_switching_delay
 #c.tabs.tabs_are_windows
-#c.tabs.title.alignment
-#c.tabs.title.format
+c.tabs.title.alignment = 'left'
+c.tabs.title.format = '{index}: {title}'
 #c.tabs.title.format_pinned
-#c.tabs.width
+c.tabs.width = '5%'
 #c.tabs.wrap
 
 #c.url.auto_search
@@ -281,6 +282,7 @@ c.url.searchengines = {
     'gh':      'https://github.com/search?q={}',
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
     'kym':     'https://knowyourmeme.com/search?q={}',
+    'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}'
 }
 c.url.start_pages = '~/any/startpage/index.html'
 c.url.yank_ignored_parameters
@@ -293,3 +295,32 @@ c.url.yank_ignored_parameters
 #c.zoom.mouse_divider
 #c.zoom.text_only
 
+config.unbind('<Ctrl-v>', mode='passthrough')
+config.bind('<Ctrl-Escape>', 'leave-mode', mode='passthrough')
+
+tab_rotate = [
+    'config-cycle tabs.position top right',
+    'config-cycle tabs.title.format "{index}: {title}" "{index}"',
+    'config-cycle tabs.title.alignment left center',
+    'set tabs.position?',
+ ]
+
+tab_show_cycle = [
+    'config-cycle tabs.show multiple switching never',
+    'set tabs.show?',
+]
+
+bar_show_toggle = [
+    'config-cycle statusbar.hide false true',
+    'set statusbar.hide?',
+]
+
+user_agent_cycle = [
+    'config-cycle content.headers.user_agent "" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0"',
+    'set content.headers.user_agent?',
+]
+
+config.bind('<F2>', ' ;; '.join(tab_rotate))
+config.bind('<F3>', ' ;; '.join(tab_show_cycle))
+config.bind('<F4>', ' ;; '.join(bar_show_toggle))
+config.bind('<F5>', ' ;; '.join(user_agent_cycle))
