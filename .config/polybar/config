@@ -58,6 +58,31 @@ tray-padding = 2
 
 wm-restack = bspwm
 
+[bar/tablet-screen]
+width = 100%
+height = 19
+offset-x = 0%
+offset-y = 0%
+fixed-center = true
+monitor = VIRTUAL1
+
+background = ${colors.barbg}
+foreground = ${colors.barfg}
+
+font-0 = Hack:size=9;2
+font-1 = Font Awesome 5 Free Solid:size=9;2
+font-2 = Font Awesome 5 Free Solid:size=11;3
+font-3 = Hack:size=9;0
+
+modules-left =
+modules-center = bspwm
+modules-right =
+
+tray-position = right
+tray-padding = 2
+
+wm-restack = bspwm
+
 [module/xkeyboard]
 type = internal/xkeyboard
 blacklist-0 = num lock

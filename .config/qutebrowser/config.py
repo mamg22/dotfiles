@@ -1,3 +1,17 @@
+# Iceberg colorscheme
+
+col = {
+    'black': '#161821',
+    'darkgray': '#6b7089',
+    'red': '#e98989',
+    'green': '#c0ca8e',
+    'yellow': '#e9b189',
+    'blue': '#91acd1',
+    'magenta': '#ada0d3',
+    'cyan': '#95c4ce',
+    'white': '#d2d4de',
+}
+
 c.aliases = {'w': 'session-save', 'q': 'quit', 'wq': 'quit --save'}
 
 #c.auto_save.interval
@@ -78,8 +92,8 @@ c.colors.tabs.bar.bg = '#161821'
 c.colors.tabs.even.bg = '#161821'
 c.colors.tabs.even.fg = '#d2d4de'
 c.colors.tabs.indicator.error = '#e98989'
-c.colors.tabs.indicator.start = '#84a0c6'
-c.colors.tabs.indicator.stop = '#b4be82'
+c.colors.tabs.indicator.start = '#161821'
+c.colors.tabs.indicator.stop = '#d2d4de'
 c.colors.tabs.indicator.system = 'rgb'
 c.colors.tabs.odd.bg = '#161821'
 c.colors.tabs.odd.fg = '#d2d4de'
@@ -158,18 +172,18 @@ c.content.headers.user_agent = ''
 #c.downloads.position
 #c.downloads.remove_finished
 
-c.editor.command = ['st', '-t', 'floaterm', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
+c.editor.command = ['st', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
 #c.editor.encoding
 
 c.fonts.completion.category = 'bold 9pt monospace'
 c.fonts.completion.entry = '9pt monospace'
 #c.fonts.debug_console
-#c.fonts.downloads
+c.fonts.downloads = '9pt monospace'
 c.fonts.hints = 'bold 9pt monospace'
 c.fonts.keyhint = '9pt monospace'
-#c.fonts.messages.error
-#c.fonts.messages.info
-#c.fonts.messages.warning
+c.fonts.messages.error = '9pt monospace'
+c.fonts.messages.info = '9pt monospace'
+c.fonts.messages.warning = '9pt monospace'
 c.fonts.monospace = 'Hack'
 #c.fonts.prompts
 c.fonts.statusbar = '9pt monospace'
@@ -247,13 +261,23 @@ c.tabs.background = True
 #c.tabs.close_mouse_button_on_bar
 #c.tabs.favicons.scale
 #c.tabs.favicons.show
-#c.tabs.indicator.padding
+c.tabs.indicator.padding = {
+    'top': 2,
+    'bottom': 2,
+    'left': 0,
+    'right': 4
+}
 c.tabs.indicator.width = 2
 c.tabs.last_close = 'default-page'
 c.tabs.mousewheel_switching = False
 #c.tabs.new_position.related
 #c.tabs.new_position.unrelated
-#c.tabs.padding
+c.tabs.padding = {
+    'top': 0,
+    'bottom': 0,
+    'left': 4,
+    'right': 4
+}
 #c.tabs.persist_mode_on_change
 #c.tabs.pinned.shrink
 c.tabs.position = 'top'
@@ -282,10 +306,10 @@ c.url.searchengines = {
     'gh':      'https://github.com/search?q={}',
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
     'kym':     'https://knowyourmeme.com/search?q={}',
-    'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}'
+    'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
 }
 c.url.start_pages = '~/any/startpage/index.html'
-c.url.yank_ignored_parameters
+#c.url.yank_ignored_parameters
 
 #c.window.hide_wayland_decoration
 #c.window.title_format
