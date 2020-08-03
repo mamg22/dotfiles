@@ -39,7 +39,17 @@ width = 100%
 height = 19
 offset-x = 0%
 offset-y = 0%
+
+;width = 100%:-8
+;height = 19
+;offset-x = 0%:+4
+;offset-y = 4
+;border-size = 2
+;border-color = ${colors.darkgray}
+
 fixed-center = true
+
+enable-ipc = true
 
 background = ${colors.barbg}
 foreground = ${colors.barfg}
@@ -51,14 +61,14 @@ font-3 = Hack:size=9;0
 
 modules-left = pulseaudio mpd
 modules-center = bspwm
-modules-right = bspwm-mode newsboat-unread xkeyboard memory cpu wlan eth battery date
+modules-right = bspwm-mode bspwm-count newsboat-unread xkeyboard memory cpu wlan eth battery date
 
 tray-position = right
 tray-padding = 2
 
 wm-restack = bspwm
 
-[bar/tablet-screen]
+[bar/extra-screen]
 width = 100%
 height = 19
 offset-x = 0%
@@ -147,8 +157,10 @@ type = internal/bspwm
 
 format = <label-mode>
 
-label-monocle = ""
-label-monocle-padding = 1
+;label-monocle = ""
+;label-monocle-padding = 1
+label-monocle =
+label-monocle-padding = 0
 
 label-tiled = 
 label-tiled-padding = 1
@@ -323,5 +335,12 @@ tail = true
 format-padding = 1
 format-prefix = " "
 format-prefix-foreground = ${colors.darkgray}
+
+[module/bspwm-count]
+type = custom/script
+exec = ~/bin/polybar-bspwm-count
+tail = true
+
+format-padding = 1
 
 ; vim:ft=dosini

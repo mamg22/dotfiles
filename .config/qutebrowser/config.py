@@ -248,7 +248,7 @@ c.scrolling.smooth = False
 #c.search.incremental
 
 #c.session.default_name
-#c.session.lazy_restore
+c.session.lazy_restore = True
 
 #c.spellcheck.languages
 
@@ -316,7 +316,7 @@ c.url.start_pages = '~/any/startpage/index.html'
 
 #c.zoom.default
 #c.zoom.levels
-#c.zoom.mouse_divider
+c.zoom.mouse_divider = 0 # Disable mouse wheel zoom
 #c.zoom.text_only
 
 config.unbind('<Ctrl-v>', mode='passthrough')
@@ -340,7 +340,7 @@ bar_show_toggle = [
 ]
 
 user_agent_cycle = [
-    'config-cycle content.headers.user_agent "" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0"',
+    'config-cycle content.headers.user_agent "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0" ""',
     'set content.headers.user_agent?',
 ]
 

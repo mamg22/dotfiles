@@ -228,16 +228,16 @@
     # Xev might be helpful to find names for keys.
 
     # Close notification.
-    close = ctrl+space
+    close = mod1+space
 
     # Close all notifications.
-    close_all = ctrl+shift+space
+    close_all = mod1+shift+space
 
     # Redisplay last message(s).
     # On the US keyboard layout "grave" is normally above TAB and left
     # of "1". Make sure this key actually exists on your keyboard layout,
     # e.g. check output of 'xmodmap -pke'
-    #history = ctrl+grave
+    history = mod1+ctrl+space
 
     # Context menu.
     context = ctrl+shift+period

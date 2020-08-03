@@ -40,7 +40,7 @@ Plug 'vim-pandoc/vim-pandoc'
 
 " Colors
 Plug 'cocopon/iceberg.vim'
-" Plug 'arcticicestudio/nord-vim'
+Plug 'arcticicestudio/nord-vim'
 " Plug 'dracula/vim', {'as': 'dracula'}
 
 call plug#end()

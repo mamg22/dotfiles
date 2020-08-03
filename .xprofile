@@ -9,3 +9,5 @@ compton >/dev/null 2>&1 &
 # pcmanfm -d &
 dunst &
 unclutter &
+# Regenerate dmenu cache
+rm ~/.cache/dmenu_run; dmenu_path >/dev/null 2>&1 &
