@@ -1,0 +1,18 @@
+#!/bin/sh
+
+podcasts_session="$(tmux list-sessions -F '#S' | grep '^podcast$')"
+
+if [ "$podcasts_session" ]; then
+    st -c floating-st -e tmux attach-session -t podcast
+else
+    podcasts="$(find ~/podcasts -type f | sort)"
+    podcasts_pretty="$(echo "$podcasts" | sed "s|/[^/]\+/[^/]\+/[^/]\+/||; s/\.mp3//")"
+
+    pick="$(echo "$podcasts_pretty" | dmenu -l 20 -i -p "Podcast:")" 
+    [ -z "$pick" ] && exit
+
+    podcast="$(echo "$podcasts" | fgrep "$pick" | head -1)"
+
+    echo "$podcast" | tr '\n' '\0' |
+        xargs -0 -I{} -r st -c floating-st -e tmux new-session -s podcast mpv --no-cache --no-video --save-position-on-quit "{}"
+fi

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+queue=~/.local/share/newsboat/queue
+
+[ -e "$queue" ] || exit 1
+
+while read line; do
+    podcast_url="$(cut -d ' ' -f1 < "$queue" | head -1)"
+    podcast_location="$(dirname "$(sed 's/[^ ]\+ //;s/^.//;s/.$//;s/Podcast: //' < "$queue" | head -1)")"
+
+    notify-send "Podcast downloader" "Downloading episode of $(basename "$podcast_location")"
+
+    #untildone aria2c -d "$podcast_location" "$podcast_url" 2>/tmp/podcast-downloader-$RANDOM.log >/dev/null && sed -i 1d "$queue"
+    untildone aria2c -d "$podcast_location" "$podcast_url" && sed -i 1d "$queue"
+
+    notify-send "Podcast downloader" "Finished downloading episode of $(basename "$podcast_location")"
+done < "$queue"

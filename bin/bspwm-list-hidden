@@ -1,0 +1,9 @@
+#!/bin/sh
+
+bspc query -N -n .hidden | while read id; do
+    printf "%s " "$id"
+    xwininfo -id "$id" | grep wininfo | sed 's/^[^"]\+"//;s/"$//'
+done
+
+# A simple hidden window list
+# bspwm-list-hidden | dmenu -l 10 -p "Hidden:" | cut -d' ' -f1 | xargs -i{} bspc node "{}" -g hidden=off -f

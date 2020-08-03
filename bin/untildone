@@ -1,0 +1,76 @@
+#!/bin/sh
+
+# untildone, a script to run a command until it returns 0
+# useful for unstable internet connections 
+# copy it to /usr/local/bin to be able to use it under sudo or similar programs
+
+times=-1
+
+shell="/bin/sh"
+
+report()
+{
+    event="$1"
+    event_color="0"
+    case "$event" in
+        (STOP)
+            event_color=31
+            ;;
+        (RESTART)
+            event_color=34
+            ;;
+    esac
+
+    nonl="$2"
+
+    description="$3"
+    if [ -n "$description" ]; then
+        description=": $description"
+    fi
+
+    printf "untildone [%s] \e[%sm%s\e[0m%s" "$(date +%H:%M:%S)" "$event_color" "$event" "$description" >&2
+    [ "$nonl" != 1 ] && printf "\n" >&2 || printf "\r" >&2
+}
+
+while getopts n:sS:w: name; do
+    case "$name" in
+        (n)
+            times="$OPTARG"
+            ;;
+        (s)
+            use_shell=1
+            ;;
+        (S)
+            shell="$OPTARG"
+            ;;
+        (w)
+            wait_time="$OPTARG"
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+exit_code=0
+
+while true; do
+    if [ -n "$use_shell" ]; then
+        # Use a shell, requires wrapping in quotes
+        "$shell" -c "$*"
+    else
+        # Direct execution, `sudo`-like syntax
+        "$@"
+    fi
+    [ "$?" -eq 0 ] && break
+
+    if [ "$times" -eq 0 ]; then
+        report STOP 0 "Retry limit reached"
+        break;
+    fi
+    if [ "$times" -gt 0 ]; then
+        times="$((times - 1))"
+    fi
+    
+    report STOP 1
+    sleep "${wait_time:-30}"
+    report RESTART
+done

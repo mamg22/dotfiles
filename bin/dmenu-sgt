@@ -1,0 +1,22 @@
+#!/bin/sh
+
+cache_dir=~/.cache/
+cache_file="$cache_dir/dmenu-sgt-cache"
+
+[ -d "$cache_dir" ] || mkdir -p "$cache_dir"
+
+if [ -e "$cache_file" ]; then
+    games="$(cat "$cache_file")"
+else
+    games="$(man -k sgt- | sed '/sgt-launcher/d;s/([0-9])//;s/^sgt-//;')"
+    echo "$games" > "$cache_file"
+fi
+
+choice="$(echo "Random\n$games" | dmenu -i -l 10 -p "Puzzle:")"
+
+[ "$choice" ] || exit 0
+[ "$choice" = "Random" ] && choice="$(echo "$games" | shuf -n1)"
+
+choice="sgt-${choice%% *}"
+
+setsid $choice >/dev/null 2>&1

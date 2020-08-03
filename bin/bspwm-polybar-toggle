@@ -1,0 +1,25 @@
+#!/bin/sh
+
+polybar_name="polybar-main_LVDS1"
+padding="top"
+visible_padding="19"
+hidden_padding="0"
+
+state="$(xwininfo -name "$polybar_name")"
+
+printf "$state" | awk -F':' '
+/Map State/ {
+    gsub("\\s", "", $2)
+    if ($2 == "IsUnMapped") {
+        exit 0
+    }
+    exit 1
+}'
+
+if [ "$?" -eq 1 ]; then
+    polybar-msg cmd hide &
+    bspc config "${padding}_padding" "$hidden_padding"
+else
+    bspc config "${padding}_padding" "$visible_padding" &
+    polybar-msg cmd show
+fi

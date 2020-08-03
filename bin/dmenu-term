@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cmd="$(dmenu_path | dmenu -p "Open in $TERMINAL:")"
+
+[ -n "$cmd" ] && exec "$TERMINAL" -e $cmd

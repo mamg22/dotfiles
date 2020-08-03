@@ -1,0 +1,17 @@
+#!/bin/sh
+
+while true; do
+    newsboat -x print-unread |
+    awk '
+    {
+        if ($1 != 0) {
+            print $1
+        } 
+        else {
+            print ""
+        }
+    }'
+    # Wait for a while, otherwise `inotifywait` doesn't wait
+    sleep 3
+    inotifywait -e close "$XDG_DATA_HOME/newsboat/cache.db" >/dev/null 2>&1
+done

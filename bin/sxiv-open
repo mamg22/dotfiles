@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# by mamg22
+# This script changes all /https?/ urls inline to a locally cached image
+
+# Change to prefered location
+storage_dir=/tmp/sxiv-open.tmp
+
+for arg in "$@"; do
+    case "$arg" in
+        (http*)
+            # If not a local file, hash the uri and download it
+            uri_hash=$(printf "$arg" | md5sum | cut -d' ' -f1)
+            output="$storage_dir/$uri_hash"
+
+            # Check if the storage direcrtory exists, if not, create it
+            [ ! -d "$storage_dir" ] && mkdir "$storage_dir"
+            # Then download the image if not already there
+            [ ! -e "$output" ] && curl -s "$arg" --output "$output"
+
+            sxiv_args="$sxiv_args $output"
+            ;;
+        (*)
+            sxiv_args="$sxiv_args $arg"
+            ;;
+    esac
+done
+
+sxiv $sxiv_args

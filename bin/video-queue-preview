@@ -1,0 +1,59 @@
+#!/bin/sh
+
+preview_fifo="/tmp/video-queue-preview.tmp"
+
+exec 2>/dev/null
+
+url="$1"
+[ "$url" ] || exit 0
+
+file="$(yd -j "$url")"
+
+format_seconds()
+{
+    h="$((${1}/3600))"
+    m="$(((${1}%3600)/60))"
+    s="$((${1}%60))"
+    if [ "$h" -eq 0 ]; then
+        printf "%02d:%02d\n" $m $s
+    else
+        printf "%02d:%02d:%02d\n" $h $m $s
+    fi
+}
+
+get_duration()
+{
+    duration="$(jq -j .duration "$file")"
+    format_seconds "$duration"
+}
+
+get_title()
+{
+    jq -j .title "$file" | tr -d '\n'
+}
+
+get_uploader()
+{
+    jq -j .uploader "$file"
+}
+
+get_formats()
+{
+    # TODO: Seguir probando con:
+    # jq -j '.formats[] | [([ .format_id, .ext] | join(":"))] | join(":")' "$(yd -j 'https://www.youtube.com/watch?v=_ijnXe4ATT8')"
+    # Para recrear lo mismo que ytdl
+    yd -F "$url"
+}
+
+generate_preview()
+{
+    printf "\e[1mTitle: %s\e[0m\nUploader: %s\nDuration: %s\n%s\n" \
+        "$(get_title)" \
+        "$(get_uploader)" \
+        "$(get_duration)" \
+        "$(get_formats)"
+}
+
+generate_preview  > "$preview_fifo" 2>/dev/null &
+
+exit 0

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+videos="$(find ~/video -type f | sort)"
+videos_pretty="$(echo "$videos" | sed "s|/[^/]\+/[^/]\+/[^/]\+/||; s/-.\{11\}\..*$//")"
+
+pick="$(echo "$videos_pretty" | dmenu -l 20 -i -p "Video:")" 
+[ -z "$pick" ] && exit
+
+video="$(echo "$videos" | fgrep "$pick" | head -1)"
+
+echo "$video" | tr '\n' '\0' | xargs -0 -I{} -r mpv --force-window "{}"

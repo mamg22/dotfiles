@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# Begin settings
+
+# How many pixels to move per "frame"
+x_speed=4
+y_speed=4
+
+# Time between "frames"
+sleep_time=0.1
+
+# 0: Ignore paddings; 1: Use paddings
+use_pad=1
+
+# Default directions (right and down)
+x_dir=1
+y_dir=1
+
+# End settings
+
+# Determine the target window, only works if it is floting
+target="$(bspc query -N -n .focused.floating)"
+[ "$target" ] || exit 0
+
+# Get monitor dimensions
+monitor_w="$(bspc query -T -m focused | jq -r '.rectangle.width')"
+monitor_h="$(bspc query -T -m focused | jq -r '.rectangle.height')"
+
+# Determine if the desktop is in monocle mode to add the "monocle_" text
+bspc query -T -d focused | jq -er '.layout == "tiled"' >/dev/null || monocle_text="monocle_"
+
+# Get paddings into variables
+read -r padding_t padding_b padding_r padding_l <<EOF
+$(bspc config top_${monocle_text}padding) \
+$(bspc config bottom_${monocle_text}padding) \
+$(bspc config right_${monocle_text}padding) \
+$(bspc config left_${monocle_text}padding)
+EOF
+
+while true; do
+    # Get window geometry into variables
+    read -r target_w target_h target_x target_y <<EOF
+    $(xwinfo -g "$target")
+EOF
+
+    # target_w="$(xwinfo -g "$target" | cut -d' ' -f 1)"
+    # target_h="$(xwinfo -g "$target" | cut -d' ' -f 2)"
+    # target_x="$(xwinfo -g "$target" | cut -d' ' -f 3)"
+    # target_y="$(xwinfo -g "$target" | cut -d' ' -f 4)"
+
+    # Are we bouncing?
+    [ "$((target_w + target_x + padding_r * use_pad))" -gt "$monitor_w" ] && x_dir=-1
+    [ "$((target_h + target_y + padding_b * use_pad))" -gt "$monitor_h" ] && y_dir=-1
+    [ "$((target_x - padding_l * use_pad))" -lt 0 ] && x_dir=1
+    [ "$((target_y - padding_t * use_pad))" -lt 0 ] && y_dir=1
+
+    bspc node "$target.floating" -v "$((x_speed * x_dir))" "$((y_speed * y_dir))" || break
+
+    sleep "$sleep_time"
+done

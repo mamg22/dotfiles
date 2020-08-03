@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Activate only when adding or removing nodes or changing desktops or desktop layouts
+# Tested with a single monitor, may not work with many (yet)
+bspc subscribe node_add node_remove desktop_focus desktop_layout | while read line; do
+    report="$(bspc subscribe -c 1 report)"
+
+    printf "$report" | awk -F':' '
+    {for (i = 1; i <= NF; i++) {
+        if ($i == "LM") {
+            exit 0
+        }
+    }
+    exit 1}'
+
+    if [ "$?" -eq 0 ]; then
+        count="$(bspc query -N -n .window -d focused | wc -l)"
+        if [ "$count" -ne 0 ]; then
+            echo "[$count]"
+        else 
+            echo "[M]"
+        fi
+    else
+        echo
+    fi
+done

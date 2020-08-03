@@ -1,0 +1,27 @@
+#!/bin/sh
+
+options='Volume
+IP
+mpd
+Battery
+Date'
+
+selection="$(echo "$options" | dmenu -i -p "Info:")"
+
+case "$selection" in
+    (Volume)
+        notify-send "$(get-volume)"
+        ;;
+    (mpd)
+        mpd-status -n
+        ;;
+    (Battery)
+        notify-send "$(acpi -b)"
+        ;;
+    (Date)
+        notify-datetime
+        ;;
+    (IP)
+        notify-send "IP: $(ip route get 1 | awk '{print $(NF-2);exit}')"
+        ;;
+esac

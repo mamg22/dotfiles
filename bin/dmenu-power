@@ -1,0 +1,41 @@
+#!/bin/sh
+
+locker_prog=~/bin/i3-lock
+
+prompt() {
+    prompt_result="$(printf "No\nSi" | dmenu -i -p "$1?")"
+    if [ "$prompt_result" = "Si" ]; then
+        return 0
+    fi
+    return 1
+}
+
+options='Suspender
+Apagar
+Reiniciar
+Apagar pantalla
+Bloquear
+Bloquear y Suspender'
+
+option="$(printf "$options" | dmenu -l 10 -i -p 'Power:')"
+
+case "$option" in
+    (Suspender)
+        prompt "$option" && systemctl suspend
+        ;;
+    (Apagar)
+        prompt "$option" && systemctl poweroff
+        ;;
+    (Reiniciar)
+        prompt "$option" && systemctl reboot
+        ;;
+    (Bloquear)
+        prompt "$option" && $locker_prog
+        ;;
+    ("Bloquear y Suspender")
+        prompt "$option" && $locker_prog && sleep 1 && systemctl suspend
+        ;;
+    ("Apagar pantalla")
+        xset dpms force off
+        ;;
+esac

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+sessions="$(tmux list-sessions)"
+
+session="$(printf "Create new session\n%s" "$sessions" | dmenu -i -l 10 -p "tmux:" | cut -d: -f 1)"
+
+if [ "$session" = "Create new session" ]; then
+    session="$(dmenu -p "session name:" <&-)"
+fi
+
+[ -z "$session" ] && exit 0
+
+$TERMINAL -e tmux new-session -As "$session"
