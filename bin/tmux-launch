@@ -1,3 +1,5 @@
 #!/bin/sh
 
-tmux new-session "$*"
+command -v tmux >/dev/null 2>&1 && exec tmux new-session "$*"
+# Fallback to the shell
+exec $SHELL
