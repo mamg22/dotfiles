@@ -155,7 +155,7 @@ output_format="$output_dir/$filename_format"
 
 if [ -n "$remove_cache_file" ]; then
     echo Clearing information cache for "$url"
-    rm "$(get_info_json "$url")"
+    rm "$(get_json_filename "$url")"
     [ "$exit_after_remove" ] && exit 0
 fi
 
