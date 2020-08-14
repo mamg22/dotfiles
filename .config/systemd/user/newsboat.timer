@@ -1,0 +1,10 @@
+[Unit]
+Description=Newsboat automatic reload timer
+
+[Timer]
+# Wait for internet connection to be fully established
+OnStartupSec=1min
+OnUnitActiveSec=45min
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Newsboat automatic reload
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/newsboat -x reload
+
+[Install]
+WantedBy=multi-user.target
