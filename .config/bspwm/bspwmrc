@@ -24,9 +24,10 @@ bspc config focus_follows_pointer true
 bspc rule -r '*'
 bspc rule -a qutebrowser desktop='^2'
 bspc rule -a Firefox desktop='^2'
+bspc rule -a Pcmanfm desktop='^6'
+bspc rule -a Filezilla desktop='^6'
 bspc rule -a Gimp desktop='^7'
+bspc rule -a Inkscape desktop='^7'
 bspc rule -a Zathura state=tiled
 bspc rule -a mpv state=floating
 bspc rule -a floating-st state=floating
-bspc rule -a Pcmanfm desktop='^6'
-bspc rule -a Filezilla desktop='^6'

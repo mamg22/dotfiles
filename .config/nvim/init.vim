@@ -135,8 +135,7 @@ let g:ncm2_pyclang#library_path = '/usr/lib/llvm-6.0/lib/libclang.so.1'
 " Less completion items, because C libraries produce a lot
 " let g:ncm2#total_popup_limit = 200
 
-" Use universal ctags
-let g:gutentags_ctags_exectuable = 'uctags'
+let g:gutentags_cache_dir = expand('~/.cache/nvim/ctags/')
 
 "}}}
 
@@ -195,5 +194,37 @@ function! Cppman(str)
     
 endf
 command! -nargs=1 Cppman :call Cppman('<args>')
+
+" Better increase and decrease which also handles booleans and keeps the case
+function! Better_incdec(dir) range
+    " Get word under cursor
+    let current_word = expand("<cword>")
+
+    if a:dir == 1
+        if current_word ==# "false"
+            normal ciwtrue
+        elseif current_word ==# "False"
+            normal ciwTrue
+        elseif current_word ==# "FALSE"
+            normal ciwTRUE
+        else
+            execute "normal! " . v:count1 . "\<C-a>"
+        endif
+    elseif a:dir == -1
+        if current_word ==# "true"
+            normal ciwfalse
+        elseif current_word ==# "True"
+            normal ciwFalse
+        elseif current_word ==# "TRUE"
+            normal ciwFALSE
+        else
+            execute "normal! " . v:count1 . "\<C-x>"
+        endif
+    else
+        echoerr "Better_incdec: Invalid argument"
+    endif
+endf
+nnoremap <silent> <C-a> :<C-U>call Better_incdec(1)<CR>
+nnoremap <silent> <C-x> :<C-U>call Better_incdec(-1)<CR>
 
 "}}}
