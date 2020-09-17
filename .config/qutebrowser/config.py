@@ -33,10 +33,17 @@ c.colors.completion.item.selected.bg = '#d2d4de'
 c.colors.completion.item.selected.border.bottom = '#d2d4de'
 c.colors.completion.item.selected.border.top = '#d2d4de'
 c.colors.completion.item.selected.fg = '#161821'
+c.colors.completion.item.selected.match.fg = '#6b7089'
 c.colors.completion.match.fg = '#6b7089'
 c.colors.completion.odd.bg = '#161821'
 c.colors.completion.scrollbar.bg = '#161821'
 c.colors.completion.scrollbar.fg = '#d2d4de'
+#c.colors.contextmenu.disabled.bg
+#c.colors.contextmenu.disabled.fg
+#c.colors.contextmenu.menu.bg
+#c.colors.contextmenu.menu.fg
+#c.colors.contextmenu.selected.bg
+#c.colors.contextmenu.selected.fg
 c.colors.downloads.bar.bg = '#161821'
 c.colors.downloads.error.bg = '#e98989'
 c.colors.downloads.error.fg = '#161821'
@@ -97,16 +104,35 @@ c.colors.tabs.indicator.stop = '#d2d4de'
 c.colors.tabs.indicator.system = 'rgb'
 c.colors.tabs.odd.bg = '#161821'
 c.colors.tabs.odd.fg = '#d2d4de'
+#c.colors.tabs.pinned.even.bg
+#c.colors.tabs.pinned.even.fg
+#c.colors.tabs.pinned.odd.bg
+#c.colors.tabs.pinned.odd.fg
+#c.colors.tabs.pinned.selected.even.bg
+#c.colors.tabs.pinned.selected.even.fg
+#c.colors.tabs.pinned.selected.odd.bg
+#c.colors.tabs.pinned.selected.odd.fg
 c.colors.tabs.selected.even.bg = '#6b7089'
 c.colors.tabs.selected.even.fg = '#d2d4de'
 c.colors.tabs.selected.odd.bg = '#6b7089'
 c.colors.tabs.selected.odd.fg = '#d2d4de'
 c.colors.webpage.bg = '#ffffff'
+#c.colors.webpage.darkmode.algorithm
+#c.colors.webpage.darkmode.contrast
+#c.colors.webpage.darkmode.enabled
+#c.colors.webpage.darkmode.grayscale.all
+#c.colors.webpage.darkmode.grayscale.images
+#c.colors.webpage.darkmode.policy.images
+#c.colors.webpage.darkmode.policy.page
+#c.colors.webpage.darkmode.threshold.background
+#c.colors.webpage.darkmode.threshold.text
+#c.colors.webpage.prefers_color_scheme_dark
 
 #c.completion.cmd_history_max_items
 #c.completion.delay
 #c.completion.height
 #c.completion.min_chars
+#c.completion.open_categories
 #c.completion.quick
 #c.completion.scrollbar.padding
 #c.completion.scrollbar.width
@@ -114,25 +140,30 @@ c.colors.webpage.bg = '#ffffff'
 #c.completion.shrink
 #c.completion.timestamp_format
 #c.completion.use_best_match
-#c.completion.web_history_max_items
+#c.completion.web_history.exclude
+#c.completion.web_history.max_items
 
 c.confirm_quit = ["multiple-tabs", "downloads"]
 
+#c.content.autoplay
 #c.content.cache.appcache
 #c.content.cache.maximum_pages
 #c.content.cache.size
+#c.content.canvas_reading
 #c.content.cookies.accept
 #c.content.cookies.store
 #c.content.default_encoding
-#c.content.developer_extras
+#c.content.desktop_capture
 #c.content.dns_prefetch
 #c.content.frame_flattening
+#c.content.fullscreen.overlay_timeout
+#c.content.fullscreen.window
 #c.content.geolocation
 c.content.headers.accept_language = 'es-VE,es'
 #c.content.headers.custom
 #c.content.headers.do_not_track
 #c.content.headers.referer
-c.content.headers.user_agent = ''
+#c.content.headers.user_agent
 #c.content.host_blocking.enabled
 #c.content.host_blocking.lists
 #c.content.host_blocking.whitelist
@@ -150,18 +181,24 @@ c.content.headers.user_agent = ''
 #c.content.local_content_can_access_remote_urls
 #c.content.local_storage
 #c.content.media_capture
+#c.content.mouse_lock
+#c.content.mute
 #c.content.netrc_file
 #c.content.notifications
+#c.content.persistent_storage
 #c.content.pdfjs
 #c.content.plugins
 #c.content.print_element_backgrounds
 #c.content.private_browsing
 #c.content.proxy
 #c.content.proxy_dns_requests
+#c.content.register_protocol_handler
+#c.content.site_specific_quirks
 #c.content.ssl_strict
+#c.content.unknown_url_scheme_policy
 #c.content.user_stylesheets
 #c.content.webgl
-#c.content.windowed_fullscreen
+#c.content.webrtc_ip_handling_policy
 #c.content.xss_auditing
 
 #c.downloads.location.directory
@@ -177,17 +214,20 @@ c.editor.command = ['st', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}
 
 c.fonts.completion.category = 'bold 9pt monospace'
 c.fonts.completion.entry = '9pt monospace'
+#c.fonts.contextmenu
 #c.fonts.debug_console
+#c.fonts.default_family
+#c.fonts.default_size
 c.fonts.downloads = '9pt monospace'
 c.fonts.hints = 'bold 9pt monospace'
 c.fonts.keyhint = '9pt monospace'
 c.fonts.messages.error = '9pt monospace'
 c.fonts.messages.info = '9pt monospace'
 c.fonts.messages.warning = '9pt monospace'
-c.fonts.monospace = 'Hack'
 #c.fonts.prompts
 c.fonts.statusbar = '9pt monospace'
-c.fonts.tabs = '9pt monospace'
+c.fonts.tabs.selected = '9pt monospace'
+c.fonts.tabs.unselected = '9pt monospace'
 #c.fonts.web.family.cursive
 #c.fonts.web.family.fantasy
 #c.fonts.web.family.fixed
@@ -206,27 +246,38 @@ c.hints.chars = 'asdfghjkl'
 #c.hints.dictionary
 #c.hints.find_implementation
 #c.hints.hide_unmatched_rapid_hints
+#c.hints.leave_on_load
 #c.hints.min_chars
 c.hints.mode = 'letter'
 #c.hints.next_regexes
+#c.hints.padding
 #c.hints.prev_regexes
+#c.hints.radius
 #c.hints.scatter
+#c.hints.selectors
 c.hints.uppercase = True
 
 #c.history_gap_interval
 
+#c.input.escape_quits_reporter
 #c.input.forward_unbound_keys
+#c.input.insert_mode.auto_enter
 #c.input.insert_mode.auto_leave
 #c.input.insert_mode.auto_load
+#c.input.insert_mode.leave_on_load
 #c.input.insert_mode.plugins
 #c.input.links_included_in_focus_chain
+#c.input.mouse.back_forward_buttons
+#c.input.mouse.rocker_gestures
 #c.input.partial_timeout
-#c.input.rocker_gestures
 #c.input.spatial_navigation
 
 #c.keyhint.blacklist
 #c.keyhint.delay
 #c.keyhint.radius
+
+#c.logging.level.console
+#c.logging.level.ram
 
 #c.messages.timeout
 
@@ -238,29 +289,35 @@ c.hints.uppercase = True
 
 #c.qt.args
 #c.qt.force_platform
+#c.qt.force_platformtheme
 #c.qt.force_software_rendering
 #c.qt.highdpi
+#c.qt.low_end_device_mode
+#c.qt.process_model
 
 #c.scrolling.bar
 c.scrolling.smooth = False
 
 #c.search.ignore_case
 #c.search.incremental
+#c.search.wrap
 
 #c.session.default_name
 c.session.lazy_restore = True
 
 #c.spellcheck.languages
 
-c.statusbar.hide = False
 #c.statusbar.padding
 c.statusbar.position = 'bottom'
+c.statusbar.show = 'always'
+#c.statusbar.widgets
 
 c.tabs.background = True
 #c.tabs.close_mouse_button
 #c.tabs.close_mouse_button_on_bar
 #c.tabs.favicons.scale
 #c.tabs.favicons.show
+#c.tabs.focus_stack_size
 c.tabs.indicator.padding = {
     'top': 2,
     'bottom': 2,
@@ -269,8 +326,12 @@ c.tabs.indicator.padding = {
 }
 c.tabs.indicator.width = 2
 c.tabs.last_close = 'default-page'
+#c.tabs.max_width
+#c.tabs.min_width
+#c.tabs.mode_on_change
 c.tabs.mousewheel_switching = False
 #c.tabs.new_position.related
+#c.tabs.new_position.stacking
 #c.tabs.new_position.unrelated
 c.tabs.padding = {
     'top': 0,
@@ -278,7 +339,7 @@ c.tabs.padding = {
     'left': 4,
     'right': 4
 }
-#c.tabs.persist_mode_on_change
+#c.tabs.pinned.frozen
 #c.tabs.pinned.shrink
 c.tabs.position = 'top'
 #c.tabs.select_on_remove
@@ -286,14 +347,17 @@ c.tabs.show = 'multiple'
 #c.tabs.show_switching_delay
 #c.tabs.tabs_are_windows
 c.tabs.title.alignment = 'left'
-c.tabs.title.format = '{index}: {title}'
+c.tabs.title.format = '{audio}{index}: {current_title}'
 #c.tabs.title.format_pinned
+#c.tabs.tooltips
+#c.tabs.undo_stack_size
 c.tabs.width = '5%'
 #c.tabs.wrap
 
 #c.url.auto_search
 c.url.default_page = '~/any/startpage/index.html'
 #c.url.incdec_segments
+#c.url.open_base_url
 c.url.searchengines = {
     'DEFAULT': 'https://duckduckgo.com/?q={}',
     'aw':      'https://wiki.archlinux.org/?search={}',
@@ -319,12 +383,9 @@ c.url.start_pages = '~/any/startpage/index.html'
 c.zoom.mouse_divider = 0 # Disable mouse wheel zoom
 #c.zoom.text_only
 
-config.unbind('<Ctrl-v>', mode='passthrough')
-config.bind('<Ctrl-Escape>', 'leave-mode', mode='passthrough')
-
 tab_rotate = [
     'config-cycle tabs.position top right',
-    'config-cycle tabs.title.format "{index}: {title}" "{index}"',
+    'config-cycle tabs.title.format "{audio}{index}: {current_title}" "{index}"',
     'config-cycle tabs.title.alignment left center',
     'set tabs.position?',
  ]
@@ -335,16 +396,16 @@ tab_show_cycle = [
 ]
 
 bar_show_toggle = [
-    'config-cycle statusbar.hide false true',
-    'set statusbar.hide?',
+    'config-cycle statusbar.show never always',
+    'set statusbar.show?',
 ]
 
-user_agent_cycle = [
-    'config-cycle content.headers.user_agent "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0" ""',
-    'set content.headers.user_agent?',
-]
+#user_agent_cycle = [
+#    'config-cycle content.headers.user_agent "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0" ""',
+#    'set content.headers.user_agent?',
+#]
 
 config.bind('<F2>', ' ;; '.join(tab_rotate))
 config.bind('<F3>', ' ;; '.join(tab_show_cycle))
 config.bind('<F4>', ' ;; '.join(bar_show_toggle))
-config.bind('<F5>', ' ;; '.join(user_agent_cycle))
+#config.bind('<F5>', ' ;; '.join(user_agent_cycle))
