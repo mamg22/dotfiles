@@ -166,8 +166,8 @@ vnoremap <Left> <nop>
 vnoremap <Right> <nop>
 
 " and use some of them
-nnoremap <Left> :bp<CR>
-nnoremap <Right> :bn<CR>
+nnoremap <silent> <Left> :bp<CR>
+nnoremap <silent> <Right> :bn<CR>
 
 " Neosnippet mappings from the doc
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)

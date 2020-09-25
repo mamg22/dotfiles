@@ -203,6 +203,6 @@ super + ctrl + b
 super + alt + apostrophe
     $TERMINAL -c floating-st -e tmux new-session -s enqueue video-queue-enqueue -c
 
-# test
-super + alt + button3
-    echo a | xmenu
+## test
+#~button3
+#    bspwm-empty-right-click

@@ -292,7 +292,7 @@ c.hints.uppercase = True
 #c.qt.force_platformtheme
 #c.qt.force_software_rendering
 #c.qt.highdpi
-#c.qt.low_end_device_mode
+c.qt.low_end_device_mode = 'always'
 #c.qt.process_model
 
 #c.scrolling.bar
@@ -364,13 +364,16 @@ c.url.searchengines = {
     'w':       'https://es.wikipedia.org/?search={}',
     'ew':      'https://en.wikipedia.org/?search={}',
     'g':       'https://www.google.com/search?&q={}',
-    'sr':      'https://reddit.com/r/{}',
+    'sr':      'https://reddit.com/r/{unquoted}',
     'r':       'https://www.reddit.com/search?q={}',
     'yt':      'https://www.youtube.com/results?search_query={}',
     'gh':      'https://github.com/search?q={}',
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
     'kym':     'https://knowyourmeme.com/search?q={}',
     'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
+    'iv':      'https://invidious.snopyta.org/search?q={}',
+    'fd':      'https://search.f-droid.org/?q={}',
+    'nt':      'https://nitter.net/search?q={}',
 }
 c.url.start_pages = '~/any/startpage/index.html'
 #c.url.yank_ignored_parameters

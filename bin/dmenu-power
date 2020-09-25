@@ -36,6 +36,8 @@ case "$option" in
         prompt "$option" && $locker_prog && sleep 1 && systemctl suspend
         ;;
     ("Apagar pantalla")
+        # Wait a little, otherwise the screen wakes up instantly because of the key up event
+        sleep 1
         xset dpms force off
         ;;
 esac
