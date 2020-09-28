@@ -364,6 +364,7 @@ c.url.searchengines = {
     'w':       'https://es.wikipedia.org/?search={}',
     'ew':      'https://en.wikipedia.org/?search={}',
     'g':       'https://www.google.com/search?&q={}',
+    # Go to given subreddit
     'sr':      'https://reddit.com/r/{unquoted}',
     'r':       'https://www.reddit.com/search?q={}',
     'yt':      'https://www.youtube.com/results?search_query={}',
@@ -374,6 +375,8 @@ c.url.searchengines = {
     'iv':      'https://invidious.snopyta.org/search?q={}',
     'fd':      'https://search.f-droid.org/?q={}',
     'nt':      'https://nitter.net/search?q={}',
+    # Jump to github repo or user
+    'ghr':     'https://github.com/{unquoted}',
 }
 c.url.start_pages = '~/any/startpage/index.html'
 #c.url.yank_ignored_parameters

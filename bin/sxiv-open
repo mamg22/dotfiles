@@ -16,7 +16,7 @@ for arg in "$@"; do
             # Check if the storage direcrtory exists, if not, create it
             [ ! -d "$storage_dir" ] && mkdir "$storage_dir"
             # Then download the image if not already there
-            [ ! -e "$output" ] && curl -s "$arg" --output "$output"
+            [ ! -e "$output" ] && untildone -n 5 curl -s "$arg" --output "$output"
 
             sxiv_args="$sxiv_args $output"
             ;;
