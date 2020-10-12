@@ -36,3 +36,5 @@ macro e set browser "video-queue-enqueue" ; open-in-browser ; set browser "quteb
 browser "qutebrowser-open %u"
 
 notify-program "~/bin/newsboat-notify"
+
+reset-unread-on-update "https://github.com/00-Evan/shattered-pixel-dungeon/releases.atom"

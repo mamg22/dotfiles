@@ -4,7 +4,7 @@ Description=Newsboat automatic reload timer
 [Timer]
 # Wait for internet connection to be fully established
 OnStartupSec=1min
-OnUnitActiveSec=45min
+OnUnitActiveSec=1h
 
 [Install]
 WantedBy=timers.target

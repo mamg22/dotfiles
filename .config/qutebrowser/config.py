@@ -72,16 +72,16 @@ c.colors.prompts.bg = '#161821'
 c.colors.prompts.border = '1px solid #6b7089'
 c.colors.prompts.fg = '#d2d4de'
 c.colors.prompts.selected.bg = '#6b7089'
-c.colors.statusbar.caret.bg = '#d2d4de'
-c.colors.statusbar.caret.fg = '#161821'
-#c.colors.statusbar.caret.selection.bg
-#c.colors.statusbar.caret.selection.fg
+c.colors.statusbar.caret.bg = '#161821'
+c.colors.statusbar.caret.fg = '#6b7089'
+c.colors.statusbar.caret.selection.bg = '#161821'
+c.colors.statusbar.caret.selection.fg = '#c0ca8e'
 c.colors.statusbar.command.bg = '#161821'
 c.colors.statusbar.command.fg = '#d2d4de'
 c.colors.statusbar.command.private.bg = '#161821'
 c.colors.statusbar.command.private.fg = '#e9b189'
 c.colors.statusbar.insert.bg = '#161821'
-c.colors.statusbar.insert.fg = '#b4be82'
+c.colors.statusbar.insert.fg = '#91acd1'
 c.colors.statusbar.normal.bg = '#161821'
 c.colors.statusbar.normal.fg = '#d2d4de'
 c.colors.statusbar.passthrough.bg = '#161821'
@@ -104,14 +104,14 @@ c.colors.tabs.indicator.stop = '#d2d4de'
 c.colors.tabs.indicator.system = 'rgb'
 c.colors.tabs.odd.bg = '#161821'
 c.colors.tabs.odd.fg = '#d2d4de'
-#c.colors.tabs.pinned.even.bg
-#c.colors.tabs.pinned.even.fg
-#c.colors.tabs.pinned.odd.bg
-#c.colors.tabs.pinned.odd.fg
-#c.colors.tabs.pinned.selected.even.bg
-#c.colors.tabs.pinned.selected.even.fg
-#c.colors.tabs.pinned.selected.odd.bg
-#c.colors.tabs.pinned.selected.odd.fg
+c.colors.tabs.pinned.even.bg = '#d2d4de'
+c.colors.tabs.pinned.even.fg = '#161821'
+c.colors.tabs.pinned.odd.bg = '#d2d4de'
+c.colors.tabs.pinned.odd.fg = '#161821'
+c.colors.tabs.pinned.selected.even.bg = '#6b7089'
+c.colors.tabs.pinned.selected.even.fg = '#d2d4de'
+c.colors.tabs.pinned.selected.odd.bg = '#6b7089'
+c.colors.tabs.pinned.selected.odd.fg = '#d2d4de'
 c.colors.tabs.selected.even.bg = '#6b7089'
 c.colors.tabs.selected.even.fg = '#d2d4de'
 c.colors.tabs.selected.odd.bg = '#6b7089'
@@ -375,6 +375,8 @@ c.url.searchengines = {
     'iv':      'https://invidious.snopyta.org/search?q={}',
     'fd':      'https://search.f-droid.org/?q={}',
     'nt':      'https://nitter.net/search?q={}',
+    # Nitter handle
+    'nth':      'https://nitter.net/{unquoted}',
     # Jump to github repo or user
     'ghr':     'https://github.com/{unquoted}',
 }
