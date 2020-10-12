@@ -1,53 +1,68 @@
 " mamg22's init.vim
 
 "{{{ Plugins
-call plug#begin('~/.local/share/nvim/plugged')
 
-" Core ncm2 completion
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-if !has('nvim')
-    Plug 'roxma/vim-hug-neovim-rpc'
+" Powered by minpac
+" https://github.com/k-takata/minpac
+" install with
+" git clone https://github.com/k-takata/minpac.git ~/.config/nvim/pack/minpac/opt/minpac
+
+packadd minpac
+
+if exists('g:loaded_minpac')
+    call minpac#init()
+
+    call minpac#add('k-takata/minpac', {'type': 'opt'})
+
+    " Core ncm2 completion
+    call minpac#add('ncm2/ncm2')
+    call minpac#add('roxma/nvim-yarp')
+    if !has('nvim')
+        call minpac#add('roxma/vim-hug-neovim-rpc')
+    endif
+    " Sources
+    call minpac#add('ncm2/ncm2-pyclang')
+    call minpac#add('ncm2/ncm2-jedi')
+    call minpac#add('ncm2/ncm2-bufword')
+    call minpac#add('ncm2/ncm2-path')
+    " call minpac#add('ncm2/ncm2-tagprefix'
+    call minpac#add('ncm2/ncm2-vim') | call minpac#add('shougo/neco-vim')
+    call minpac#add('ncm2/ncm2-neosnippet') | call minpac#add('Shougo/neosnippet.vim')
+    call minpac#add('ncm2/ncm2-neoinclude') | call minpac#add('Shougo/neoinclude.vim')
+    call minpac#add('ncm2/ncm2-syntax') | call minpac#add('shougo/neco-syntax')
+
+    " Tag generation and listing
+    call minpac#add('ludovicchabant/vim-gutentags')
+    call minpac#add('majutsushi/tagbar')
+
+    " Snippets
+    call minpac#add('Shougo/neosnippet-snippets')
+
+    " Status line
+    call minpac#add('itchyny/lightline.vim')
+
+    " Highlight
+    call minpac#add('cespare/vim-toml')
+    call minpac#add('vim-pandoc/vim-pandoc-syntax')
+
+    " Misc
+    call minpac#add('vim-pandoc/vim-pandoc')
+    " call minpac#add('junegunn/goyo.vim')
+
+    " Colors
+    call minpac#add('cocopon/iceberg.vim')
+    " call minpac#add('arcticicestudio/nord-vim')
+    " call minpac#add('dracula/vim', {'name': 'dracula'})
 endif
-" Sources
-Plug 'ncm2/ncm2-pyclang'
-Plug 'ncm2/ncm2-jedi'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-" Plug 'ncm2/ncm2-tagprefix'
-Plug 'ncm2/ncm2-vim' | Plug 'shougo/neco-vim'
-Plug 'ncm2/ncm2-neosnippet' | Plug 'Shougo/neosnippet.vim'
-Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
-Plug 'ncm2/ncm2-syntax' | Plug 'shougo/neco-syntax'
-
-" Tag generation and listing
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'majutsushi/tagbar'
-
-" Snippets
-Plug 'Shougo/neosnippet-snippets'
-
-" Status line
-Plug 'itchyny/lightline.vim'
-
-" Highlight
-Plug 'cespare/vim-toml'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-
-" Misc
-Plug 'vim-pandoc/vim-pandoc'
-" Plug 'junegunn/goyo.vim'
-
-" Colors
-Plug 'cocopon/iceberg.vim'
-Plug 'arcticicestudio/nord-vim'
-" Plug 'dracula/vim', {'as': 'dracula'}
-
-call plug#end()
 "}}}
 
 "{{{ Core configuration
 
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
+command! PackStatus call minpac#status()
+
+"
 syntax on
 " Detection
 filetype plugin indent on
@@ -200,6 +215,16 @@ function! Better_incdec(dir) range
     " Get word under cursor
     let current_word = expand("<cword>")
 
+    " TODO: Jump to the next true or false and change it
+    " || search('\<false\>', 'c', line("."))
+    " BUG: Pressing either C-x or C-a in whitespace near word
+    "      causes it to type true/flase replacing that space
+    "      instead of flipping the nearest, example:
+    "      This is a true
+    "               ^here
+    "      results in
+    "      This is afalsetrue
+    "             
     if a:dir == 1
         if current_word ==# "false"
             normal ciwtrue
