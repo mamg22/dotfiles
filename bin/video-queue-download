@@ -12,7 +12,7 @@ while read url resolution format; do
     [ "$resolution" ] && set -- "$@" -r$resolution
     [ "$format" ] && set -- "$@" -f$format
 
-    yd "$@" "$url" && flock "$queue" sed -i 1d "$queue"
+    yd "$@" "$url" && sed -i 1d "$queue"
 
     notify-send "Video downloader" "Finished downloading $url"
     unset resolution

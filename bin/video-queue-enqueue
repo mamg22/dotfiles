@@ -29,6 +29,6 @@ read -r resolution format
 
 close_preview
 
-flock "$queue_file" echo "$url|$resolution|$format" >> "$queue_file"
+echo "$url|$resolution|$format" >> "$queue_file"
 
 exit 0

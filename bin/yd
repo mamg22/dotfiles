@@ -65,8 +65,9 @@ get_info_json()
     json_info="$(get_json_filename)"
 
     # Get a file descriptor and lock it
-    exec 9>"$json_info"
-    flock 9
+    # Seems to introduce a bug, testing without it
+    # exec 9>"$json_info"
+    # flock 9
 
     # Only download if doesn't exist, is too small to be valid or isn't valid json
     while [ ! -e "$json_info" ] ||
@@ -77,7 +78,7 @@ get_info_json()
         untildone youtube-dl --dump-single-json --skip-download -- "$url" > "$json_info"
     done
     # Unlock the file
-    flock -u 9
+    # flock -u 9
     echo "$json_info"
 }
 
