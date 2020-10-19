@@ -45,7 +45,7 @@ EOF
 
 hash_url()
 {
-    printf "%s" "$url" | md5sum | cut -d' ' -f1
+    printf "%s" "$1" | md5sum | cut -d' ' -f1
 }
 
 get_json_filename()
@@ -62,7 +62,7 @@ get_json_filename()
 # Get the information json instead of downloading again every time
 get_info_json()
 {
-    json_info="$(get_json_filename)"
+    json_info="$(get_json_filename "$1")"
 
     # Get a file descriptor and lock it
     # Seems to introduce a bug, testing without it

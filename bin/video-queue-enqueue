@@ -1,34 +1,30 @@
 #!/bin/sh
 
 queue_file=~/.cache/youtube-download-queue
-preview_fifo="/tmp/video-queue-preview.tmp"
 
 url="$1"
 [ "$1" = "-c" ] && url="$(xsel -bo)"
 [ "$url" ] || exit 0
 
-[ -e "$preview_fifo" ] || mkfifo "$preview_fifo"
-
-preview_pane="$(tmux split-window -d -v -P -p 80 "printf 'Loading preview'; less -f -R $preview_fifo;")"
-
-close_preview()
-{
-    tmux kill-pane -t "$preview_pane"
-}
-
-sleep 0.5
-
-setsid video-queue-preview "$url" &
-
-trap "close_preview; exit" INT TERM
-
 echo "Pressing enter indicates the default"
 
-printf "Video resolution and format to download: "
-read -r resolution format
+while true; do
+    printf "Video resolution and format to download (p for preview): "
+    read -r resolution format
 
-close_preview
+    if [ "$resolution" = "p" ]; then
+        if [ -z "$preview_pane" ]; then
+            preview_pane="$(tmux split-window -d -v -P -p 80 "video-queue-preview '$url'")"
+            trap "tmux kill-pane -t $preview_pane 2>/dev/null; exit 0" INT TERM
+        fi
 
-echo "$url|$resolution|$format" >> "$queue_file"
+        continue;
+    fi
+
+    [ -n "$preview_pane" ] && tmux kill-pane -t "$preview_pane" 2>/dev/null
+    break;
+done
+
+echo "$url $resolution $format" >> "$queue_file"
 
 exit 0

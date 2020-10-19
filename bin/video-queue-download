@@ -6,16 +6,20 @@ queue=~/.cache/youtube-download-queue
 
 [ -e "$queue" ] || exit 1
 
-IFS='|'
-while read url resolution format; do
-    notify-send "Video downloader" "Downloading $url"
-    [ "$resolution" ] && set -- "$@" -r$resolution
-    [ "$format" ] && set -- "$@" -f$format
+while [ -s "$queue" ]; do
+    while read url resolution format; do
+        notify-send "Video downloader" "Downloading $url"
+        [ "$resolution" ] && set -- "$@" -r$resolution
+        [ "$format" ] && set -- "$@" -f$format
 
-    yd "$@" "$url" && sed -i 1d "$queue"
+        yd "$@" "$url" && sed -i 1d "$queue"
 
-    notify-send "Video downloader" "Finished downloading $url"
-    unset resolution
-    unset format
-    set --
-done < "$queue"
+        notify-send "Video downloader" "Finished downloading $url"
+        unset resolution
+        unset format
+        set --
+    done <<EOF
+$(head -n 1 "$queue")
+EOF
+done
+

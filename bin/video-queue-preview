@@ -1,6 +1,6 @@
 #!/bin/sh
 
-preview_fifo="/tmp/video-queue-preview.tmp"
+preview_file="/tmp/video-queue-preview.tmp"
 
 exec 2>/dev/null
 
@@ -54,6 +54,9 @@ generate_preview()
         "$(get_formats)"
 }
 
-generate_preview  > "$preview_fifo" 2>/dev/null &
+echo "Loading preview"
+
+generate_preview > "$preview_file" 2>/dev/null
+less -R "$preview_file"
 
 exit 0
