@@ -360,6 +360,7 @@ c.url.default_page = '~/any/startpage/index.html'
 #c.url.open_base_url
 c.url.searchengines = {
     'DEFAULT': 'https://duckduckgo.com/?q={}',
+    'd':       'https://duckduckgo.com/?q={}',
     'aw':      'https://wiki.archlinux.org/?search={}',
     'w':       'https://es.wikipedia.org/?search={}',
     'ew':      'https://en.wikipedia.org/?search={}',
