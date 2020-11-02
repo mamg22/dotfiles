@@ -1,3 +1,5 @@
 #!/bin/sh
 
+queue=~/.cache/youtube-download-queue
 
+st -c floating-st -e tmux new-session -s edit-queue $EDITOR "$queue"

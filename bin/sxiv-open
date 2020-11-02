@@ -6,6 +6,9 @@
 # Change to prefered location
 storage_dir=/tmp/sxiv-open.tmp
 
+# Check if the storage direcrtory exists, if not, create it
+[ ! -d "$storage_dir" ] && mkdir "$storage_dir"
+
 for arg in "$@"; do
     case "$arg" in
         (http*)
@@ -13,9 +16,7 @@ for arg in "$@"; do
             uri_hash=$(printf "$arg" | md5sum | cut -d' ' -f1)
             output="$storage_dir/$uri_hash"
 
-            # Check if the storage direcrtory exists, if not, create it
-            [ ! -d "$storage_dir" ] && mkdir "$storage_dir"
-            # Then download the image if not already there
+            # Download the image if not already there
             [ ! -e "$output" ] && untildone -n 5 curl -s "$arg" --output "$output"
 
             sxiv_args="$sxiv_args $output"

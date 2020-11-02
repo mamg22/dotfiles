@@ -8,4 +8,4 @@ pick="$(echo "$videos_pretty" | dmenu -l 20 -i -p "Video:")"
 
 video="$(echo "$videos" | fgrep "$pick" | head -1)"
 
-echo "$video" | tr '\n' '\0' | xargs -0 -I{} -r mpv --force-window "{}"
+echo "$video" | tr '\n' '\0' | xargs -0 -I{} -r mpv --quiet --force-window "{}"

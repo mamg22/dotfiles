@@ -31,7 +31,7 @@ bind-key x pb-delete
 
 bind-key | delete-article
 
-macro e set browser "video-queue-enqueue" ; open-in-browser ; set browser "qutebrowser-open %u"
+macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser-open %u"
 
 browser "qutebrowser-open %u"
 

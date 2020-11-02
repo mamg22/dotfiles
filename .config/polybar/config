@@ -68,7 +68,7 @@ tray-padding = 2
 
 wm-restack = bspwm
 
-[bar/extra-screen]
+[bar/virtual-screen]
 width = 100%
 height = 19
 offset-x = 0%
@@ -82,7 +82,6 @@ foreground = ${colors.barfg}
 font-0 = Hack:size=9;2
 font-1 = Font Awesome 5 Free Solid:size=9;2
 font-2 = Font Awesome 5 Free Solid:size=11;3
-font-3 = Hack:size=9;0
 
 modules-left =
 modules-center = bspwm
@@ -115,40 +114,62 @@ type = internal/bspwm
 
 format = <label-state>
 
-;ws-icon-0  = 1;
-;ws-icon-1  = 2;
-;ws-icon-2  = 3;
-;ws-icon-3  = 4;
-;ws-icon-4  = 5;
-;ws-icon-5  = 6;
-;ws-icon-6  = 7;●
-;ws-icon-7  = 8;
-;ws-icon-8  = 9;●
-;ws-icon-9  = 10;
+ws-icon-0  = 1;
+ws-icon-1  = 2;
+ws-icon-2  = 3;
+ws-icon-3  = 4;
+ws-icon-4  = 5;
+ws-icon-5  = 6;
+ws-icon-6  = 7;
+ws-icon-7  = 8;
+ws-icon-8  = 9;
+ws-icon-9  = 10;
 ws-icon-default = ●
 
 
 label-focused = %icon%
 label-focused-foreground = ${colors.active}
 label-focused-padding = 0
-label-focused-font = 4
 
 label-occupied = %icon%
 label-occupied-foreground = ${colors.foreground}
 label-occupied-padding = 0
-label-occupied-font = 4
 
 label-urgent = %icon%
 label-urgent-foreground = ${colors.alert}
 label-urgent-padding = 0
-label-urgent-font = 4
 
 label-empty = %icon%
 label-empty-foreground = ${colors.inactive}
 label-empty-padding = 0
-label-empty-font = 4
 
 label-separator = " "
+
+;label-focused = %icon%
+;label-focused-foreground = ${colors.black}
+;label-focused-background = ${colors.active}
+;label-focused-padding = 1
+;label-focused-font = 4
+;
+;label-occupied = %icon%
+;label-occupied-foreground = ${colors.black}
+;label-occupied-background = ${colors.foreground}
+;label-occupied-padding = 1
+;label-occupied-font = 4
+;
+;label-urgent = %icon%
+;label-urgent-foreground = ${colors.black}
+;label-urgent-background = ${colors.alert}
+;label-urgent-padding = 1
+;label-urgent-font = 4
+;
+;label-empty = %icon%
+;label-empty-foreground = ${colors.black}
+;label-empty-background = ${colors.inactive}
+;label-empty-padding = 1
+;label-empty-font = 4
+;
+;;label-separator = " "
 
 enable-scroll = false
 
@@ -212,7 +233,7 @@ label-offline = mpd is offline
 format-offline-prefix = " "
 format-offline-prefix-foreground = ${colors.darkgray}
 
-label-song-maxlen = 45
+label-song-maxlen = 40
 label-song-ellipsis = true
 ;label-song = %title%
 

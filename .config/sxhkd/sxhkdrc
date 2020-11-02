@@ -167,7 +167,7 @@ super + {_,shift +} r
     bspc node -R {_,-}90
 
 # mpd control
-super + alt + {_,shift + } p
+super + alt + {_,shift +} p
     mpc {toggle,stop}
 
 super + {plus,minus}
@@ -183,17 +183,17 @@ super + alt + BackSpace
     mpc seek 0%
 
 # Common programs
-super + alt + q
-    qutebrowser
+super + alt + {_,shift +} q
+    {qutebrowser,firefox}
 
-super + alt + f
-    pcmanfm
+super + alt + {_,shift +} f
+    {pcmanfm,filezilla}
 
-super + alt + shift + f
-    filezilla
+super + alt + {_,shift +} g
+    {gimp,inkscape}
 
-super + alt + g
-    gimp
+super + alt + {_,shift +} w
+    {lowriter,loimpress}
 
 # Toggle polybar
 super + ctrl + b
@@ -201,7 +201,11 @@ super + ctrl + b
 
 # Enqueue videos for download
 super + alt + apostrophe
-    $TERMINAL -c floating-st -e tmux new-session -s enqueue video-queue-enqueue -c
+    $TERMINAL -c floating-st -e tmux new-session -s enqueue vq -nc
+
+# Send files to phone
+super + alt + e
+    kdeconnect-send-files
 
 ## test
 #~button3

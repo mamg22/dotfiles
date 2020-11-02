@@ -31,3 +31,4 @@ bspc rule -a Inkscape desktop='^7'
 bspc rule -a Zathura state=tiled
 bspc rule -a mpv state=floating
 bspc rule -a floating-st state=floating
+bspc rule -a Yad state=floating
