@@ -1,4 +1,8 @@
-# Iceberg colorscheme
+# For compatibility with newer versions
+try:
+    config.load_autoconfig(False)
+except:
+    pass
 
 c.aliases = {
     'w': 'session-save',
@@ -9,6 +13,14 @@ c.aliases = {
 c.backend = 'webengine'
 
 c.completion.delay = 1000
+c.completion.web_history.exclude = [
+    # Exclude searches from completion
+    # Doesn't regenerate automatically, see: https://github.com/qutebrowser/qutebrowser/issues/5868
+    # Can be regenerated manually with
+    # sqlite3 ~/.local/share/qutebrowser/history.sqlite 'update CompletionMetaInfo set value=1 where key="force_rebuild"'
+    '*://duckduckgo.com/*',
+    '*://www.google.com/*',
+]
 
 c.confirm_quit = ["multiple-tabs", "downloads"]
 
@@ -24,6 +36,11 @@ c.fonts.web.size.default = 15
 c.hints.border = '1px solid #6b7089'
 c.hints.chars = 'asdfghjkl'
 c.hints.mode = 'letter'
+# Reddit expando
+c.hints.selectors['expando'] = ['.expando-button']
+# Reddit and Hacker News comment toggles
+c.hints.selectors['comment'] = ['.expand', '.togg']
+c.hints.selectors['any'] = ['*']
 c.hints.uppercase = True
 
 c.qt.low_end_device_mode = 'always'
@@ -66,8 +83,9 @@ c.url.searchengines = {
     'ew':      'https://en.wikipedia.org/?search={}',
     'g':       'https://www.google.com/search?&q={}',
     # Go to given subreddit
-    'sr':      'https://reddit.com/r/{unquoted}',
+    'sr':      'https://www.reddit.com/r/{unquoted}',
     'r':       'https://www.reddit.com/search?q={}',
+    'ru':      'https://www.reddit.com/user/{unquoted}',
     'yt':      'https://www.youtube.com/results?search_query={}',
     'gh':      'https://github.com/search?q={}',
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
@@ -77,9 +95,10 @@ c.url.searchengines = {
     'fd':      'https://search.f-droid.org/?q={}',
     'nt':      'https://nitter.net/search?q={}',
     # Nitter handle
-    'nth':      'https://nitter.net/{unquoted}',
+    'nth':     'https://nitter.net/{unquoted}',
     # Jump to github repo or user
     'ghr':     'https://github.com/{unquoted}',
+    'wf':      'https://www.wolframalpha.com/input/?i={}'
 }
 c.url.start_pages = '~/any/startpage/index.html'
 
@@ -109,5 +128,9 @@ def join_commands(command_list):
 config.bind('xr', join_commands(tab_rotate))
 config.bind('xt', join_commands(tab_show_cycle))
 config.bind('xb', join_commands(bar_show_toggle))
+config.bind(';e', 'hint expando')
+config.bind(';E', 'hint --rapid expando')
+config.bind(';c', 'hint comment')
+config.bind(';C', 'hint --rapid comment')
 
 config.source("colors.py")
