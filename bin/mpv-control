@@ -1,0 +1,41 @@
+#!/bin/sh
+
+ipc_socket="/tmp/mpv-remote-socket"
+
+send()
+{
+    for arg in "$@"; do
+        comm="$comm$separator\"$arg\""
+        separator=","
+    done
+    echo '{ "command": [ "osd-auto", ' "$comm" '] }' | socat - "UNIX-CONNECT:$ipc_socket,linger=10"
+}
+
+action="$1"
+[ "$action" ] || exit 1
+shift 1
+
+case "$action" in
+    (toggle)
+        send cycle pause
+        ;;
+    (volume)
+        send add volume "$1"
+        ;;
+    (seek)
+        case "$1" in
+            (*%)
+                send seek "${1%\%}" absolute-percent
+                ;;
+            (*)
+                send seek "$1"
+                ;;
+        esac
+        ;;
+    (prev|next)
+        send "playlist-$action"
+        ;;
+    (stop)
+        send quit
+        ;;
+esac

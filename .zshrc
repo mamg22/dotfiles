@@ -57,6 +57,7 @@ alias aptlu='apt list -u'
 alias aptli='apt list -i'
 alias aptin='sudo untildone apt install -y'
 alias aptse='apt search'
+alias apts='apt show'
 
 alias ud='untildone '
 

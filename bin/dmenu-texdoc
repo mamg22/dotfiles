@@ -1,0 +1,31 @@
+#!/bin/sh
+
+favorites="symbols
+tikz
+pgfplots"
+
+# End of configuration
+
+options="Favorites
+By name
+Search"
+
+selection="$(echo "$options" | dmenu -p "Texdoc:" -l 10 -i)"
+[ "$selection" ] || exit 0
+
+case "$selection" in
+    (Favorites)
+        choice="$(echo "$favorites" | dmenu -p "Favorites:" -l 10 -i)"
+        [ "$choice" ] && texdoc "$choice"
+        ;;
+    ("By name")
+        name="$(dmenu -p "By name:" <&-)"
+        [ "$name" ] && texdoc "$name"
+        ;;
+    (Search)
+        query="$(dmenu -p "Search:" <&-)"
+        [ "$query" ] || exit 0
+        results="$(texdoc -l -M "$query")"
+        texdoc --just-view "$(echo "$results" | awk '{print $3;}' | dmenu -p "Select:" -l 10 -i)"
+        ;;
+esac

@@ -158,6 +158,9 @@ super + alt + v
 super + shift + alt + v
     dmenu-podcasts
 
+super + alt + t
+    dmenu-texdoc
+
 # Luke Smith's emoji dmenu
 super + alt + u
     dmenuunicode
@@ -166,21 +169,21 @@ super + alt + u
 super + {_,shift +} r
     bspc node -R {_,-}90
 
-# mpd control
-super + alt + {_,shift +} p
-    mpc {toggle,stop}
+# mpd and mpv control
+super + {alt,ctrl} + {_,shift +} p
+    {mpc,mpv-control} {toggle,stop}
 
-super + {plus,minus}
-    mpc volume {+,-}2
+super + {_,ctrl +} {plus,minus}
+    {mpc,mpv-control} volume {+,-}2
 
-super + {less,greater}
-    mpc {prev,next}
+super + {_,ctrl +} {less,greater}
+    {mpc,mpv-control} {prev,next}
 
-super + alt + {plus,minus}
-    mpc seek {+,-}5
+super + alt + {_,ctrl +} {plus,minus}
+    {mpc,mpv-control} seek {+,-}5
 
-super + alt + BackSpace
-    mpc seek 0%
+super + {alt,ctrl} + BackSpace
+    {mpc,mpv-control} seek 0%
 
 # Common programs
 super + alt + {_,shift +} q
