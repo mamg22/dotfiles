@@ -2,8 +2,6 @@ set font "Hack 9"
 
 set recolor-lightcolor "#161821"
 set recolor-darkcolor  "#d2d4de"
-set recolor-keephue
-set recolor-reverse-video
 
 #set default-bg "#161821"
 #set default-fg "#d2d4de"
