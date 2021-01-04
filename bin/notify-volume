@@ -1,0 +1,19 @@
+#!/bin/sh
+
+id="40"
+
+awk_script='
+/^\s*Front Left:/ {
+    volume = substr($5, 2, length($5) - 2)
+    enabled = substr($6, 2, length($6) - 2)
+    if (enabled == "on") {
+        print "Volume: " volume
+    }
+    else {
+        print "Volume: " volume " (Muted)"
+    }
+}'
+
+volume="$(amixer -D pulse get Master | awk "$awk_script")"
+
+dunstify -t 5000 -r "$id" "Volumen" "$volume"

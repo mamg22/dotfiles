@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# TODO: Add interactive option and merge dmenu-tmux
+
+workspaces="hw
+web
+media
+dev
+sys
+files
+creative
+office"
+
+spawn()
+{
+    if [ "$1" ]; then
+        $TERMINAL -e tmux new-session -As "$1"
+    else
+        $TERMINAL -e tmux new-session
+    fi
+}
+
+# Workspaces named 1..10
+current_workspace_name="$(bspc query --names -D -d focused)"
+
+# Geet current workspace
+workspace="$(echo "$workspaces" | sed -n "${current_workspace_name}p")"
+
+# Get tmux sessions formated as "name|number of clients"
+sessions="$(tmux list-sessions -F '#S|#{session_attached}')"
+
+# Is this named session active?
+ws_session="$(echo "$sessions" | grep "^$workspace\>")"
+
+if [ "$ws_session" ]; then
+    # Is active, get number of attached clients
+    # Attach if there's no clients attached to it
+    # Otherwise, spawn an unnamed session
+    wss_clients="$(echo "$ws_session" | sed 's/[^|]\+|//')"
+
+    if [ "$wss_clients" -eq 0 ]; then
+        spawn "$workspace"
+    else
+        spawn
+    fi
+else
+    # Not active, create it
+    spawn "$workspace"
+fi
