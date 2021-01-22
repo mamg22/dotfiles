@@ -5,9 +5,19 @@ setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle
 xsettingsd &
 # xfce4-power-manager &
 # lxpolkit &
-compton >/dev/null 2>&1 &
+picom --experimental-backends >/dev/null 2>&1 &
 # pcmanfm -d &
 dunst &
 unclutter &
+
 # Regenerate dmenu cache
-rm ~/.cache/dmenu_run; dmenu_path >/dev/null 2>&1 &
+# rm ~/.cache/dmenu_run; dmenu_path >/dev/null 2>&1 &
+
+# Start kdeconnect
+# Enabling the unit doesn't work right now
+systemctl --user start kdeconnect.service &
+
+systemd-inhibit --what=handle-power-key \
+    --who="Power Key inhibitor for X" \
+    --why="Disable power key behaviour so X programs can use it" \
+    sh -c 'while true; do sleep 2419200; done' &
