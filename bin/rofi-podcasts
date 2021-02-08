@@ -1,0 +1,40 @@
+#!/bin/sh
+
+podcasts_dir=~/podcasts
+
+# If not running in rofi, either connect to running podcast player or
+# execute rofi podcast selector
+if [ -z "$ROFI_RETV" ]; then
+    podcasts_session="$(tmux list-sessions -F '#S' | grep '^podcast$')"
+
+    if [ "$podcasts_session" ]; then
+        setsid st -c floating-st -e tmux attach-session -t podcast
+        exit 0
+    else
+        exec rofi -modi "podcast:$0" -show podcast
+        exit 0
+    fi
+fi
+
+target="$(echo "$1" | sed 's/^\[..\] //')"
+
+if [ "$target" = ".." ] || [ -z "$target" ]; then
+    # In base directory
+    while read dir; do
+        n_files="$(ls -1 "$podcasts_dir/$dir" | wc -l)"
+        printf "[%2d] %s\n" "$n_files" "$dir"
+    done <<EOF
+$(ls -1 "$podcasts_dir")
+EOF
+elif [ -d "$podcasts_dir/$target" ]; then
+    # Selected a directory, show ".." option and contents
+    options="$(ls -1 "$podcasts_dir/$target")"
+    echo ".."
+else
+    file="$(find "$podcasts_dir" -name "$target" -type f)"
+    # Is file, open player and quit
+    exec setsid st -c floating-st -e tmux new-session -s podcast mpv \
+        --no-cache --no-video --save-position-on-quit "$file" >/dev/null 2>&1
+fi
+
+echo "$options"

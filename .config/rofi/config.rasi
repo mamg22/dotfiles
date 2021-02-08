@@ -1,0 +1,3 @@
+configuration {
+	theme: "/home/marco/.config/rofi/themes/iceberg.rasi";
+}

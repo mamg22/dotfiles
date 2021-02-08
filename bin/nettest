@@ -1,0 +1,82 @@
+#!/bin/sh
+
+ok_text="[\033[32m OK \033[0m]"
+fail_text="[\033[31mFAIL\033[0m]"
+
+isp_test() {
+    curl -s 192.168.110.1 >/dev/null 2>&1
+    return $?
+}
+isp_test_text="Testing ISP connection"
+
+dns_test() {
+    host duckduckgo.com >/dev/null 2>&1
+    return $?
+}
+dns_test_text="Testing DNS connection"
+
+web_test() {
+    # TODO: Detect ISP redirection (when not paid or other issues)
+    #webtest_file="/tmp/webtest-output"
+    #curl -s duckduckgo.com -o "$webtest_file"
+    ## If ISP doesn't redirect me
+    #if [ "$(grep -c "mikrotik hotspot" "$webtest_file")" != 0 ]; then
+    #    return 1;
+    #fi
+    return 0
+}
+web_test_text="Testing web connection"
+
+run_it() {
+    printf "%s | %s " "$(date "+%k:%M" | tr -d '\n')" "$2"
+    $1
+    exit_code=$?
+    if [ $exit_code -eq 0 ]; then
+        printf "$ok_text\n"
+    else
+        printf "$fail_text"
+    fi
+    return $exit_code
+}
+
+loop_it() {
+    while true
+    do
+        if run_it "$1" "$2"
+        then
+            break
+        fi
+        sleep 1m
+        printf "\r"
+    done
+}
+
+case "$1" in
+    (isp)
+        loop_it isp_test "$isp_test_text"
+        ;;
+    (dns)
+        loop_it dns_test "$dns_test_text"
+        ;;
+    (web)
+        loop_it web_test "$web_test_text"
+        ;;
+    (once)
+        run_it isp_test "$isp_test_text"
+        run_it dns_test "$dns_test_text"
+        run_it web_test "$web_test_text"
+        echo
+        exit 0
+        ;;
+    (*)
+        loop_it isp_test "$isp_test_text"
+        loop_it dns_test "$dns_test_text"
+        loop_it web_test "$web_test_text"
+        ;;
+esac
+
+figlet -ct Llego el intenet | lolcat
+if [ "$1" = "silent" ] || [ "$2" = "silent" ]; then
+    exit 0
+fi
+mpv ~/music/Newton/Newton\ -\ Streamline.mp3 --no-terminal

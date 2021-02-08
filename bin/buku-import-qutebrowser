@@ -1,0 +1,7 @@
+#!/bin/sh
+
+bookmarks_file="${XDG_CONFIG_DIR:-$HOME/.config}/qutebrowser/bookmarks/urls"
+
+while read url title; do
+    : | buku --add "$url" --title "$title"
+done < "$bookmarks_file"

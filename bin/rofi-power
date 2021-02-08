@@ -1,0 +1,62 @@
+#!/bin/sh
+
+locker_prog=~/bin/i3-lock
+logout_prog="bspc quit"
+
+default_opt=3
+
+yes="Sí"
+no="No"
+
+theme="power-menu"
+confirm_theme="power-confirm"
+
+lock_sleep="<span rise='12000' size='xx-small'></span><span size='4000'> </span><span size='xx-small'></span>"
+
+options=" Bloquear
+襤 Apagar
+ Suspender
+ Apagar Pantalla
+ Cerrar sesión
+累 Reiniciar
+$lock_sleep Bloquear y suspender"
+
+prompt() {
+    answer="$(printf "%s\n%s" "$no" "$yes" |
+        rofi -dmenu -theme "$confirm_theme" -p "$1" \
+        -me-select-entry '' -me-accept-entry 'MousePrimary')"
+    [ "$answer" = "$yes" ] && return 0
+    return 1
+}
+
+choice="$(echo "$options" |
+    rofi -markup-rows -me-select-entry '' -me-accept-entry 'MousePrimary' \
+    -theme "$theme" -dmenu -selected-row "$default_opt")"
+
+case "$choice" in
+    (*Suspender)
+        prompt "Suspender?" && systemctl suspend
+        ;;
+    (*Apagar)
+        prompt "Apagar?" && systemctl poweroff
+        ;;
+    (*Reiniciar)
+        prompt "Reiniciar?" && systemctl reboot
+        ;;
+    (*Bloquear)
+        prompt "Bloquear?" && $locker_prog
+        ;;
+    (*"Bloquear y suspender")
+        prompt "Bloquear y suspender?" && $locker_prog && sleep 1 && systemctl suspend
+        ;;
+    (*"Apagar Pantalla")
+        # Wait a little, otherwise the screen wakes up instantly because of
+        # the key up event
+        sleep 1
+        xset dpms force off
+        ;;
+    (*"Cerrar sesión")
+        prompt "Cerrar sesión?" && $logout_prog
+        ;;
+esac
+

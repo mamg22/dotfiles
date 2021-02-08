@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# Rewrite this thing in something else, xpath is slow to process the file
+# And needing to do it twice is much worse
+
+registry_file=~/".config/libreoffice/4/user/registrymodifications.xcu"
+
+history_query='/oor:items/item/node/prop[@oor:name="HistoryItemRef"]/value/text()'
+order_query='/oor:items/item/node/prop[@oor:name="HistoryItemRef"]/../@oor:name'
+
+urldecode()
+{
+    # https://unix.stackexchange.com/questions/159253/decoding-url-encoding-percent-encoding#comment424350_159254
+    python3 -c "import sys, urllib.parse as ul; [sys.stdout.write(ul.unquote_plus(l)) for l in sys.stdin]"
+}
+
+recent_files="$(xpath -q -e "$history_query" "$registry_file" | urldecode)"
+file_order="$(xpath -q -e "$order_query" "$registry_file" | sed 's/[^0-9]//g')"
+
+files="$( (echo "$file_order"; echo "$recent_files") | awk '
+# Get the indexes
+NR<26 {
+    numbers[NR] = $0
+}
+# Get the filenames and associate them to their index
+NR>25 {
+    files[numbers[NR - 25]] = $0
+}
+# Sort the files by their index
+END {
+    asort(files, files, "@ind_num_asc")
+    for (var in files) {
+        print files[var]
+    }
+}')"
+
+choice="$(echo "$files" | dmenu -p "Recent:" -l 10)"
+[ "$choice" ] || exit 0
+loffice "$choice"

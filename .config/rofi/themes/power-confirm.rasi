@@ -1,0 +1,26 @@
+@import "power-common"
+
+mainbox {
+    children: [ promptpad, listview ];
+}
+
+promptpad {
+    orientation: horizontal;
+    children: [ pad, prompt, pad ];
+}
+
+prompt {
+    padding: 10% 0% 10% 0%;
+    horizontal-align:               0.5;
+    vertical-align:                 0.5;
+    font: "Hack Nerd Font 30";
+}
+
+listview {
+    layout: vertical;
+    columns: 2;
+}
+
+element {
+    padding: 3.5% 0% 3.5% 0%;
+}
