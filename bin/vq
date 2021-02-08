@@ -4,7 +4,35 @@ queue=~/.cache/vq-queue
 preview_file="/tmp/vq-preview"
 download_lock="/tmp/vq-download-lock"
 
-# TODO: Add file locking to race conditions or other queue access problems
+isatty()
+{
+    # True if file descriptor 0 (stdin) is a terminal
+    test -t 0
+}
+
+usage()
+{
+    cat <<EOF
+usage: $(basename "$0") [options]... url
+
+A video download queue manager based on yd
+
+Must specify at least one operation in the options
+
+Operations:
+    -d          Download
+    -e          Edit queue
+    -n          Add to queue
+    -h          Show usage information
+
+Available options:
+    -c          Use the contents of the clipboard instead of the given url
+    -f FORMAT   Set video format (either "webm" or "mp4") to FORMAT
+    -i          Force interactive mode
+    -I          Force non-interactive mode
+    -r RES      Set video resolution to RES
+EOF
+}
 
 download()
 {
@@ -12,26 +40,33 @@ download()
 
     touch "$download_lock"
     exec 9> "$download_lock"
+
     if ! flock --nonblock 9; then
-        echo "Another instance of $(basename "$0") is already downloading" >&2
+        message="Another instance of $(basename "$0") is already downloading"
+
+        if isatty; then
+            echo "$message" >&2
+        else
+            notify-send "Video downloader" "$message"
+        fi
         exit 4
     fi
+
     trap "flock -u 9; exit 0" INT TERM
 
     while [ -s "$queue" ]; do
-        while read url resolution format; do
-            notify-send "Video downloader" "Downloading $url"
-            [ "$resolution" ] && resolution="-r$resolution"
-            [ "$format" ] && format="-f$format"
+        echo "$(head -n 1 "$queue")" |
+            while read url resolution format; do
+                notify-send "Video downloader" "Downloading $url"
+                [ "$resolution" ] && resolution="-r$resolution"
+                [ "$format" ] && format="-f$format"
 
-            yd $resolution $format "$url" && flock "$queue" sed -i 1d "$queue"
+                yd $resolution $format "$url" && flock "$queue" sed -i 1d "$queue"
 
-            notify-send "Video downloader" "Finished downloading $url"
-            unset resolution
-            unset format
-        done <<EOF
-$(head -n 1 "$queue")
-EOF
+                notify-send "Video downloader" "Finished downloading $url"
+                unset resolution
+                unset format
+            done
     done
     flock -u 9
 }
@@ -66,16 +101,16 @@ get_uploader()
 
 get_formats()
 {
-    # TODO: Seguir probando con:
+    # TODO: Keep testing with:
     # jq -j '.formats[] | [([ .format_id, .ext] | join(":"))] | join(":")' "$(yd -j 'https://www.youtube.com/watch?v=_ijnXe4ATT8')"
-    # Para recrear lo mismo que ytdl
+    # To recreate something like youtube-dl -F $url
     yd -F "$1"
 }
 
 generate_preview()
 {
     url="$1"
-    [ "$url" ] || exit 0
+    [ "$url" ] || return
 
     file="$(yd -j "$url")"
     printf "\e[1mTitle: %s\e[0m\nUploader: %s\nDuration: %s\n%s\n" \
@@ -87,41 +122,48 @@ generate_preview()
 
 preview()
 {
-    exec 2>/dev/null
-
     echo "Loading preview"
 
-    # Use a file instead of piping into less allows it to show the "Loading preview" text
-    generate_preview "$1" > "$preview_file" 2>/dev/null
-    less -R "$preview_file"
+    generate_preview "$1"
+}
 
-    exit 0
+is_interactive()
+{
+    # If no interactivity mode is set, guess it
+    if [ -z "$interactive" ]; then
+        isatty
+        return
+    else
+        return "$((!interactive))"
+    fi
 }
 
 enqueue()
 {
     url="$1"
     [ -n "$use_clipboard" ] && url="$(xsel -bo)"
-    [ "$url" ] || exit 0
 
-    echo "Pressing enter indicates the default"
+    if [ -z "$url" ]; then
+        echo "No url provided"
+        exit 5
+    fi
 
-    while true; do
-        printf "Video resolution and format to download (p for preview): "
-        read -r resolution format
+    if is_interactive; then
+        while true; do
+            printf "%s\n%s" \
+                "Video resolution and format to download" \
+                "(empty for default, p for preview): "
 
-        if [ "$resolution" = "p" ]; then
-            if [ -z "$preview_pane" ]; then
-                preview_pane="$(tmux split-window -d -v -P -p 80 "$0 -p '$url'")"
-                trap "tmux kill-pane -t $preview_pane 2>/dev/null; exit 0" INT TERM
+            read -r resolution format
+
+            if [ "$resolution" = "p" ]; then
+                preview "$url"
+                continue;
             fi
 
-            continue;
-        fi
-
-        [ -n "$preview_pane" ] && tmux kill-pane -t "$preview_pane" 2>/dev/null
-        break;
-    done
+            break
+        done
+    fi
 
     flock "$queue" echo "$url $resolution $format" >> "$queue"
 
@@ -130,11 +172,15 @@ enqueue()
 
 edit()
 {
-    st -c floating-st -e tmux new-session -s edit-queue "$EDITOR" "$queue"
+    if isatty; then
+        "$EDITOR" "$queue"
+    else
+        "$TERMINAL" -c floating-st -e tmux new-session -s edit-queue "$EDITOR" "$queue"
+    fi
 }
 
 unset operation
-while getopts cdenp name; do
+while getopts cdef:hiInpr: name; do
     case "$name" in
         (c)
             use_clipboard=1
@@ -145,19 +191,35 @@ while getopts cdenp name; do
         (e)
             operation=edit
             ;;
+        (f)
+            format="$OPTARG"
+            ;;
+        (h)
+            operation=usage
+            ;;
+        (i)
+            interactive=1
+            ;;
+        (I)
+            interactive=0
+            ;;
         (n)
             operation=enqueue
             ;;
-        (p)
-            operation=preview
+        (r)
+            resolution="$OPTARG"
             ;;
         (?)
+            usage >&2
             exit 2
             ;;
     esac
 done
 shift $((OPTIND - 1))
 
-[ "$operation" ] || exit 3
+if [ -z "$operation" ]; then
+    echo "No operation selected" >&2
+    exit 3
+fi
 
 $operation "$@"
