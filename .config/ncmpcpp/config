@@ -71,7 +71,7 @@ visualizer_in_stereo = no
 ## that sane values start with >=10.
 ##
 #
-visualizer_sync_interval = 30
+# visualizer_sync_interval = 30
 #
 ##
 ## Note: To enable spectrum frequency visualization you need to compile ncmpcpp
@@ -354,7 +354,7 @@ progressbar_look = "-- "
 #
 #lines_scrolled = 2
 #
-lyrics_fetchers = genius, azlyrics, metrolyrics, lyricwiki, sing365, lyricsmania, justsomelyrics, jahlyrics, plyrics, tekstowo, internet
+#lyrics_fetchers = genius, azlyrics, metrolyrics, sing365, lyricsmania, justsomelyrics, jahlyrics, plyrics, tekstowo, internet
 #
 follow_now_playing_lyrics = yes
 #

@@ -43,10 +43,10 @@ if exists('g:loaded_minpac')
 
     " Highlight
     call minpac#add('cespare/vim-toml')
-    call minpac#add('vim-pandoc/vim-pandoc-syntax')
+    " call minpac#add('vim-pandoc/vim-pandoc-syntax')
 
     " Misc
-    call minpac#add('vim-pandoc/vim-pandoc')
+    " call minpac#add('vim-pandoc/vim-pandoc')
     " call minpac#add('junegunn/goyo.vim')
 
     " Colors
@@ -95,8 +95,6 @@ if (!empty($DISPLAY))
     set termguicolors
 
     colorscheme iceberg
-    " iceberg's Specialkey highlight is barely visible
-    highlight SpecialKey guifg=#6b7089 guibg=NONE
     " Transparency
     highlight Normal guibg=NONE
     highlight EndOfBUffer guibg=NONE
@@ -159,7 +157,7 @@ let g:gutentags_cache_dir = expand('~/.cache/nvim/ctags/')
 augroup filespecific
     autocmd!
     autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
-    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+    "autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 
 "}}}

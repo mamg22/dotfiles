@@ -10,21 +10,17 @@ c.aliases = {
     'wq': 'quit --save',
 }
 
-c.backend = 'webengine'
-
-c.completion.delay = 1000
+# c.completion.delay = 1000
 c.completion.web_history.exclude = [
-    # Exclude searches from completion
-    # Doesn't regenerate automatically, see: https://github.com/qutebrowser/qutebrowser/issues/5868
-    # Can be regenerated manually with
-    # sqlite3 ~/.local/share/qutebrowser/history.sqlite 'update CompletionMetaInfo set value=1 where key="force_rebuild"'
     '*://duckduckgo.com/*',
     '*://www.google.com/*',
+    'https://www.reddit.com/*/search',
+    'qute://pdfjs/*',
 ]
 
 c.confirm_quit = ["multiple-tabs", "downloads"]
 
-c.content.headers.accept_language = 'es-VE,es'
+c.content.headers.accept_language = 'es-VE,es,en'
 
 c.editor.command = ['st', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
 
@@ -34,8 +30,6 @@ c.fonts.web.family.standard = 'Liberation Sans'
 c.fonts.web.size.default = 15
 
 c.hints.border = '1px solid #6b7089'
-c.hints.chars = 'asdfghjkl'
-c.hints.mode = 'letter'
 # Reddit expando
 c.hints.selectors['expando'] = ['.expando-button']
 # Reddit and Hacker News comment toggles
@@ -44,6 +38,7 @@ c.hints.selectors['any'] = ['*']
 c.hints.uppercase = True
 
 c.qt.low_end_device_mode = 'always'
+c.qt.process_model = 'process-per-site'
 
 c.scrolling.smooth = False
 
@@ -98,7 +93,8 @@ c.url.searchengines = {
     'nth':     'https://nitter.net/{unquoted}',
     # Jump to github repo or user
     'ghr':     'https://github.com/{unquoted}',
-    'wf':      'https://www.wolframalpha.com/input/?i={}'
+    'wf':      'https://www.wolframalpha.com/input/?i={}',
+    'hn':      'https://hn.algolia.com/?q={}',
 }
 c.url.start_pages = '~/any/startpage/index.html'
 
@@ -125,12 +121,18 @@ bar_show_toggle = [
 def join_commands(command_list):
     return ' ;; '.join(command_list)
 
+# Toggle GUI parts
 config.bind('xr', join_commands(tab_rotate))
 config.bind('xt', join_commands(tab_show_cycle))
 config.bind('xb', join_commands(bar_show_toggle))
+
+# Hints
 config.bind(';e', 'hint expando')
 config.bind(';E', 'hint --rapid expando')
 config.bind(';c', 'hint comment')
 config.bind(';C', 'hint --rapid comment')
+
+# Suspend tabs
+config.bind('xs', 'spawn --userscript suspend')
 
 config.source("colors.py")

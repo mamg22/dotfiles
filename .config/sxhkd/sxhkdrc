@@ -1,10 +1,14 @@
 # terminal emulator
 super + Return
-	$TERMINAL
+	terminal-spawn
 
 # program launcher
 super + @space
-	dmenu_run -p "dmenu:"
+	rofi -modi run,drun -show run
+
+# window switcher
+alt + Tab
+    rofi -modi window -show window
 
 # make sxhkd reload its configuration files:
 super + ctrl + Escape
@@ -118,17 +122,17 @@ super + {Left,Down,Up,Right}
 
 # volume and brightness control
 XF86Audio{Raise,Lower}Volume
-    pactl set-sink-volume @DEFAULT_SINK@ {+,-}5%
+    pactl set-sink-volume @DEFAULT_SINK@ {+,-}5% && notify-volume
 
 XF86AudioMute
-    pactl set-sink-mute @DEFAULT_SINK@ toggle
+    pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-volume
 
 XF86MonBrightness{Up,Down}
     brightnessctl set 10%{+,-}
 
-# my dmenu scripts 
+# my rofi/dmenu scripts
 super + Pause
-    dmenu-power
+    rofi-power
 
 super + alt + i
     dmenu-info
@@ -156,7 +160,7 @@ super + alt + v
     dmenu-videos
 
 super + shift + alt + v
-    dmenu-podcasts
+    rofi-podcasts
 
 super + alt + t
     dmenu-texdoc
@@ -209,6 +213,10 @@ super + alt + apostrophe
 # Send files to phone
 super + alt + e
     kdeconnect-send-files
+
+# Power Key
+XF86PowerOff
+    rofi-power
 
 ## test
 #~button3

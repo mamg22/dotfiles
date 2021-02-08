@@ -3,11 +3,11 @@
 # Begin settings
 
 # How many pixels to move per "frame"
-x_speed=4
-y_speed=4
+x_speed=2
+y_speed=2
 
 # Time between "frames"
-sleep_time=0.1
+sleep_time=0.01
 
 # 0: Ignore paddings; 1: Use paddings
 use_pad=1

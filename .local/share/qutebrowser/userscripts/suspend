@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [ "$QUTE_COUNT" ]; then
+    # Don't know a good way to get the title for unfocused tabs
+    #
+    # Maybe try with session-save and reading the yaml file?
+    #
+    # Made a hacky way that switched the tab, and told qutebrowser to
+    # run the same script again with a special argument, and there 
+    # suspend that tab like in the else part of this
+    # condition, and finally switched back with :tab-focus last
+    #
+    # It worked, but the tab switching was annoying and it also lost the
+    # real previous tab
+
+    echo "run-with-count ${QUTE_COUNT} open qute://back" >> "$QUTE_FIFO"
+else
+    echo "open qute://back#${QUTE_TITLE}" >> "$QUTE_FIFO"
+fi

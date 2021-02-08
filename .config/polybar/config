@@ -126,7 +126,6 @@ ws-icon-8  = 9;
 ws-icon-9  = 10;
 ws-icon-default = ●
 
-
 label-focused = %icon%
 label-focused-foreground = ${colors.active}
 label-focused-padding = 0

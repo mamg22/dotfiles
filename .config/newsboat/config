@@ -5,7 +5,7 @@ color listfocus cyan default standout
 color listfocus_unread cyan default bold standout
 
 download-timeout 60
-download-retries 15
+download-retries 10
 
 download-path "~/podcasts/%n"
 

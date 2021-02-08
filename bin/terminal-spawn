@@ -14,9 +14,9 @@ office"
 spawn()
 {
     if [ "$1" ]; then
-        $TERMINAL -e tmux new-session -As "$1"
+        exec $TERMINAL -e tmux new-session -As "$1"
     else
-        $TERMINAL -e tmux new-session
+        exec $TERMINAL -e tmux new-session
     fi
 }
 
