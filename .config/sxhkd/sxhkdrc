@@ -128,7 +128,7 @@ XF86AudioMute
     pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-volume
 
 XF86MonBrightness{Up,Down}
-    brightnessctl set 10%{+,-}
+    brightnessctl set 10%{+,-} && notify-brightness
 
 # my rofi/dmenu scripts
 super + Pause
@@ -157,7 +157,7 @@ super + alt + s
     dmenu-sgt
 
 super + alt + v
-    dmenu-videos
+    rofi-videos
 
 super + shift + alt + v
     rofi-podcasts
