@@ -52,7 +52,11 @@ download()
         exit 4
     fi
 
-    trap "flock -u 9; exit 0" INT TERM
+    # On interruption or termination:
+    # Unlock the download_lock file, wait a second (This solves a weird
+    # issue were output keeps appearing even after the shell prompt appears,
+    # and exit
+    trap "flock -u 9; sleep 1; exit 0" INT TERM
 
     while [ -s "$queue" ]; do
         echo "$(head -n 1 "$queue")" |
