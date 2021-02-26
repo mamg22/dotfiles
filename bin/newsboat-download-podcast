@@ -6,7 +6,7 @@ queue=~/.local/share/newsboat/queue
 
 while read line; do
     podcast_url="$(cut -d ' ' -f1 < "$queue" | head -1)"
-    podcast_location="$(dirname "$(sed 's/[^ ]\+ //;s/^.//;s/.$//;s/Podcast: //' < "$queue" | head -1)")"
+    podcast_location="$(dirname "$(sed 's/[^ ]\+ //;s/^.//;s/.$//' < "$queue" | head -1)")"
 
     notify-send "Podcast downloader" "Downloading episode of $(basename "$podcast_location")"
 
