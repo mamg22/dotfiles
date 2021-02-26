@@ -165,10 +165,6 @@ super + shift + alt + v
 super + alt + t
     dmenu-texdoc
 
-# Luke Smith's emoji dmenu
-super + alt + u
-    dmenuunicode
-
 # rotate nodes
 super + {_,shift +} r
     bspc node -R {_,-}90
@@ -218,6 +214,3 @@ super + alt + e
 XF86PowerOff
     rofi-power
 
-## test
-#~button3
-#    bspwm-empty-right-click
