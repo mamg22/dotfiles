@@ -25,5 +25,3 @@ macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser-open %u
 browser "qutebrowser-open %u"
 
 notify-program "~/bin/newsboat-notify"
-
-reset-unread-on-update "https://github.com/00-Evan/shattered-pixel-dungeon/releases.atom"
