@@ -4,7 +4,7 @@ super + Return
 
 # program launcher
 super + @space
-	rofi -modi run,drun -show run
+	rofi -modi run,drun -show drun
 
 # window switcher
 alt + Tab
@@ -143,14 +143,11 @@ super + ctrl + Return
 super + alt + space
     dmenu-clipluncher
 
-super + alt + c
-    dmenu-compton
-
 super + alt + Return
     dmenu-tmux
 
 super + Print
-    dmenu-screenshot
+    rofi-screenshot
 
 # Pick a puzzle from Simon Tatham's collection
 super + alt + s

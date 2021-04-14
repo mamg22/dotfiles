@@ -1,24 +1,32 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
+# Uncomment this line and add zprof at the bottom for startup time profiling
+# zmodload zsh/zprof
+
+HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -v
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
+
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle :compinstall filename '/home/marco/.zshrc'
 
 autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+#compinit -C
+# https://gist.github.com/ctechols/ca1035271ad134841284
+setopt extendedglob
+if [[ -n ${ZDOTDIR:-${HOME}}/.zcompdump(#qN.mh+24) ]]; then
+	compinit;
+    # Also compile it into a zwc file for faster loading
+    # zcompile "${ZDOTDIR:-${HOME}}/.zcompdump"
+else
+	compinit -C;
+fi;
+setopt noextendedglob
 
 setopt histignorespace
 setopt histignoredups
 
 PROMPT="%F{4}[%F{6}%n@%m%F{4}](%F{6}%~%F{4})%f
 %(?..%F{1})%#%f "
-
-compdef _command untildone
-compdef _command ud
 
 # Aliases
 
@@ -36,8 +44,6 @@ alias l='ls -CF'
 
 alias za='zathura --fork >/dev/null 2>&1'
 alias ytdl='youtube-dl'
-
-alias lynx='lynx --lss=~/.lynx/lynx.lss --cfg=~/.lynx/lynx.cfg'
 
 alias sc='systemctl'
 alias scu='systemctl --user'
@@ -83,4 +89,5 @@ mkcd()
     mkdir -p "$1" && cd "$1"
 }
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
+[ -f /usr/share/fzf/shell/key-bindings.zsh ] && source /usr/share/fzf/shell/key-bindings.zsh || true

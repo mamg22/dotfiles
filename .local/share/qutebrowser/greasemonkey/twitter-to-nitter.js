@@ -8,4 +8,4 @@
 // @run-at         document-start
 // ==/UserScript==
 
-location.href=location.href.replace("twitter.com","nitter.net");
+location.href=location.href.replace("twitter.com","nitter.kavin.rocks");

@@ -31,7 +31,7 @@ warning    = ${colors.yellow}
 active     = ${colors.darkcyan}
 inactive   = ${colors.darkgray}
 
-barbg = #e4161821
+barbg = ${colors.background}
 barfg = ${colors.foreground}
 
 [bar/main]

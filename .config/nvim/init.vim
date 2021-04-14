@@ -43,6 +43,7 @@ if exists('g:loaded_minpac')
 
     " Highlight
     call minpac#add('cespare/vim-toml')
+    call minpac#add('aklt/plantuml-syntax')
     " call minpac#add('vim-pandoc/vim-pandoc-syntax')
 
     " Misc
@@ -96,11 +97,11 @@ if (!empty($DISPLAY))
 
     colorscheme iceberg
     " Transparency
-    highlight Normal guibg=NONE
-    highlight EndOfBUffer guibg=NONE
-    hi CursorLine guibg=NONE
-    hi LineNr guibg=NONE
-    hi Conceal guibg=NONE guifg=#ada0d3
+    "highlight Normal guibg=NONE
+    "highlight EndOfBUffer guibg=NONE
+    "hi CursorLine guibg=NONE
+    "hi LineNr guibg=NONE
+    "hi Conceal guibg=NONE guifg=#ada0d3
     set cursorline
 else
     " Linux console

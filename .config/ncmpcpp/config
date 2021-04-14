@@ -521,7 +521,7 @@ state_line_color = blue
 #
 state_flags_color = cyan:b
 #
-main_window_color = blue
+main_window_color = white
 #
 #color1 = red
 #

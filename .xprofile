@@ -1,5 +1,9 @@
 #!/bin/sh
 
+/etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+systemctl --user start X-online.target
+
+xrdb .Xresources &
 $HOME/.fehbg &
 setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle -option caps:swapescape &
 xsettingsd &
@@ -17,6 +21,7 @@ unclutter &
 # Enabling the unit doesn't work right now
 systemctl --user start kdeconnect.service &
 
+# Allow sxhkd to grab the power key
 systemd-inhibit --what=handle-power-key \
     --who="Power Key inhibitor for X" \
     --why="Disable power key behaviour so X programs can use it" \

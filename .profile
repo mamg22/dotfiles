@@ -32,10 +32,11 @@ export EDITOR="nvim"
 export BROWSER="qutebrowser"
 export TERMINAL="st"
 
-export PATH=$PATH:/usr/local/go/bin
-
-export GOPATH="$HOME/dev/projects/go"
-export GOBIN="$GOPATH/bin"
+export QT_QPA_PLATFORMTHEME=qt5ct
+#export QT_STYLE=Adwaita-dark
 
 # Force english manpages
 export MANOPT="-L en"
+
+# Fix java gui apps
+export _JAVA_AWT_WM_NONREPARENTING=1
