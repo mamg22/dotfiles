@@ -102,4 +102,6 @@ c.colors.tabs.selected.even.bg                     = color_dark_gray
 c.colors.tabs.selected.even.fg                     = color_white
 c.colors.tabs.selected.odd.bg                      = color_dark_gray
 c.colors.tabs.selected.odd.fg                      = color_white
-c.colors.webpage.bg                                = '#ffffff'
+
+#c.colors.webpage.bg                                = '#ffffff'
+c.colors.webpage.preferred_color_scheme            = 'dark'

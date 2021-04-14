@@ -37,6 +37,7 @@ c.hints.selectors['comment'] = ['.expand', '.togg']
 c.hints.selectors['any'] = ['*']
 c.hints.uppercase = True
 
+c.qt.force_software_rendering = 'qt-quick'
 c.qt.low_end_device_mode = 'always'
 c.qt.process_model = 'process-per-site'
 
@@ -88,9 +89,9 @@ c.url.searchengines = {
     'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
     'iv':      'https://invidious.snopyta.org/search?q={}',
     'fd':      'https://search.f-droid.org/?q={}',
-    'nt':      'https://nitter.net/search?q={}',
+    'nt':      'https://nitter.kavin.rocks/search?q={}',
     # Nitter handle
-    'nth':     'https://nitter.net/{unquoted}',
+    'nth':     'https://nitter.kavin.rocks/{unquoted}',
     # Jump to github repo or user
     'ghr':     'https://github.com/{unquoted}',
     'wf':      'https://www.wolframalpha.com/input/?i={}',
