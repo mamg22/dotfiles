@@ -75,8 +75,8 @@ case "$1" in
         ;;
 esac
 
-figlet -ct Llego el intenet | lolcat
+echo "Llego el intenet"
 if [ "$1" = "silent" ] || [ "$2" = "silent" ]; then
     exit 0
 fi
-mpv ~/music/Newton/Newton\ -\ Streamline.mp3 --no-terminal
+mpv "$HOME/music/Newton/Newton - Streamline.mp3" --no-terminal

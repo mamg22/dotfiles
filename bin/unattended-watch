@@ -3,7 +3,7 @@
 # My laptop's battery is old and has been under lot of usage, so it can't keep
 # charge for more than a few minutes. This script is a small utility that
 # suspends (or other action) the system when it detects the power has been
-# disconnected. I run this when leaving it unatrended overnight, when
+# disconnected. I run this when leaving it unatrended overnight, where
 # I might not notice power failures.
 #
 # Also supports suspend when the network disconnects.
@@ -15,6 +15,7 @@ power=AC0
 
 action="${1:-suspend}"
 
+echoerr "Watching for power and network disconnections"
 while true; do
     # Store network state
     old_state="$(cat /sys/class/net/$iface/operstate)"
@@ -23,7 +24,7 @@ while true; do
     # Break instantly if unplugged
     [ "$plugged" = "0" ] && reason="Power supply disconnected" && break
 
-    sleep 1m
+    sleep 30
 
     # Check network state again, if down in the two checks, break
     current_state="$(cat /sys/class/net/$iface/operstate)"
