@@ -52,6 +52,7 @@ if exists('g:loaded_minpac')
 
     " Colors
     call minpac#add('cocopon/iceberg.vim')
+    call minpac#add('morhetz/gruvbox')
     " call minpac#add('arcticicestudio/nord-vim')
     " call minpac#add('dracula/vim', {'name': 'dracula'})
 endif
@@ -95,7 +96,7 @@ if (!empty($DISPLAY))
     " Running in GUI
     set termguicolors
 
-    colorscheme iceberg
+    colorscheme gruvbox
     " Transparency
     "highlight Normal guibg=NONE
     "highlight EndOfBUffer guibg=NONE
@@ -118,7 +119,7 @@ let g:echodoc#type = 'virtual'
 
 if (!empty($DISPLAY))
     let g:lightline = {
-                    \ 'colorscheme':'iceberg'
+                    \ 'colorscheme':'gruvbox'
                     \}
 else
     let g:lightline = {
