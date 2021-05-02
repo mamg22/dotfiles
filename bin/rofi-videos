@@ -1,7 +1,9 @@
 #!/bin/sh
 
-videos="$(find ~/video -type f | sort)"
-videos_pretty="$(echo "$videos" | sed "s|/[^/]\+/[^/]\+/[^/]\+/||; s/-.\{11\}\..*$//")"
+videos_dir="$(xdg-user-dir VIDEOS)"
+
+videos="$(find "$videos_dir" -type f | sort)"
+videos_pretty="$(echo "$videos" | sed "s|$videos_dir/||; s/-.\{11\}\..*$//")"
 
 pick="$(echo "$videos_pretty" | rofi -width -120 -dmenu -l 20 -i -p "Video")" 
 [ -z "$pick" ] && exit

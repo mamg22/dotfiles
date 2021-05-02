@@ -156,10 +156,13 @@ enqueue()
         while true; do
             printf "%s\n%s" \
                 "Video resolution and format to download" \
-                "(empty for default, p for preview): "
+                "([Enter] default, [p]review, [q]uit): "
 
             read -r resolution format
 
+            if [ "$resolution" = "q" ]; then
+                exit 0;
+            fi
             if [ "$resolution" = "p" ]; then
                 preview "$url"
                 continue;

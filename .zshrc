@@ -22,8 +22,7 @@ else
 fi;
 setopt noextendedglob
 
-setopt histignorespace
-setopt histignoredups
+setopt histignorespace histignoredups
 
 PROMPT="%F{4}[%F{6}%n@%m%F{4}](%F{6}%~%F{4})%f
 %(?..%F{1})%#%f "
@@ -87,6 +86,14 @@ alias ncm='ncmpcpp'
 mkcd()
 {
     mkdir -p "$1" && cd "$1"
+}
+
+uni()
+{
+    unidir="$HOME/doc/uni/cur"
+    target="$(find "$unidir/" -mindepth 1 -type d -printf '%P\n' | fzf --height 40% || return 0)"
+    [ "$target" ] || return 0
+    cd "$unidir/$target"
 }
 
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true

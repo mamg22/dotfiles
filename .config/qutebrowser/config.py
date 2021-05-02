@@ -87,7 +87,7 @@ c.url.searchengines = {
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
     'kym':     'https://knowyourmeme.com/search?q={}',
     'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
-    'iv':      'https://invidious.snopyta.org/search?q={}',
+    'iv':      'https://invidious.kavin.rocks/search?q={}',
     'fd':      'https://search.f-droid.org/?q={}',
     'nt':      'https://nitter.kavin.rocks/search?q={}',
     # Nitter handle
@@ -135,5 +135,9 @@ config.bind(';C', 'hint --rapid comment')
 
 # Suspend tabs
 config.bind('xs', 'spawn --userscript suspend')
+
+# Use google search
+config.bind('<Alt-o>', 'set-cmd-text -s :open g')
+config.bind('<Alt-Shift-o>', 'set-cmd-text -s :open -t g')
 
 config.source("colors.py")
