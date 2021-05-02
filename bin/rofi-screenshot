@@ -1,0 +1,73 @@
+#!/bin/sh
+
+date_fmt='+scrot-%y-%m-%d_%H-%M-%S'
+
+screenshot_dir="$HOME/img/screenshot"
+
+tmp_dir="/tmp/rofi-screenshot.tmp"
+
+image_viewer="sxiv"
+
+[ -d "$tmp_dir" ] || mkdir -p "$tmp_dir"
+
+options='Fullscreen
+Select area
+Fullscreen and save as...
+Select area and save as...
+Open in image viewer
+Extract text (spanish)
+Extract text (english)'
+
+selection="$(echo "$options" | rofi -dmenu -i -l 10 -p "Screenshot")"
+
+filename="$(date "$date_fmt").png"
+
+output="$screenshot_dir/$filename"
+
+# TODO: Rewrite this thing, maybe the whole script, add functions, idk this is a mess
+case "$selection" in
+    (Fullscreen*)
+        maim -ou "$output" || exit 1
+        ;;
+    ("Select area"*)
+         # Wait for a few ms, so the highlight doesn't appear in the screenshot
+        maim -soul -d 0.1 -c '0,1,1,0.3' "$output" || exit 1
+        ;;
+    ("Open in image viewer")
+        output="$tmp_dir/$filename"
+        maim -soul -d 0.1 -c '0,1,1,0.3' "$output" || exit 1
+        $image_viewer "$output"
+        rm "$output"
+        ;;
+    ("Extract text"*)
+        output="$tmp_dir/$filename"
+        maim -soul -d 0.1 -c '0,1,1,0.3' "$output" || exit 1
+        case "$selection" in
+            (*"(spanish)")
+                lang=spa
+                ;;
+            (*"(english)")
+                lang=eng
+                ;;
+        esac
+        tesseract "$output" "$output" -l "$lang"
+        xsel -b < "$output.txt"
+        notify-send "Text copied to clipboard"
+        ;;
+esac
+
+case "$selection" in
+    (*"save as"*)
+        while true; do
+            # Get the filename, if nothing is given, remove the screenshot
+            filename="$(rofi -dmenu -lines 0 -p "Filename").png"
+            [ "$filename" = ".png" ] && rm "$output" && exit 0
+
+            # If the file exists, ask if we want to overwrte
+            [ ! -e "$screenshot_dir/$filename" ] && break
+            overwrite="$(printf "No\nYes" | rofi -dmenu -i -p "Overwrite?")"
+            [ "$overwrite" = "Yes" ] && break
+        done
+        mv "$output" "$screenshot_dir/$filename"
+esac
+

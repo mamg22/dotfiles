@@ -1,0 +1,54 @@
+#!/usr/bin/zsh
+
+# Begin configuration
+
+# Session name : Session executable
+declare -A sessions=(
+    'bspwm' 'startx'
+    'sway'  'sway'
+)
+
+timeout=5
+default=1
+
+# End of configuration
+
+# If no default set, use first entry
+# TODO: Add a saved default option?
+default="${default:-1}"
+
+timeout="${timeout:-5}"
+
+# Iterate over available sessions, and build an array to map indexes to names
+declare -a index_mapping
+count=1
+
+echo "Select a session:"
+for session in "${(@k)sessions}"; do
+    printf "[%d] %s " "$count" "$session"
+    index_mapping+=("$session")
+    ((count++))
+done
+
+printf '\n\n'
+
+# Set the prompt and ask for a single character with a timeout
+printf "Selecting default [%d] in %s seconds: " "$default" "$timeout"
+read -r -t "$timeout" -k 1 selection
+printf '\n'
+
+# If enter is pressed, use the default
+[ "$selection" = $'\n' ] && selection="$default"
+
+# Map form the $selection index, if empty use default
+selected_session="${index_mapping[${selection:-$default}]}"
+
+# Session doesn't exist
+if [ -z "$selected_session" ]; then
+    echo "Invalid session"
+    exit 1
+fi
+
+session_exec="${sessions[$selected_session]}"
+
+$session_exec
