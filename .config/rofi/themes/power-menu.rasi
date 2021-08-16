@@ -2,12 +2,5 @@
 
 mainbox {
     children: [ listview ];
-}
-
-element {
-    border-color: transparent;
-}
-
-element-text {
-    margin: 0.4% 0%;
+    padding: 2px;
 }

@@ -1,8 +1,4 @@
-# For compatibility with newer versions
-try:
-    config.load_autoconfig(False)
-except:
-    pass
+config.load_autoconfig(True)
 
 c.aliases = {
     'w': 'session-save',
@@ -21,6 +17,7 @@ c.completion.web_history.exclude = [
 c.confirm_quit = ["multiple-tabs", "downloads"]
 
 c.content.headers.accept_language = 'es-VE,es,en'
+c.content.autoplay = False
 
 c.editor.command = ['st', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
 
@@ -29,7 +26,7 @@ c.fonts.web.family.sans_serif = 'Liberation Sans'
 c.fonts.web.family.standard = 'Liberation Sans'
 c.fonts.web.size.default = 15
 
-c.hints.border = '1px solid #6b7089'
+c.hints.border = '1px solid #928374'
 # Reddit expando
 c.hints.selectors['expando'] = ['.expando-button']
 # Reddit and Hacker News comment toggles
@@ -96,6 +93,8 @@ c.url.searchengines = {
     'ghr':     'https://github.com/{unquoted}',
     'wf':      'https://www.wolframalpha.com/input/?i={}',
     'hn':      'https://hn.algolia.com/?q={}',
+    # Fedora sources
+    'fsr':     'https://src.fedoraproject.org/search?term={}',
 }
 c.url.start_pages = '~/any/startpage/index.html'
 
@@ -134,7 +133,8 @@ config.bind(';c', 'hint comment')
 config.bind(';C', 'hint --rapid comment')
 
 # Suspend tabs
-config.bind('xs', 'spawn --userscript suspend')
+#config.bind('xs', 'spawn --userscript suspend')
+config.bind('xs', 'open qute://back')
 
 # Use google search
 config.bind('<Alt-o>', 'set-cmd-text -s :open g')

@@ -1,3 +1,4 @@
 configuration {
-	theme: "/home/marco/.config/rofi/themes/iceberg.rasi";
+    font: "Hack 10";
+    theme: "gruvbox-dark";
 }

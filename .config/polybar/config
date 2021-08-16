@@ -6,29 +6,32 @@ margin-bottom = 0
 screenchange-reload = true
 
 [colors]
-# iceberg colors
-black = #161821
-darkred = #e27878
-darkgreen = #b4be82
-darkyellow = #e2a478
-darkblue = #84a0c6
-darkmagenta = #a093c7
-darkcyan = #89b8c2
-lightgray = #c6c8d1
-darkgray = #6b7089
-red = #e98989
-green = #c0ca8e
-yellow = #e9b189
-blue = #91acd1
-magenta = #ada0d3
-cyan = #95c4ce
-white = #d2d4de
+# gruvbox colors
+black = #282828
+darkred = #cc241d
+darkgreen = #98971a
+darkyellow = #d79921
+darkblue = #458588
+darkmagenta = #b16286
+darkcyan = #689d6a
+lightgray = #a89984
+darkgray = #928374
+red = #fb4934
+green = #b8bb26
+yellow = #fabd2f
+blue = #83a598
+magenta = #d3869b
+cyan = #8ec07c
+white = #ebdbb2
 
-background = ${colors.black}
-foreground = ${colors.white}
+bg = #282828
+fg = #ebdbb2
+
+background = ${colors.bg}
+foreground = ${colors.fg}
 alert      = ${colors.red}
 warning    = ${colors.yellow}
-active     = ${colors.darkcyan}
+active     = ${colors.cyan}
 inactive   = ${colors.darkgray}
 
 barbg = ${colors.background}
@@ -36,16 +39,8 @@ barfg = ${colors.foreground}
 
 [bar/main]
 width = 100%
-height = 19
 offset-x = 0%
 offset-y = 0%
-
-;width = 100%:-8
-;height = 19
-;offset-x = 0%:+4
-;offset-y = 4
-;border-size = 2
-;border-color = ${colors.darkgray}
 
 fixed-center = true
 
@@ -54,43 +49,55 @@ enable-ipc = true
 background = ${colors.barbg}
 foreground = ${colors.barfg}
 
-font-0 = Hack:size=9;2
-font-1 = Font Awesome 5 Free Solid:size=9;2
-font-2 = Font Awesome 5 Free Solid:size=11;3
-font-3 = Hack:size=9;0
+font-0 = Hack:size=9
+font-1 = Font Awesome 5 Free Solid:size=9
+font-2 = Font Awesome 5 Free Solid:size=11
+font-3 = Hack:size=9
+font-4 = Noto Color Emoji:scale=10
 
 modules-left = pulseaudio mpd
-modules-center = bspwm
-modules-right = bspwm-mode bspwm-count newsboat-unread xkeyboard memory cpu wlan eth battery date
+modules-center = xworkspaces
+modules-right = newsboat-unread xkeyboard memory cpu wlan eth battery date
 
 tray-position = right
 tray-padding = 2
 
-wm-restack = bspwm
+[module/xworkspaces]
+type = internal/xworkspaces
 
-[bar/virtual-screen]
-width = 100%
-height = 19
-offset-x = 0%
-offset-y = 0%
-fixed-center = true
-monitor = VIRTUAL1
+format = <label-state>
 
-background = ${colors.barbg}
-foreground = ${colors.barfg}
+icon-0  = hw;
+icon-1  = web;
+icon-2  = media;
+icon-3  = dev;
+icon-4  = sys;
+icon-5  = files;
+icon-6  = creative;
+icon-7  = office;
+icon-8  = other;
+icon-9  = 10;
+icon-default = ●
 
-font-0 = Hack:size=9;2
-font-1 = Font Awesome 5 Free Solid:size=9;2
-font-2 = Font Awesome 5 Free Solid:size=11;3
+label-active = "%icon% "
+label-active-foreground = ${colors.active}
+label-active-padding = 0
 
-modules-left =
-modules-center = bspwm
-modules-right =
+label-occupied = "%icon% "
+label-occupied-foreground = ${colors.foreground}
+label-occupied-padding = 0
 
-tray-position = right
-tray-padding = 2
+label-urgent = "%icon% "
+label-urgent-foreground = ${colors.alert}
+label-urgent-padding = 0
 
-wm-restack = bspwm
+label-empty = "%icon% "
+label-empty-foreground = ${colors.inactive}
+label-empty-padding = 0
+
+label-separator = " "
+
+enable-scroll = false
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -108,103 +115,6 @@ layout-icon-1 = us;us
 label-indicator-on = %icon%
 label-indicator-on-foreground = ${colors.warning}
 indicator-icon-0 = caps lock;;
-
-[module/bspwm]
-type = internal/bspwm
-
-format = <label-state>
-
-ws-icon-0  = 1;
-ws-icon-1  = 2;
-ws-icon-2  = 3;
-ws-icon-3  = 4;
-ws-icon-4  = 5;
-ws-icon-5  = 6;
-ws-icon-6  = 7;
-ws-icon-7  = 8;
-ws-icon-8  = 9;
-ws-icon-9  = 10;
-ws-icon-default = ●
-
-label-focused = %icon%
-label-focused-foreground = ${colors.active}
-label-focused-padding = 0
-
-label-occupied = %icon%
-label-occupied-foreground = ${colors.foreground}
-label-occupied-padding = 0
-
-label-urgent = %icon%
-label-urgent-foreground = ${colors.alert}
-label-urgent-padding = 0
-
-label-empty = %icon%
-label-empty-foreground = ${colors.inactive}
-label-empty-padding = 0
-
-label-separator = " "
-
-;label-focused = %icon%
-;label-focused-foreground = ${colors.black}
-;label-focused-background = ${colors.active}
-;label-focused-padding = 1
-;label-focused-font = 4
-;
-;label-occupied = %icon%
-;label-occupied-foreground = ${colors.black}
-;label-occupied-background = ${colors.foreground}
-;label-occupied-padding = 1
-;label-occupied-font = 4
-;
-;label-urgent = %icon%
-;label-urgent-foreground = ${colors.black}
-;label-urgent-background = ${colors.alert}
-;label-urgent-padding = 1
-;label-urgent-font = 4
-;
-;label-empty = %icon%
-;label-empty-foreground = ${colors.black}
-;label-empty-background = ${colors.inactive}
-;label-empty-padding = 1
-;label-empty-font = 4
-;
-;;label-separator = " "
-
-enable-scroll = false
-
-[module/bspwm-mode]
-type = internal/bspwm
-
-format = <label-mode>
-
-;label-monocle = ""
-;label-monocle-padding = 1
-label-monocle =
-label-monocle-padding = 0
-
-label-tiled = 
-label-tiled-padding = 1
-
-label-fullscreen = ""
-label-fullscreen-padding = 1
-
-label-floating = ""
-label-floating-padding = 1
-
-label-pseudotiled = ""
-label-pseudotiled-padding = 1
-
-label-locked = ""
-label-locked-padding = 1
-
-label-sticky = ""
-label-sticky-padding = 1
-
-label-private = ""
-label-private-padding = 1
-
-label-marked = ""
-label-marked-padding = 1
 
 [module/mpd]
 type = internal/mpd

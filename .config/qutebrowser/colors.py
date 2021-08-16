@@ -1,19 +1,25 @@
-color_black                                        = '#161821'
-color_dark_red                                     = '#e27878'
-color_dark_green                                   = '#b4be82'
-color_dark_yellow                                  = '#e2a478'
-color_dark_blue                                    = '#84a0c6'
-color_dark_magenta                                 = '#a093c7'
-color_dark_cyan                                    = '#89b8c2'
-color_light_gray                                   = '#c6c8d1'
-color_dark_gray                                    = '#6b7089'
-color_red                                          = '#e98989'
-color_green                                        = '#c0ca8e'
-color_yellow                                       = '#e9b189'
-color_blue                                         = '#91acd1'
-color_magenta                                      = '#ada0d3'
-color_cyan                                         = '#95c4ce'
-color_white                                        = '#d2d4de'
+# Gruvbox colors
+# hard contrast: #1d2021
+# soft contrast: #32302f
+background                                         = '#282828'
+foreground                                         = '#ebdbb2'
+
+color_black                                        = '#282828'
+color_dark_red                                     = '#cc241d'
+color_dark_green                                   = '#98971a'
+color_dark_yellow                                  = '#d79921'
+color_dark_blue                                    = '#458588'
+color_dark_magenta                                 = '#b16286'
+color_dark_cyan                                    = '#689d6a'
+color_light_gray                                   = '#a89984'
+color_dark_gray                                    = '#928374'
+color_red                                          = '#fb4934'
+color_green                                        = '#b8bb26'
+color_yellow                                       = '#fabd2f'
+color_blue                                         = '#83a598'
+color_magenta                                      = '#d3869b'
+color_cyan                                         = '#8ec07c'
+color_white                                        = '#ebdbb2'
 
 c.colors.completion.category.bg                    = color_dark_gray
 c.colors.completion.category.border.bottom         = color_dark_gray
@@ -30,6 +36,7 @@ c.colors.completion.match.fg                       = color_dark_gray
 c.colors.completion.odd.bg                         = color_black
 c.colors.completion.scrollbar.bg                   = color_black
 c.colors.completion.scrollbar.fg                   = color_white
+
 c.colors.downloads.bar.bg                          = color_black
 c.colors.downloads.error.bg                        = color_red
 c.colors.downloads.error.fg                        = color_black
@@ -39,25 +46,30 @@ c.colors.downloads.stop.bg                         = color_green
 c.colors.downloads.stop.fg                         = color_black
 c.colors.downloads.system.bg                       = 'rgb'
 c.colors.downloads.system.fg                       = 'rgb'
-c.colors.hints.bg                                  = 'rgba(210,212,222,.9)'
-c.colors.hints.fg                                  = color_black
+
+c.colors.hints.bg                                  = 'rgba(40,40,40,.95)'
+c.colors.hints.fg                                  = color_white
 c.colors.hints.match.fg                            = color_dark_gray
-c.colors.keyhint.bg                                = 'rgba(22,24,33,90%)'
+
+c.colors.keyhint.bg                                = 'rgba(40,40,40,90%)'
 c.colors.keyhint.fg                                = color_white
 c.colors.keyhint.suffix.fg                         = color_cyan
+
 c.colors.messages.error.bg                         = color_black
 c.colors.messages.error.border                     = color_black
-c.colors.messages.error.fg                         = color_dark_red
+c.colors.messages.error.fg                         = color_red
 c.colors.messages.info.bg                          = color_black
 c.colors.messages.info.border                      = color_black
 c.colors.messages.info.fg                          = color_white
 c.colors.messages.warning.bg                       = color_black
 c.colors.messages.warning.border                   = color_black
 c.colors.messages.warning.fg                       = color_yellow
+
 c.colors.prompts.bg                                = color_black
-c.colors.prompts.border                            = '1px solid #6b7089'
+c.colors.prompts.border                            = '1px solid #928374'
 c.colors.prompts.fg                                = color_white
 c.colors.prompts.selected.bg                       = color_dark_gray
+
 c.colors.statusbar.caret.bg                        = color_black
 c.colors.statusbar.caret.fg                        = color_dark_gray
 c.colors.statusbar.caret.selection.bg              = color_black
@@ -75,12 +87,13 @@ c.colors.statusbar.passthrough.fg                  = color_magenta
 c.colors.statusbar.private.bg                      = color_black
 c.colors.statusbar.private.fg                      = color_yellow
 c.colors.statusbar.progress.bg                     = color_white
-c.colors.statusbar.url.error.fg                    = color_dark_red
+c.colors.statusbar.url.error.fg                    = color_red
 c.colors.statusbar.url.fg                          = color_white
 c.colors.statusbar.url.hover.fg                    = color_cyan
 c.colors.statusbar.url.success.http.fg             = color_white
-c.colors.statusbar.url.success.https.fg            = color_dark_green
-c.colors.statusbar.url.warn.fg                     = color_dark_yellow
+c.colors.statusbar.url.success.https.fg            = color_green
+c.colors.statusbar.url.warn.fg                     = color_yellow
+
 c.colors.tabs.bar.bg                               = color_black
 c.colors.tabs.even.bg                              = color_black
 c.colors.tabs.even.fg                              = color_white
@@ -103,5 +116,6 @@ c.colors.tabs.selected.even.fg                     = color_white
 c.colors.tabs.selected.odd.bg                      = color_dark_gray
 c.colors.tabs.selected.odd.fg                      = color_white
 
-#c.colors.webpage.bg                                = '#ffffff'
+c.colors.webpage.bg                                = '#282828'
+c.colors.webpage.darkmode.enabled                  = True
 c.colors.webpage.preferred_color_scheme            = 'dark'

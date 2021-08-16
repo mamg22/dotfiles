@@ -9,23 +9,31 @@ bindkey -v
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle :compinstall filename '/home/marco/.zshrc'
 
+# Initialize completion and avoid regenerating cache unless older than 24h
+# Also zcompile it for a little faster loading
 autoload -Uz compinit
-#compinit -C
+
+Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
+
+# This is a slightly modified version of
 # https://gist.github.com/ctechols/ca1035271ad134841284
-setopt extendedglob
-if [[ -n ${ZDOTDIR:-${HOME}}/.zcompdump(#qN.mh+24) ]]; then
-	compinit;
-    # Also compile it into a zwc file for faster loading
-    # zcompile "${ZDOTDIR:-${HOME}}/.zcompdump"
-else
-	compinit -C;
-fi;
-setopt noextendedglob
+# https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-3109177
+() {
+    if [[ -n "$1" || ! -e "$Zcompdump.zwc" ]]; then
+        echo "Regenerating completion cache"
+        compinit
+        compdump
+        zcompile "$Zcompdump"
+        clear
+    else
+        compinit -C;
+    fi;
+} "$Zcompdump"(N.mh+24)
 
 setopt histignorespace histignoredups
 
-PROMPT="%F{4}[%F{6}%n@%m%F{4}](%F{6}%~%F{4})%f
-%(?..%F{1})%#%f "
+PROMPT="%F{12}[%F{14}%n@%m%F{12}](%F{14}%~%F{12})%f
+%(?..%F{9})%#%f "
 
 # Aliases
 
@@ -75,11 +83,17 @@ alias pmpv='mpv --no-cache --no-video --save-position-on-quit'
 alias vmpv='mpv --quiet'
 alias mpva='ud mpv --ytdl-format=bestaudio'
 alias mpvap='ud mpv --ytdl-format=bestaudio --pause'
+alias mpvw='ud mpv --ytdl-format=worst'
+alias mpvwp='ud mpv --ytdl-format=worst --pause'
 
 alias ytba='ud youtube-dl -f bestaudio -o "%(title)s.%(ext)s"'
 
 alias nb='newsboat'
+alias nbr='newsboat -x reload'
+alias nbdp='newsboat-download-podcast'
 alias ncm='ncmpcpp'
+
+alias hc='herbstclient'
 
 # End of aliases
 
@@ -91,9 +105,17 @@ mkcd()
 uni()
 {
     unidir="$HOME/doc/uni/cur"
-    target="$(find "$unidir/" -mindepth 1 -type d -printf '%P\n' | fzf --height 40% || return 0)"
+    target="$(find "$unidir/" -mindepth 1 -type d -printf '%P\n' |
+        fzf --height 40% --preview="ls --color=always $unidir/{}" || return 0)"
     [ "$target" ] || return 0
     cd "$unidir/$target"
+}
+
+# Make a temporal test directory and switch to it
+mktest()
+{
+    testdir="$(mktemp -d)"
+    cd "$testdir"
 }
 
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true

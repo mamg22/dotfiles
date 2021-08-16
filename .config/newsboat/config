@@ -1,5 +1,5 @@
 color info cyan default
-color listnormal white default
+color listnormal default default
 color listnormal_unread white default bold
 color listfocus cyan default standout
 color listfocus_unread cyan default bold standout
@@ -8,6 +8,7 @@ download-timeout 60
 download-retries 10
 
 download-path "~/podcasts/%n"
+download-filename-format "%F - %t.%e"
 
 bind-key ^O open-all-unread-in-browser-and-mark-read
 
