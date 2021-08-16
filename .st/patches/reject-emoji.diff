@@ -1,0 +1,11 @@
+--- a/x.c	2021-08-10 01:02:53.669874742 -0400
++++ b/x.c	2021-08-10 01:03:01.823772804 -0400
+@@ -1297,6 +1297,8 @@
+ 			FcPatternAddCharSet(fcpattern, FC_CHARSET,
+ 					fccharset);
+ 			FcPatternAddBool(fcpattern, FC_SCALABLE, 1);
++            // Avoid color fonts and a crash
++            FcPatternAddBool(fcpattern, FC_COLOR, FcFalse);
+ 
+ 			FcConfigSubstitute(0, fcpattern,
+ 					FcMatchPattern);
