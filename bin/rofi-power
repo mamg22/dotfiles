@@ -1,7 +1,7 @@
 #!/bin/sh
 
 locker_prog=~/bin/i3-lock
-logout_prog="bspc quit"
+logout_prog="herbstclient quit"
 
 default_opt=3
 
@@ -23,7 +23,7 @@ $lock_sleep Bloquear y suspender"
 
 prompt() {
     answer="$(printf "%s\n%s" "$no" "$yes" |
-        rofi -dmenu -theme "$confirm_theme" -p "$1" \
+        rofi -dmenu -theme "$confirm_theme" -p "$1" -lines 2 \
         -me-select-entry '' -me-accept-entry 'MousePrimary')"
     [ "$answer" = "$yes" ] && return 0
     return 1
@@ -31,7 +31,7 @@ prompt() {
 
 choice="$(echo "$options" |
     rofi -markup-rows -me-select-entry '' -me-accept-entry 'MousePrimary' \
-    -theme "$theme" -dmenu -selected-row "$default_opt")"
+    -theme "$theme" -dmenu -lines 7 -selected-row "$default_opt")"
 
 case "$choice" in
     (*Suspender)

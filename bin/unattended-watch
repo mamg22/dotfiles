@@ -10,7 +10,7 @@
 
 echoerr() { echo "$@" >&2; }
 
-iface=wlp7s0
+iface="${2:-wlp7s0}"
 power=AC0
 
 action="${1:-suspend}"

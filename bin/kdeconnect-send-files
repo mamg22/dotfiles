@@ -17,7 +17,8 @@ while read line; do
     fi
     # TODO: Make sleep change with file size, otherwise it sends it all almost
     # at once and some downloads might fail
-    sleep 3
+    # Is this fixed in newer versions? (might test later)
+    #sleep 3
 done < "$filelist"
 
 if [ "$failcount" -eq 0 ]; then

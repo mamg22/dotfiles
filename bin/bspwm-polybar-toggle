@@ -2,7 +2,7 @@
 
 polybar_name="polybar-main_LVDS1"
 padding="top"
-visible_padding="19"
+visible_padding="24"
 hidden_padding="0"
 
 state="$(xwininfo -name "$polybar_name")"

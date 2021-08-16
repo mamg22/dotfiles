@@ -11,7 +11,7 @@ if [ -z "$ROFI_RETV" ]; then
         setsid st -c floating-st -e tmux attach-session -t podcast
         exit 0
     else
-        exec rofi -modi "podcast:$0" -show podcast
+        exec rofi -width -120 -modi "podcast:$0" -show podcast
         exit 0
     fi
 fi

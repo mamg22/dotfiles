@@ -35,6 +35,7 @@ Available options:
                     don't download anything
     -o YTDLFORMAT   Use YTDLFORMAT as the filename format passed to youtube-dl
     -r RESOLUTION   Minimum video resolution to download
+    -s SUBLANGS     Subtitle languages to download
     -X              Remove cache file generated for the given url
                     Specify twice to exit after removing the cache file
     -y YTDLOPTIONS  Pass YTDLOPTIONS directly to youtube-dl
@@ -87,14 +88,17 @@ download()
     format="$1"
     output="$2"
     url="$3"
-    opts="$4"
+    subs="$4"
+    opts="$5"
     # Get the json info location
     info="$(get_info_json "$url")"
-    untildone youtube-dl -f "$format" -o "$output" --load-info-json "$info" --add-metadata $opts -- "$url"
+    untildone youtube-dl -f "$format" -o "$output" --load-info-json "$info" --add-metadata \
+        $subs \
+        $opts -- "$url"
 }
 
 # Parse arguments
-while getopts acC:f:Fhjo:r:Xy: name; do
+while getopts acC:f:Fhjo:r:s:Xy: name; do
     case "$name" in
         (a)
             audio_only=1
@@ -124,6 +128,9 @@ while getopts acC:f:Fhjo:r:Xy: name; do
             ;;
         (r)
             resolution="$OPTARG"
+            ;;
+        (s)
+            subtitles="$OPTARG"
             ;;
         (X)
             [ "$remove_cache_file" = 1 ] &&  exit_after_remove=1
@@ -188,4 +195,11 @@ if [ -n "$audio_only" ]; then
     format_str="bestaudio[acodec*=$aformat]/worst"
 fi
 
-download "$format_str" "$output_format" "$url" "$ytdl_opts"
+# If requesting subtitles, request both normal and automatic subtitles for the given languages
+if [ -n "$subtitles" ]; then
+    subtitles="--write-sub --write-auto-sub --sub-lang $subtitles"
+else
+    subtitles=""
+fi
+
+download "$format_str" "$output_format" "$url" "$subtitles" "$ytdl_opts"

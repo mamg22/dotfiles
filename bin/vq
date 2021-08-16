@@ -31,6 +31,7 @@ Available options:
     -i          Force interactive mode
     -I          Force non-interactive mode
     -r RES      Set video resolution to RES
+    -s LANGS    Download subtitles in languages LANGS (comma separated)
 EOF
 }
 
@@ -58,14 +59,16 @@ download()
     # and exit
     trap "flock -u 9; sleep 1; exit 0" INT TERM
 
+    IFS="|"
     while [ -s "$queue" ]; do
         echo "$(head -n 1 "$queue")" |
-            while read url resolution format; do
+            while read url resolution format subtitles; do
                 notify-send "Video downloader" "Downloading $url"
                 [ "$resolution" ] && resolution="-r$resolution"
                 [ "$format" ] && format="-f$format"
+                [ "$subtitles" ] && subtitles="-s$subtitles"
 
-                yd $resolution $format "$url" && flock "$queue" sed -i 1d "$queue"
+                yd $resolution $format $subtitles "$url" && flock "$queue" sed -i 1d "$queue"
 
                 notify-send "Video downloader" "Finished downloading $url"
                 unset resolution
@@ -155,10 +158,10 @@ enqueue()
     if is_interactive; then
         while true; do
             printf "%s\n%s" \
-                "Video resolution and format to download" \
+                "Video resolution, format, subtitles to download" \
                 "([Enter] default, [p]review, [q]uit): "
 
-            read -r resolution format
+            read -r resolution format subtitles
 
             if [ "$resolution" = "q" ]; then
                 exit 0;
@@ -172,7 +175,7 @@ enqueue()
         done
     fi
 
-    flock "$queue" echo "$url $resolution $format" >> "$queue"
+    flock "$queue" echo "$url|$resolution|$format|$subtitles" >> "$queue"
 
     exit 0
 }
@@ -187,7 +190,7 @@ edit()
 }
 
 unset operation
-while getopts cdef:hiInpr: name; do
+while getopts cdef:hiInpr:s: name; do
     case "$name" in
         (c)
             use_clipboard=1
@@ -215,6 +218,9 @@ while getopts cdef:hiInpr: name; do
             ;;
         (r)
             resolution="$OPTARG"
+            ;;
+        (s)
+            subtitles="$OPTARG"
             ;;
         (?)
             usage >&2

@@ -69,5 +69,6 @@ case "$selection" in
             [ "$overwrite" = "Yes" ] && break
         done
         mv "$output" "$screenshot_dir/$filename"
+        ;;
 esac
 

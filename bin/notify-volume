@@ -1,6 +1,6 @@
 #!/bin/sh
 
-id="40"
+stack_tag="volume"
 
 awk_script='
 /^\s*Front Left:/ {
@@ -16,4 +16,4 @@ awk_script='
 
 volume="$(amixer -D pulse get Master | awk "$awk_script")"
 
-dunstify -t 5000 -r "$id" "Volumen" "$volume"
+dunstify -h "string:x-dunst-stack-tag:$stack_tag" -t 5000 "Volumen" "$volume"

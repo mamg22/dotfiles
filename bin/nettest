@@ -5,13 +5,11 @@ fail_text="[\033[31mFAIL\033[0m]"
 
 isp_test() {
     curl -s 192.168.110.1 >/dev/null 2>&1
-    return $?
 }
 isp_test_text="Testing ISP connection"
 
 dns_test() {
     host duckduckgo.com >/dev/null 2>&1
-    return $?
 }
 dns_test_text="Testing DNS connection"
 
@@ -74,6 +72,15 @@ case "$1" in
         loop_it web_test "$web_test_text"
         ;;
 esac
+
+## Parse options
+#while getopts s name; do
+#    case "$name" in
+#        (?)
+#            exit 2
+#            ;;
+#    esac
+#done
 
 echo "Llego el intenet"
 if [ "$1" = "silent" ] || [ "$2" = "silent" ]; then
