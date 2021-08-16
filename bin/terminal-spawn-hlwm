@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# TODO: Add interactive option and merge dmenu-tmux
+
+spawn()
+{
+    if [ "$1" ]; then
+        exec $TERMINAL -e tmux new-session -As "$1"
+    else
+        exec $TERMINAL -e tmux new-session
+    fi
+}
+
+# Get tag name
+tag="$(herbstclient -n get_attr tags.focus.name)"
+
+# Get tmux sessions formated as "name|number of clients"
+sessions="$(tmux list-sessions -F '#S|#{session_attached}')"
+
+# Is this named session active?
+ws_session="$(echo "$sessions" | grep "^$tag\>")"
+
+if [ "$ws_session" ]; then
+    # Is active, get number of attached clients
+    # Attach if there's no clients attached to it
+    # Otherwise, spawn an unnamed session
+    wss_clients="$(echo "$ws_session" | sed 's/[^|]\+|//')"
+
+    if [ "$wss_clients" -eq 0 ]; then
+        spawn "$tag"
+    else
+        spawn
+    fi
+else
+    # Not active, create it
+    spawn "$tag"
+fi
