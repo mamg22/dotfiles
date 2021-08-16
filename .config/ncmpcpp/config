@@ -82,7 +82,7 @@ visualizer_in_stereo = no
 ##
 #visualizer_type = wave
 #
-visualizer_look = ●█
+#visualizer_look = ●█
 #
 #visualizer_color = blue, cyan, green, yellow, magenta, red
 #
@@ -262,7 +262,7 @@ current_item_suffix = $/r
 ##   available.
 ##
 #
-song_columns_list_format = (30)[cyan]{a} (70)[white]{t|f:Title} (7f)[cyan]{lr} (1f)[cyan]{: }
+song_columns_list_format = (30)[cyan]{a} (70)[default]{t|f:Title} (7f)[cyan]{lr} (1f)[cyan]{: }
 #
 ##### various settings #####
 #
@@ -521,7 +521,7 @@ state_line_color = blue
 #
 state_flags_color = cyan:b
 #
-main_window_color = white
+main_window_color = default
 #
 #color1 = red
 #

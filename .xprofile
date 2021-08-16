@@ -6,20 +6,22 @@ systemctl --user start X-online.target
 xrdb .Xresources &
 $HOME/.fehbg &
 setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle -option caps:swapescape &
-xsettingsd &
+# xsettingsd &
 # xfce4-power-manager &
 # lxpolkit &
 picom --experimental-backends >/dev/null 2>&1 &
 # pcmanfm -d &
 dunst &
-unclutter &
+# unclutter &
+redshift &
 
 # Regenerate dmenu cache
 # rm ~/.cache/dmenu_run; dmenu_path >/dev/null 2>&1 &
 
 # Start kdeconnect
 # Enabling the unit doesn't work right now
-systemctl --user start kdeconnect.service &
+# systemctl --user start kdeconnect.service &
+setsid /usr/libexec/kdeconnectd &
 
 # Allow sxhkd to grab the power key
 systemd-inhibit --what=handle-power-key \

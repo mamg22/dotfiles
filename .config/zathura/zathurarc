@@ -1,21 +1,21 @@
 set font "Hack 9"
 
-set recolor-lightcolor "#161821"
-set recolor-darkcolor  "#d2d4de"
+set recolor-lightcolor "#1d2021"
+set recolor-darkcolor  "#ebdbb2"
 
 #set default-bg "#161821"
 #set default-fg "#d2d4de"
 
-set statusbar-bg "#161821"
-set statusbar-fg "#d2d4de"
+set statusbar-bg "#1d2021"
+set statusbar-fg "#ebdbb2"
 
-set index-bg "#161821"
-set index-fg "#d2d4de"
-set index-active-bg "#95c4ce"
+set index-bg "#1d2021"
+set index-fg "#ebdbb2"
+set index-active-bg "#83a598"
 set index-active-fg "#161821"
 
-set inputbar-bg "#161821"
-set inputbar-fg "#d2d4de"
+set inputbar-bg "#1d2021"
+set inputbar-fg "#ebdbb2"
 
 set notification-bg "#95c4ce"
 set notification-fg "#161821"
@@ -24,11 +24,11 @@ set notification-error-fg "#161821"
 set notification-warning-bg "#e9b189"
 set notification-warning-fg "#161821"
 
-set completion-bg "#161821"
-set completion-fg "#d2d4de"
-set completion-group-bg "#d2d4de"
-set completion-group-fg "#161821"
-set completion-highlight-bg "#95c4ce"
-set completion-highlight-fg "#161821"
+set completion-bg "#1d2021"
+set completion-fg "#ebdbb2"
+set completion-group-bg "#a89984"
+set completion-group-fg "#1d2021"
+set completion-highlight-bg "#83a598"
+set completion-highlight-fg "#1d2021"
 
 set statusbar-home-tilde true
