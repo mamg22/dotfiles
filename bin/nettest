@@ -9,7 +9,7 @@ isp_test() {
 isp_test_text="Testing ISP connection"
 
 dns_test() {
-    host duckduckgo.com >/dev/null 2>&1
+    host google.com >/dev/null 2>&1
 }
 dns_test_text="Testing DNS connection"
 
