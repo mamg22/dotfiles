@@ -12,6 +12,8 @@ c.completion.web_history.exclude = [
     '*://www.google.com/*',
     'https://www.reddit.com/*/search',
     'qute://pdfjs/*',
+    '*://uptamca.terna.net/index.php',
+    'https://invidious.kavin.rocks/videoplayback',
 ]
 
 c.confirm_quit = ["multiple-tabs", "downloads"]
@@ -68,54 +70,56 @@ c.tabs.title.format = '{audio}{index}: {current_title}'
 c.tabs.width = '5%'
 
 c.url.default_page = '~/any/startpage/index.html'
-c.url.searchengines = {
-    'DEFAULT': 'https://duckduckgo.com/?q={}',
+searchengines = {
+    # General search engines
     'd':       'https://duckduckgo.com/?q={}',
+    'g':       'https://www.google.com/search?&q={}',
+
+    # Wikis and reference sites
     'aw':      'https://wiki.archlinux.org/?search={}',
     'w':       'https://es.wikipedia.org/?search={}',
     'ew':      'https://en.wikipedia.org/?search={}',
-    'g':       'https://www.google.com/search?&q={}',
-    # Go to given subreddit
-    'sr':      'https://www.reddit.com/r/{unquoted}',
-    'r':       'https://www.reddit.com/search?q={}',
-    'ru':      'https://www.reddit.com/user/{unquoted}',
-    'yt':      'https://www.youtube.com/results?search_query={}',
-    'gh':      'https://github.com/search?q={}',
+    'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
     'kym':     'https://knowyourmeme.com/search?q={}',
-    'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
-    'iv':      'https://invidious.kavin.rocks/search?q={}',
-    'fd':      'https://search.f-droid.org/?q={}',
+
+    # Reddit
+    'r':       'https://www.reddit.com/search?q={}',
+    # Go to specified subreddit (allows passing /new, ?t=all, and others
+    'sr':      'https://www.reddit.com/r/{unquoted}',
+    'ru':      'https://www.reddit.com/user/{unquoted}',
+
+    # Github
+    'gh':      'https://github.com/search?q={}',
+    # Jump to github repo or user
+    'ghr':     'https://github.com/{unquoted}',
+
+    # Nitter & invidious
     'nt':      'https://nitter.kavin.rocks/search?q={}',
     # Nitter handle
     'nth':     'https://nitter.kavin.rocks/{unquoted}',
-    # Jump to github repo or user
-    'ghr':     'https://github.com/{unquoted}',
+    'iv':      'https://invidious.kavin.rocks/search?q={}',
+
+    # Other
+    'yt':      'https://www.youtube.com/results?search_query={}',
+    'fd':      'https://search.f-droid.org/?q={}',
     'wf':      'https://www.wolframalpha.com/input/?i={}',
     'hn':      'https://hn.algolia.com/?q={}',
-    # Fedora sources
+    # Fedora packages (and more) sources
     'fsr':     'https://src.fedoraproject.org/search?term={}',
+    'ml':      'https://listado.mercadolibre.com.ve/{}',
 }
+searchengines['DEFAULT'] = searchengines['g']
+c.url.searchengines = searchengines
 c.url.start_pages = '~/any/startpage/index.html'
 
 # Disable mouse wheel zoom
 c.zoom.mouse_divider = 0
 
 tab_rotate = [
-    'config-cycle tabs.position top right',
-    'config-cycle tabs.title.format "{audio}{index}: {current_title}" "{aligned_index}"',
-    'config-cycle tabs.title.alignment left center',
-    'set tabs.position?',
-]
-
-tab_show_cycle = [
-    'config-cycle tabs.show multiple switching never',
-    'set tabs.show?',
-]
-
-bar_show_toggle = [
-    'config-cycle statusbar.show never always',
-    'set statusbar.show?',
+    'config-cycle --temp --print tabs.position top right',
+    'config-cycle --temp tabs.title.format "{audio}{index}: {current_title}" "{aligned_index}"',
+    'config-cycle --temp tabs.title.alignment left center',
 ]
 
 def join_commands(command_list):
@@ -123,8 +127,8 @@ def join_commands(command_list):
 
 # Toggle GUI parts
 config.bind('xr', join_commands(tab_rotate))
-config.bind('xt', join_commands(tab_show_cycle))
-config.bind('xb', join_commands(bar_show_toggle))
+config.bind('xt', 'config-cycle --temp --print tabs.show multiple switching never')
+config.bind('xb', 'config-cycle --temp --print statusbar.show never always')
 
 # Hints
 config.bind(';e', 'hint expando')
@@ -139,5 +143,9 @@ config.bind('xs', 'open qute://back')
 # Use google search
 config.bind('<Alt-o>', 'set-cmd-text -s :open g')
 config.bind('<Alt-Shift-o>', 'set-cmd-text -s :open -t g')
+
+# Yank github repo as "user/repo"
+config.bind('yg', 'spawn --output-messages --userscript yank-github-repo')
+config.bind('yG', 'spawn --output-messages --userscript yank-github-repo --primary')
 
 config.source("colors.py")

@@ -29,7 +29,7 @@
     # the top and down respectively.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "350x5-0+19"
+    geometry = "350x5-30+30"
 
     # Turn on the progess bar
     progress_bar = true
@@ -212,7 +212,7 @@
     dmenu = rofi -dmenu -p dunst
 
     # Browser for opening urls in context menu.
-    browser = qutebrowser-open
+    browser = qutebrowser
 
     # Always run rule-defined scripts, even if the notification is suppressed
     always_run_script = true
@@ -296,34 +296,6 @@
     # using the resolution and physical size. This might be useful in setups
     # where there are multiple screens with very different dpi values.
     per_monitor_dpi = false
-
-# The internal keyboard shortcut support in dunst is now considered deprecated
-# and should be replaced by dunstctl calls. You can use the configuration of your
-# WM or DE to bind these to shortcuts of your choice.
-# Check the dunstctl manual page for more info.
-[shortcuts]
-
-    # Shortcuts are specified as [modifier+][modifier+]...key
-    # Available modifiers are "ctrl", "mod1" (the alt-key), "mod2",
-    # "mod3" and "mod4" (windows-key).
-    # Xev might be helpful to find names for keys.
-
-    # Close notification. Equivalent dunstctl command:
-    # dunstctl close
-    close = mod1+space
-
-    # Close all notifications. Equivalent dunstctl command:
-    # dunstctl close-all
-    close_all = mod1+shift+space
-
-    # Redisplay last message(s). Equivalent dunstctl command:
-    # dunstctl history-pop
-    # history = ctrl+grave
-    history = mod1+ctrl+space
-
-    # Context menu. Equivalent dunstctl command:
-    # dunstctl context
-    context = ctrl+shift+period
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
@@ -465,4 +437,8 @@
 [no_summary]
     summary = ""
     format = "%b"
+
+[volume_notification]
+    stack_tag = "volume-notification"
+    timeout = 3
 # vim: ft=cfg

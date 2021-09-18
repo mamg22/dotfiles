@@ -21,8 +21,8 @@ bind-key g home
 
 bind-key | delete-article
 
-macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser-open %u"
+macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser %u"
 
-browser "qutebrowser-open %u"
+browser "qutebrowser %u"
 
 notify-program "~/bin/newsboat-notify"

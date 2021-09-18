@@ -42,6 +42,8 @@ width = 100%
 offset-x = 0%
 offset-y = 0%
 
+locale = es_VE.UTF-8
+
 fixed-center = true
 
 enable-ipc = true
@@ -52,48 +54,50 @@ foreground = ${colors.barfg}
 font-0 = Hack:size=9
 font-1 = Font Awesome 5 Free Solid:size=9
 font-2 = Font Awesome 5 Free Solid:size=11
-font-3 = Hack:size=9
+font-3 = Cantarell:size=10
 font-4 = Noto Color Emoji:scale=10
 
-modules-left = pulseaudio mpd
-modules-center = xworkspaces
-modules-right = newsboat-unread xkeyboard memory cpu wlan eth battery date
+modules-left = xworkspaces
+modules-center = date
+modules-right = newsboat-unread xkeyboard pulseaudio memory cpu wlan eth battery
 
 tray-position = right
 tray-padding = 2
+
+padding = 1
 
 [module/xworkspaces]
 type = internal/xworkspaces
 
 format = <label-state>
 
-icon-0  = hw;
-icon-1  = web;
-icon-2  = media;
-icon-3  = dev;
-icon-4  = sys;
-icon-5  = files;
-icon-6  = creative;
-icon-7  = office;
-icon-8  = other;
-icon-9  = 10;
+icon-0 = hw;
+icon-1 = web;
+icon-2 = media;
+icon-3 = dev;
+icon-4 = sys;
+icon-5 = files;
+icon-6 = creative;
+icon-7 = office;
+icon-8 = other;
+icon-9 = 10;
 icon-default = ●
 
-label-active = "%icon% "
+label-active = "%icon%"
 label-active-foreground = ${colors.active}
-label-active-padding = 0
+label-active-padding-right = 1
 
-label-occupied = "%icon% "
+label-occupied = "%icon%"
 label-occupied-foreground = ${colors.foreground}
-label-occupied-padding = 0
+label-occupied-padding-right = 1
 
-label-urgent = "%icon% "
+label-urgent = "%icon%"
 label-urgent-foreground = ${colors.alert}
-label-urgent-padding = 0
+label-urgent-padding-right = 1
 
-label-empty = "%icon% "
+label-empty = "%icon%"
 label-empty-foreground = ${colors.inactive}
-label-empty-padding = 0
+label-empty-padding-right = 1
 
 label-separator = " "
 
@@ -116,35 +120,35 @@ label-indicator-on = %icon%
 label-indicator-on-foreground = ${colors.warning}
 indicator-icon-0 = caps lock;;
 
-[module/mpd]
-type = internal/mpd
-
-format-playing = <label-song>
-format-playing-prefix = " "
-format-playing-prefix-font = 2
-format-playing-prefix-foreground = ${colors.darkgray}
-format-playing-padding = 1
-
-format-paused = <label-song>
-format-paused-prefix = " "
-format-paused-prefix-font = 2
-format-paused-prefix-foreground = ${colors.darkgray}
-format-paused-padding = 1
-
-format-stopped = <label-song>
-format-stopped-prefix = " "
-format-stopped-prefix-font = 2
-format-stopped-prefix-foreground = ${colors.darkgray}
-format-stopped-padding = 1
-
-format-offline = <label-offline>
-label-offline = mpd is offline
-format-offline-prefix = " "
-format-offline-prefix-foreground = ${colors.darkgray}
-
-label-song-maxlen = 40
-label-song-ellipsis = true
-;label-song = %title%
+;[module/mpd]
+;type = internal/mpd
+;
+;format-playing = <label-song>
+;format-playing-prefix = " "
+;format-playing-prefix-font = 2
+;format-playing-prefix-foreground = ${colors.darkgray}
+;format-playing-padding = 1
+;
+;format-paused = <label-song>
+;format-paused-prefix = " "
+;format-paused-prefix-font = 2
+;format-paused-prefix-foreground = ${colors.darkgray}
+;format-paused-padding = 1
+;
+;format-stopped = <label-song>
+;format-stopped-prefix = " "
+;format-stopped-prefix-font = 2
+;format-stopped-prefix-foreground = ${colors.darkgray}
+;format-stopped-padding = 1
+;
+;format-offline = <label-offline>
+;label-offline = mpd is offline
+;format-offline-prefix = " "
+;format-offline-prefix-foreground = ${colors.darkgray}
+;
+;label-song-maxlen = 40
+;label-song-ellipsis = true
+;;label-song = %title%
 
 [module/cpu]
 type = internal/cpu
@@ -156,7 +160,7 @@ label = %percentage:3%%
 
 [module/memory]
 type = internal/memory
-interval = 4
+interval = 5
 format-prefix = " "
 format-prefix-foreground = ${colors.darkgray}
 format-padding = 1
@@ -193,10 +197,10 @@ type = internal/date
 interval = 5
 
 date =
-date-alt = "%d/%m"
+date-alt = "%a %d/%b/%Y"
 
-time = %I:%M
-time-alt = 
+time = "%I:%M %p"
+time-alt = "%I:%M %p, "
 
 format-padding = 1
 
@@ -229,11 +233,11 @@ full-at = 99
 format-charging = <animation-charging>
 format-charging-suffix = " "
 format-charging-suffix-foreground = ${colors.darkgray}
-format-charging-padding = 1
+format-charging-padding = 0
 format-charging-font = 3
 
 format-discharging = <ramp-capacity>
-format-discharging-padding = 1
+format-discharging-padding = 0
 format-discharging-font = 3
 
 format-full = <ramp-capacity>
@@ -265,12 +269,5 @@ tail = true
 format-padding = 1
 format-prefix = " "
 format-prefix-foreground = ${colors.darkgray}
-
-[module/bspwm-count]
-type = custom/script
-exec = ~/bin/polybar-bspwm-count
-tail = true
-
-format-padding = 1
 
 ; vim:ft=dosini

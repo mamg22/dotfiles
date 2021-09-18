@@ -106,9 +106,9 @@ hc keybind $Mod-c cycle
 hc keybind $Mod-i jumpto urgent
 
 # Volume and brightness control
-hc keybind XF86AudioRaiseVolume spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-volume'
-hc keybind XF86AudioLowerVolume spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-volume'
-hc keybind XF86AudioMute spawn sh -c 'pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-volume'
+hc keybind XF86AudioRaiseVolume spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-volume.pl'
+hc keybind XF86AudioLowerVolume spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-volume.pl'
+hc keybind XF86AudioMute spawn sh -c 'pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-volume.pl'
 
 hc keybind XF86MonBrightnessUp spawn sh -c 'brightnessctl set 10%+ && notify-brightness'
 hc keybind XF86MonBrightnessDown spawn sh -c 'brightnessctl set 10%- && notify-brightness'
@@ -125,13 +125,41 @@ hc keybind $Mod-Ctrl-b spawn hlwm-polybar-toggle
 hc keybind $Mod-Alt-e spawn kdeconnect-send-files
 hc keybind $Mod-Alt-apostrophe spawn $TERMINAL -e tmux new-session -s enqueue vq -nc
 
+# Media control
+hc keybind $Mod-Alt-p spawn playerctl play-pause
+hc keybind $Mod-Alt-Shift-p spawn playerctl stop
+
+hc keybind $Mod-Alt-j spawn playerctl volume 0.02-
+hc keybind $Mod-Alt-k spawn playerctl volume 0.02+
+
+hc keybind $Mod-Alt-h spawn playerctl position 10-
+hc keybind $Mod-Alt-l spawn playerctl position 10+
+
+hc keybind $Mod-Alt-comma  spawn playerctl previous
+hc keybind $Mod-Alt-period spawn playerctl next
+
+# Show the currently active player name and state
+hc keybind $Mod-Alt-o spawn playerctld-notify
+# Shift to the next player and show its name and state
+hc keybind $Mod-Alt-Shift-o spawn playerctld-notify shift
+
+# dunst notification daemon control
+hc keybind Alt-space spawn dunstctl close
+hc keybind Alt-Shift-space spawn dunstctl close-all
+hc keybind Alt-Ctrl-space spawn dunstctl history-pop
+hc keybind Ctrl-Shift-period spawn dunstctl context
+
+# Frequenty used programs
+hc keybind $Mod-Alt-f spawn thunar
+hc keybind $Mod-Alt-b spawn qutebrowser
+
 # theme
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
 hc set frame_border_active_color '#222222'
 hc set frame_border_normal_color '#101010'
-hc set frame_bg_normal_color '#565656aa'
-hc set frame_bg_active_color '#345F0Caa'
+hc set frame_bg_normal_color '#565656'
+hc set frame_bg_active_color '#345F0C'
 hc set frame_border_width 1
 hc set always_show_frame on
 hc set frame_bg_transparent on
@@ -142,10 +170,10 @@ hc attr theme.title_height 15
 hc attr theme.title_font 'Dejavu Sans:pixelsize=12'  # example using Xft
 # hc attr theme.title_font '-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
 hc attr theme.padding_top 2  # space below the title's baseline (i.e. text depth)
-hc attr theme.active.color '#345F0Cef'
+hc attr theme.active.color '#345F0C'
 hc attr theme.title_color '#ffffff'
-hc attr theme.normal.color '#323232dd'
-hc attr theme.urgent.color '#7811A1dd'
+hc attr theme.normal.color '#323232'
+hc attr theme.urgent.color '#7811A1'
 hc attr theme.normal.title_color '#898989'
 hc attr theme.inner_width 1
 hc attr theme.inner_color black
@@ -184,6 +212,7 @@ hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 
 hc rule class='qutebrowser' tag=web
 hc rule class~'Gimp.*' tag=creative
+hc rule class='Thunar' tag=files
 
 hc set tree_style '╾│ ├└╼─┐'
 
