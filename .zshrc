@@ -62,18 +62,6 @@ alias s='sudo '
 
 alias config="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 
-alias aptup='sudo apt update'
-alias aptug='sudo untildone apt upgrade -y'
-alias aptuu='sudo apt update && sudo untildone apt -y upgrade'
-alias aptrm='sudo apt remove'
-alias aptar='sudo apt remove --autoremove'
-alias aptl='apt list'
-alias aptlu='apt list -u'
-alias aptli='apt list -i'
-alias aptin='sudo untildone apt install -y'
-alias aptse='apt search'
-alias apts='apt show'
-
 alias untildone='untildone '
 alias ud='untildone '
 
@@ -96,6 +84,38 @@ alias ncm='ncmpcpp'
 alias hc='herbstclient'
 
 # End of aliases
+
+# Ignore lines from including them in history
+# See zshmisc(1), SPECIAL FUNCTIONS section
+zshaddhistory()
+{
+    # return 1 is like a space at the beginning, not saved and stays until the
+    # next command, return 2 saves it to memory but not to the file
+
+    # $1 is the entered command, including newlines, so I'll strip the last one
+    # And also strip out trailing whitespace
+    line=${1%%$'\n'}
+    line=${line%% }
+
+    case "$line" in
+        # ls and aliases without arguments
+        (l|l[s.al])
+            return 2
+            ;;
+        # Common programs and aliases (without any arguments)
+        (nb|nbr|nbdp|pysr|htop|nnn|exit|ncm|ncmpcpp|uni|pw-top|nettest|nvim| \
+         mktest|reboot|poweroff)
+            return 2
+            ;;
+        ("vq -"[de])
+            return 2
+            ;;
+        # Ignore cd to parent and cd to home
+        ("cd .."|cd|"cd ~")
+            return 2
+            ;;
+    esac
+}
 
 mkcd()
 {
