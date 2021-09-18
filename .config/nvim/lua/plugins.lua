@@ -1,9 +1,16 @@
 return require('packer').startup({function()
     use 'wbthomason/packer.nvim'
 
-    use 'hrsh7th/nvim-compe'
+    use 'hrsh7th/nvim-cmp'
+    use 'hrsh7th/cmp-buffer'
+    use 'hrsh7th/cmp-nvim-lua'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'saadparwaiz1/cmp_luasnip'
 
     use 'neovim/nvim-lspconfig'
+
+    use 'L3MON4D3/LuaSnip'
 
     use {
         'nvim-treesitter/nvim-treesitter',
@@ -19,6 +26,10 @@ return require('packer').startup({function()
         requires = {
             {'nvim-lua/plenary.nvim'}
         }
+    }
+    use {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        run = 'make',
     }
 
     use {
@@ -39,16 +50,17 @@ return require('packer').startup({function()
 
     -- use 'itchyny/lightline.vim'
 
-    use {
-        'cespare/vim-toml',
-        ft = 'toml',
-    }
+    --use {
+    --    'cespare/vim-toml',
+    --    ft = 'toml',
+    --}
     use {
         'aklt/plantuml-syntax',
         ft = 'plantuml',
     }
 
     use 'gruvbox-community/gruvbox'
+    -- use {"ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
 
     use {
         'ThePrimeagen/vim-be-good',
@@ -60,6 +72,15 @@ return require('packer').startup({function()
     }
 
     use 'windwp/nvim-autopairs'
+
+    --use {
+    --    'nvim-neorg/neorg',
+    --    branch = 'unstable',
+    --}
+
+    use {
+        'lewis6991/impatient.nvim',
+    }
 end,
     config = {
         max_jobs = 2,
