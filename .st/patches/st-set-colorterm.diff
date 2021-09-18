@@ -1,0 +1,10 @@
+--- a/st.c	2021-09-13 19:00:07.733415718 -0400
++++ b/st.c	2021-09-13 19:05:56.523055248 -0400
+@@ -702,6 +702,7 @@
+ 	setenv("SHELL", sh, 1);
+ 	setenv("HOME", pw->pw_dir, 1);
+ 	setenv("TERM", termname, 1);
++    setenv("COLORTERM", "truecolor", 1);
+ 
+ 	signal(SIGCHLD, SIG_DFL);
+ 	signal(SIGHUP, SIG_DFL);
