@@ -1,16 +1,27 @@
 #!/bin/sh
-
-while true; do
-    newsboat -x print-unread |
-    awk '
-    {
-        if ($1 != 0) {
+awk_script='
+{
+    # Check if field one, which should contain a number IS a number
+    # Otherwise an error
+    if ($1 ~ /[0-9]+/) {
+        if ($1 > 0) {
+            # Got unread feeds
             print $1
         } 
         else {
+            # Print nothing, this hides the whole module
             print ""
         }
-    }'
+    }
+    else {
+        # An error has occured, database is locked or newsboat is already running
+        print "?"
+    }
+}'
+
+while true; do
+    LANG=C newsboat -x print-unread |
+    awk "$awk_script"
     # Wait for a while, otherwise `inotifywait` doesn't wait
     sleep 3
     inotifywait -e close "$XDG_DATA_HOME/newsboat/cache.db" >/dev/null 2>&1

@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# This is a small script that adds feedback when shifting players using
+# playerctld from a keybind
+# Passing query instead of a shift direction shows the current active player
+
+dunst_stack_tag='playerctld-notify'
+
+notification_title='Active media player'
+output_format='{{playerName}} - {{status}}:
+
+<b>{{title}}</b>
+by {{default(artist, "Unknown Artist")}}
+{{duration(position)}} / {{duration(mpris:length)}}'
+
+echoerr()
+{
+    echo "$@" >&2
+}
+
+# First (and only) argument selects the shift direction,
+# if not given, "query" is assumed
+shiftdir="${1:-query}"
+case "$shiftdir" in
+    (shift|unshift)
+        playerctld "$shiftdir"
+        ;;
+    (query)
+        # Do nothing
+        ;;
+    (*)
+        echoerr "Invalid argument \"$shiftdir\""
+        exit 1
+        ;;
+esac
+
+content="$(playerctl metadata --format "$output_format")"
+notify-send -h "string:x-dunst-stack-tag:$dunst_stack_tag" \
+    --urgency low \
+    "$notification_title" "$content"

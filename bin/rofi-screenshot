@@ -1,8 +1,10 @@
 #!/bin/sh
 
-date_fmt='+scrot-%y-%m-%d_%H-%M-%S'
+date_fmt='scrot-%y-%m-%d_%H-%M-%S'
 
-screenshot_dir="$HOME/img/screenshot"
+xdg_pictures_dir="$(xdg-user-dir PICTURES)"
+
+screenshot_dir="${xdg_pictures_dir:-${HOME}}/screenshot"
 
 tmp_dir="/tmp/rofi-screenshot.tmp"
 
@@ -20,7 +22,7 @@ Extract text (english)'
 
 selection="$(echo "$options" | rofi -dmenu -i -l 10 -p "Screenshot")"
 
-filename="$(date "$date_fmt").png"
+filename="$(date "+$date_fmt").png"
 
 output="$screenshot_dir/$filename"
 
