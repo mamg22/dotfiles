@@ -1,4 +1,5 @@
-Sxiv.font: Hack-8
+Sxiv.font: Hack-9
+Nsxiv.bar.font: Hack-9
 
 ! Gruvbox dark
 ! hard contrast: *background: #1d2021

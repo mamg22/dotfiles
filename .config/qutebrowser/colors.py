@@ -116,6 +116,6 @@ c.colors.tabs.selected.even.fg                     = color_white
 c.colors.tabs.selected.odd.bg                      = color_dark_gray
 c.colors.tabs.selected.odd.fg                      = color_white
 
-c.colors.webpage.bg                                = '#282828'
-c.colors.webpage.darkmode.enabled                  = True
+#c.colors.webpage.bg                                = '#282828'
+#c.colors.webpage.darkmode.enabled                  = False
 c.colors.webpage.preferred_color_scheme            = 'dark'

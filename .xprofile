@@ -4,7 +4,8 @@
 systemctl --user start X-online.target
 
 xrdb .Xresources &
-$HOME/.fehbg &
+#$HOME/.fehbg &
+nitrogen --restore
 setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle -option caps:swapescape &
 # xsettingsd &
 # xfce4-power-manager &

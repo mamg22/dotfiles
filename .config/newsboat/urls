@@ -12,12 +12,12 @@ https://xkcd.com/atom.xml                             "comics" "~xkcd"
 
 " " # Separator
 
-https://www.hellointernet.fm/podcast?format=rss "podcasts" "~Hello Internet"
-http://nodumbqs.libsyn.com/rss                  "podcasts" "~No Dumb Questions"
-https://rss.simplecast.com/podcasts/7738/rss    "podcasts" "~The Create Unknown"
-https://www.unmade.fm/episodes?format=rss       "podcasts" "~The Unmade Podcast"
-
-" "
+#https://www.hellointernet.fm/podcast?format=rss "podcasts" "~Hello Internet"
+#http://nodumbqs.libsyn.com/rss                  "podcasts" "~No Dumb Questions"
+#https://rss.simplecast.com/podcasts/7738/rss    "podcasts" "~The Create Unknown"
+#https://www.unmade.fm/episodes?format=rss       "podcasts" "~The Unmade Podcast"
+#
+#" "
 
 https://www.youtube.com/feeds/videos.xml?channel_id=UCxHAlbZQNFU2LgEtiqd2Maw "youtube" "~Cᐩᐩ Weekly With Jason Turner"
 https://www.youtube.com/feeds/videos.xml?channel_id=UC2C_jShtL725hvbm1arSV9w "youtube" "~CGP Grey"
@@ -56,3 +56,4 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCsnGwSIHyoYN0kiINAGUKxg "yo
 https://github.com/herbstluftwm/herbstluftwm/commits.atom "software"
 https://github.com/baskerville/bspwm/commits.atom "software"
 https://github.com/qutebrowser/qutebrowser/commits.atom "software"
+https://github.com/nsxiv/nsxiv/commits.atom "software"

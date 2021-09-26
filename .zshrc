@@ -13,7 +13,7 @@ zstyle :compinstall filename '/home/marco/.zshrc'
 # Also zcompile it for a little faster loading
 autoload -Uz compinit
 
-Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
+local Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
 
 # This is a slightly modified version of
 # https://gist.github.com/ctechols/ca1035271ad134841284
@@ -31,9 +31,12 @@ Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
 } "$Zcompdump"(N.mh+24)
 
 setopt histignorespace histignoredups
+setopt histreduceblanks
+setopt correct
 
 PROMPT="%F{12}[%F{14}%n@%m%F{12}](%F{14}%~%F{12})%f
 %(?..%F{9})%#%f "
+#RPROMPT='%(?;;[%F{red}%B%?%b%f])'
 
 # Aliases
 
@@ -73,6 +76,7 @@ alias mpva='ud mpv --ytdl-format=bestaudio'
 alias mpvap='ud mpv --ytdl-format=bestaudio --pause'
 alias mpvw='ud mpv --ytdl-format=worst'
 alias mpvwp='ud mpv --ytdl-format=worst --pause'
+alias mpvp='mpv --pause'
 
 alias ytba='ud youtube-dl -f bestaudio -o "%(title)s.%(ext)s"'
 
@@ -82,6 +86,11 @@ alias nbdp='newsboat-download-podcast'
 alias ncm='ncmpcpp'
 
 alias hc='herbstclient'
+
+# Please, shut up
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
+alias ffplay='ffplay -hide_banner'
 
 # End of aliases
 
@@ -94,6 +103,7 @@ zshaddhistory()
 
     # $1 is the entered command, including newlines, so I'll strip the last one
     # And also strip out trailing whitespace
+    local line
     line=${1%%$'\n'}
     line=${line%% }
 
@@ -104,7 +114,7 @@ zshaddhistory()
             ;;
         # Common programs and aliases (without any arguments)
         (nb|nbr|nbdp|pysr|htop|nnn|exit|ncm|ncmpcpp|uni|pw-top|nettest|nvim| \
-         mktest|reboot|poweroff)
+         mktest|reboot|poweroff|reset|xev|rehash|make|unattended-watch)
             return 2
             ;;
         ("vq -"[de])
@@ -124,8 +134,22 @@ mkcd()
 
 uni()
 {
-    unidir="$HOME/doc/uni/cur"
-    target="$(find "$unidir/" -mindepth 1 -type d -printf '%P\n' |
+    if ! command -v xdg-user-dir >/dev/null; then
+        echo "xdg-user-dir is not installed" >&2
+        return 1
+    fi
+
+    local unidir="$(xdg-user-dir DOCUMENTS)/uni/cur"
+    if ! [ -d "$unidir" ]; then
+        cat <<ERRMSG >&2
+\$unidir ($unidir) doesn't exist. Check:
+* Is the DOCUMENTS xdg directory defined?
+* \$unidir exists and is a directory or link to a directory
+ERRMSG
+        return 2
+    fi
+
+    local target="$(find "$unidir/" -mindepth 1 -type d -printf '%P\n' |
         fzf --height 40% --preview="ls --color=always $unidir/{}" || return 0)"
     [ "$target" ] || return 0
     cd "$unidir/$target"
@@ -134,7 +158,7 @@ uni()
 # Make a temporal test directory and switch to it
 mktest()
 {
-    testdir="$(mktemp -d)"
+    local testdir="$(mktemp -d)"
     cd "$testdir"
 }
 
