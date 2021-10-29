@@ -77,10 +77,6 @@ return require('packer').startup({function()
     --    'nvim-neorg/neorg',
     --    branch = 'unstable',
     --}
-
-    use {
-        'lewis6991/impatient.nvim',
-    }
 end,
     config = {
         max_jobs = 2,

@@ -10,7 +10,6 @@
 
 vim.g.mapleader = " "
 
-require('impatient')
 require('plugins')
 
 -- Core configuration
@@ -31,8 +30,6 @@ vim.opt.showmode = false
 vim.opt.inccommand = "nosplit"
 
 vim.opt.hlsearch = false
---vim.opt.ignorecase = true
---vim.opt.smartcase = true
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true
@@ -41,6 +38,9 @@ vim.opt.signcolumn = "yes"
 
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
+
+-- Just testing
+vim.opt.hidden = true
 
 vim.opt.completeopt = {"noinsert", "menuone", "noselect"}
 vim.opt.shortmess:append({c = true})
@@ -109,6 +109,12 @@ vim.api.nvim_set_keymap('n', '<Leader>bb', [[<Cmd>lua require('telescope.builtin
 vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], mapopts)
 vim.api.nvim_set_keymap('n', '<Leader>bn', [[<Cmd>bn<CR>]], mapopts)
 vim.api.nvim_set_keymap('n', '<Leader>bp', [[<Cmd>bp<CR>]], mapopts)
+vim.api.nvim_set_keymap('n', '<Leader>y', [["+y]], mapopts)
+vim.api.nvim_set_keymap('n', '<Leader>Y', [["+Y]], mapopts)
+
+-- Disable space / leader key
+vim.api.nvim_set_keymap('n', '<Space>', '<Nop>', mapopts)
+vim.api.nvim_set_keymap('v', '<Space>', '<Nop>', mapopts)
 
 vim.api.nvim_set_keymap('t', '<C-q>', [[<C-\><C-n>]], mapopts)
 
@@ -192,16 +198,18 @@ cmp.setup {
     },
 
     mapping = {
-        ['<C-p>'] = cmp.mapping.select_prev_item(),
-        ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
         ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Insert,
+            behavior = cmp.ConfirmBehavior.Replace,
             select = true,
-        })
+        }),
     },
 
     sources = {
@@ -235,7 +243,7 @@ local check_back_space = function()
 end
 
 _G.tab_complete = function()
-    if vim.fn.pumvisible() == 1 then
+    if cmp.visible() then
         return t "<C-n>"
     elseif luasnip and luasnip.expand_or_jumpable() then
         return t "<Plug>luasnip-expand-or-jump"
@@ -244,7 +252,7 @@ _G.tab_complete = function()
     end
 end
 _G.s_tab_complete = function()
-    if vim.fn.pumvisible() == 1 then
+    if cmp.visible() then
         return t "<C-p>"
     elseif luasnip and luasnip.jumpable(-1) then
         return t "<Plug>luasnip-jump-prev"
@@ -279,3 +287,22 @@ require('telescope').setup{
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
 
+require('snippets')
+
+panqueca = require('panqueca')
+panqueca.setup({
+    shifts = {
+        {"true", "false"},
+        {"enabled", "disabled",},
+        {"yes", "no",},
+        {"first", "second", "third"},
+        {"systemd", "systemD", config = {case_sensitive = true}},
+        --[[ In the future, I'll add something like
+        lisp = {
+            {"t", "nil"},
+        }
+        ]]
+    }
+})
+-- pf for panqueca flip
+vim.api.nvim_set_keymap("n", "<Leader>pf", "<Cmd>lua require('panqueca').convert()<CR>", mapopts)
