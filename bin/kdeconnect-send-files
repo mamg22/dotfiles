@@ -13,7 +13,7 @@ export NNN_SEL="$filelist.tmp"
 #    -c "only" -c "set nodotfiles" -c "normal! gg" -c "set vifminfo="  \
 #    -c "set statusline='Select files to send via kdeconnect'" ~
 
-$TERMINAL -c floating-st -e nnn -p"$filelist"
+$TERMINAL -c floating-st -e nnn -o -p"$filelist"
 
 # Exit on empty selection
 [ ! -s "$filelist" ] && exit 0

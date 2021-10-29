@@ -4,6 +4,7 @@ c.aliases = {
     'w': 'session-save',
     'q': 'quit',
     'wq': 'quit --save',
+    'h': 'help --tab',
 }
 
 # c.completion.delay = 1000

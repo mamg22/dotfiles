@@ -32,3 +32,4 @@ set completion-highlight-bg "#83a598"
 set completion-highlight-fg "#1d2021"
 
 set statusbar-home-tilde true
+set window-title-home-tilde true

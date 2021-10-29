@@ -12,21 +12,30 @@ spawn()
 }
 
 # Get tag name
-tag="$(herbstclient -n get_attr tags.focus.name)"
+tag="$1"
 
-# Get tmux sessions formated as "name|number of clients"
-sessions="$(tmux list-sessions -F '#S|#{session_attached}')"
+declare -a sessions
+# Get tmux sessions formated as "number of clients:name"
+readarray -t sessions < <(tmux list-sessions -F '#{session_attached}:#S')
 
 # Is this named session active?
-ws_session="$(echo "$sessions" | grep "^$tag\>")"
+for session in "${sessions[@]}"; do
+    session_name="${session#*:}"
+    attach_count="${session%:*}"
+
+    if [ "$session_name" = "$tag" ]; then
+        ws_session="${session_name}"
+        ws_session_attach_count="${attach_count}"
+        break;
+    fi
+done
 
 if [ "$ws_session" ]; then
-    # Is active, get number of attached clients
+    # Is active, query number of attached clients
     # Attach if there's no clients attached to it
     # Otherwise, spawn an unnamed session
-    wss_clients="$(echo "$ws_session" | sed 's/[^|]\+|//')"
 
-    if [ "$wss_clients" -eq 0 ]; then
+    if [ "$ws_session_attach_count" -eq 0 ]; then
         spawn "$tag"
     else
         spawn

@@ -1,8 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-# This is a small script that adds feedback when shifting players using
-# playerctld from a keybind
+# This is a script that adds feedback when shifting players using playerctld
+# from a keybind
 # Passing query instead of a shift direction shows the current active player
+
+# We'll need this one later
+shopt -s extglob
 
 dunst_stack_tag='playerctld-notify'
 
@@ -11,7 +14,8 @@ output_format='{{playerName}} - {{status}}:
 
 <b>{{title}}</b>
 by {{default(artist, "Unknown Artist")}}
-{{duration(position)}} / {{duration(mpris:length)}}'
+{{duration(position)}} / {{duration(mpris:length)}}
+Volume: {{volume * 100 + 0.5}}'
 
 echoerr()
 {
@@ -28,13 +32,45 @@ case "$shiftdir" in
     (query)
         # Do nothing
         ;;
-    (*)
+    # tree-sitter-bash parser breaks a lot if I use `(` here
+    *)
         echoerr "Invalid argument \"$shiftdir\""
         exit 1
         ;;
 esac
 
 content="$(playerctl metadata --format "$output_format")"
+# Replace the volume fractional part (usually .9999999998) with a percentage
+content="${content%.*}%"
+
+# Get aditional data straight from the media player (only mpd for now)
+playername="${content%%" - "*}"
+
+case "$playername" in
+    (mpd)
+        mpdstatus="$(mpc status)"
+        # Get the last line, and put it all in an array
+        lastline="${mpdstatus##*$'\n'}"
+        # Replace the first colon with a space, because if volume is at 100%,
+        # The line becomes "Volume:100% ...", totally breaking the splitting
+        lastline="${lastline/:/ }"
+        states=($lastline)
+
+        # Convert to `ncmpcpp`-like symbols
+        repeat="${states[3]/on/r}"
+        repeat="${repeat/off/-}"
+        random="${states[5]/on/z}"
+        random="${random/off/-}"
+        single="${states[7]/on/s}"
+        single="${single/off/-}"
+        consume="${states[9]/on/c}"
+        consume="${consume/off/-}"
+
+        content+=$'\n'
+        content+="[$repeat$random$single$consume]"
+        ;;
+esac
+
 notify-send -h "string:x-dunst-stack-tag:$dunst_stack_tag" \
     --urgency low \
     "$notification_title" "$content"

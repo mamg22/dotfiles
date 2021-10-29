@@ -13,22 +13,21 @@ zstyle :compinstall filename '/home/marco/.zshrc'
 # Also zcompile it for a little faster loading
 autoload -Uz compinit
 
-local Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
+Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
 
-# This is a slightly modified version of
+# This is a modified version of
 # https://gist.github.com/ctechols/ca1035271ad134841284
 # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-3109177
-() {
-    if [[ -n "$1" || ! -e "$Zcompdump.zwc" ]]; then
-        echo "Regenerating completion cache"
-        compinit
-        compdump
-        zcompile "$Zcompdump"
-        clear
-    else
-        compinit -C;
-    fi;
-} "$Zcompdump"(N.mh+24)
+
+if [ "$Zcompdump"(N.mh+24) ]; then
+    printf "Regenerating completion cache"
+    compinit
+    compdump
+    zcompile "$Zcompdump"
+    printf "\r"
+else
+    compinit -C;
+fi
 
 setopt histignorespace histignoredups
 setopt histreduceblanks
@@ -105,8 +104,16 @@ zshaddhistory()
     # And also strip out trailing whitespace
     local line
     line=${1%%$'\n'}
-    line=${line%% }
 
+    # To strip trailing whitespace nicely, we can use the `##` glob operator,
+    # which works like a `+` in a regex. It is only available with extendedglob
+    # so I'll enable it temporarily and then restore to the previous state
+    local extglob_state="${options[extendedglob]}"
+    setopt extendedglob
+    line="${line%% ##}"
+    options[extendedglob]="$extglob_state"
+
+    # TODO: What about using `set --`, so the arguments are put in $1..$n
     case "$line" in
         # ls and aliases without arguments
         (l|l[s.al])
@@ -162,5 +169,25 @@ mktest()
     cd "$testdir"
 }
 
+# Wrapper enabling cd-on-quit
+nnn()
+{
+    # Run the real nnn and forward args
+    command nnn "$@"
+
+    # Glob the cd-on-quit file
+    #  N = Nullglob, return nothing on failed glob instead of error
+    #  . = Plain files
+    #  m = Modification time
+    #  s = seconds
+    # -1 = 1 second or earlier
+    # Using an array, since globs aren't expanding when setting as a string
+    local nnn_cdfile=("$HOME/.config/nnn/.lastd"(N.ms-1))
+    if [ "$nnn_cdfile" ]; then
+        . "$nnn_cdfile"
+    fi
+}
+
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
-[ -f /usr/share/fzf/shell/key-bindings.zsh ] && source /usr/share/fzf/shell/key-bindings.zsh || true
+[ -f /usr/share/fzf/shell/key-bindings.zsh ] &&
+    source /usr/share/fzf/shell/key-bindings.zsh || true

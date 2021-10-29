@@ -16,7 +16,8 @@ Mod=Mod4   # Use the super key as the main modifier
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Return spawn terminal-spawn-hlwm # "${TERMINAL:-xterm}" # use your $TERMINAL with xterm as fallback
+hc keybind $Mod-Return substitute TAGNAME tags.focus.name \
+    spawn terminal-spawn-hlwm TAGNAME # "${TERMINAL:-xterm}"
 hc keybind $Mod-Alt+space spawn rofi -modi run,drun -show drun
 
 # basic movement in tiling and floating mode
@@ -134,9 +135,13 @@ hc keybind $Mod-Alt-k spawn playerctl volume 0.02+
 
 hc keybind $Mod-Alt-h spawn playerctl position 10-
 hc keybind $Mod-Alt-l spawn playerctl position 10+
+hc keybind $Mod-Alt-BackSpace spawn playerctl position 0
 
 hc keybind $Mod-Alt-comma  spawn playerctl previous
 hc keybind $Mod-Alt-period spawn playerctl next
+
+hc keybind $Mod-Alt-u spawn playerctl shuffle Toggle
+#hc keybind $Mod-Alt-y spawn playerctl shuffle Toggle
 
 # Show the currently active player name and state
 hc keybind $Mod-Alt-o spawn playerctld-notify
@@ -152,6 +157,7 @@ hc keybind Ctrl-Shift-period spawn dunstctl context
 # Frequenty used programs
 hc keybind $Mod-Alt-f spawn thunar
 hc keybind $Mod-Alt-b spawn qutebrowser
+hc keybind $Mod-Alt-z spawn zathura
 
 # theme
 hc attr theme.tiling.reset 1
