@@ -66,12 +66,40 @@ tray-padding = 2
 
 padding = 1
 
+[bar/alt]
+width = 100%
+offset-x = 0%
+offset-y = 0%
+
+locale = es_VE.UTF-8
+
+fixed-center = true
+
+enable-ipc = true
+
+background = ${colors.barbg}
+foreground = ${colors.barfg}
+
+font-0 = Hack:size=9
+font-1 = Font Awesome 5 Free Solid:size=9
+font-2 = Font Awesome 5 Free Solid:size=11
+font-3 = Cantarell:size=10
+font-4 = Noto Color Emoji:scale=10
+
+modules-left = xworkspaces
+modules-center = date
+modules-right = xkeyboard pulseaudio memory cpu wlan eth battery
+
+padding = 1
+
+monitor = VGA1
+
 [module/xworkspaces]
 type = internal/xworkspaces
 
 format = <label-state>
 
-icon-0 = hw;
+icon-0 = work;
 icon-1 = web;
 icon-2 = media;
 icon-3 = dev;
@@ -269,5 +297,15 @@ tail = true
 format-padding = 1
 format-prefix = " "
 format-prefix-foreground = ${colors.darkgray}
+
+[module/hlwm-tags-main]
+type = custom/script
+exec = ~/bin/polybar-hlwm-workspaces main
+tail = true
+
+[module/hlwm-tags-alt]
+type = custom/script
+exec = ~/bin/polybar-hlwm-workspaces alt
+tail = true
 
 ; vim:ft=dosini

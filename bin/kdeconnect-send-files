@@ -9,10 +9,6 @@ notification_name="KDEConnect Send Files"
 : > "$filelist"
 export NNN_SEL="$filelist.tmp"
 
-#st -c floating-st -g 120x30 -e vifm -f \
-#    -c "only" -c "set nodotfiles" -c "normal! gg" -c "set vifminfo="  \
-#    -c "set statusline='Select files to send via kdeconnect'" ~
-
 $TERMINAL -c floating-st -e nnn -o -p"$filelist"
 
 # Exit on empty selection
@@ -24,10 +20,6 @@ while read line; do
     if ! kdeconnect-cli -n "$name" --share "$line"; then
         failcount="$((failcount + 1))"
     fi
-    # TODO: Make sleep change with file size, otherwise it sends it all almost
-    # at once and some downloads might fail
-    # Is this fixed in newer versions? (might test later)
-    #sleep 3
 done < "$filelist"
 
 if [ "$failcount" -eq 0 ]; then

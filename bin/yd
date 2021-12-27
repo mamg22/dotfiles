@@ -19,7 +19,7 @@ usage()
     cat <<EOF
 usage: $(basename "$0") [options]... url
 
-An easy to use wrapper for youtube-dl with caching, resistant to slow and
+An easy to use wrapper for yt-dlp with caching, resistant to slow and
 unstable internet connections.
 
 Available options:
@@ -33,12 +33,12 @@ Available options:
     -j              Print json data filename and exit
                     Specify twice to only generate filename, print it and
                     don't download anything
-    -o YTDLFORMAT   Use YTDLFORMAT as the filename format passed to youtube-dl
+    -o YTDLFORMAT   Use YTDLFORMAT as the filename format passed to yt-dlp
     -r RESOLUTION   Minimum video resolution to download
     -s SUBLANGS     Subtitle languages to download
     -X              Remove cache file generated for the given url
                     Specify twice to exit after removing the cache file
-    -y YTDLOPTIONS  Pass YTDLOPTIONS directly to youtube-dl
+    -y YTDLOPTIONS  Pass YTDLOPTIONS directly to yt-dlp
                     Multiple uses append to the other options
 
 EOF
@@ -76,7 +76,7 @@ get_info_json()
         jc -e . "$json_info" >/dev/null 2>&1; do
         # Remove any json information that failed to download
         rm -f "$json_info"
-        untildone youtube-dl --dump-single-json --skip-download -- "$url" > "$json_info"
+        untildone yt-dlp --dump-single-json --skip-download -- "$url" > "$json_info"
     done
     # Unlock the file
     # flock -u 9
@@ -92,7 +92,7 @@ download()
     opts="$5"
     # Get the json info location
     info="$(get_info_json "$url")"
-    untildone youtube-dl -f "$format" -o "$output" --load-info-json "$info" --add-metadata \
+    untildone yt-dlp -f "$format" -o "$output" --load-info-json "$info" --add-metadata \
         $subs \
         $opts -- "$url"
 }
@@ -168,7 +168,7 @@ if [ -n "$remove_cache_file" ]; then
 fi
 
 if [ -n "$show_formats" ]; then
-    youtube-dl --load-info-json "$(get_info_json "$url")" -F -- "$url"
+    yt-dlp --load-info-json "$(get_info_json "$url")" -F -- "$url"
     exit 0
 fi
 

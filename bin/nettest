@@ -28,8 +28,8 @@ web_test_text="Testing web connection"
 run_it() {
     printf "%s | %s " "$(date "+%k:%M" | tr -d '\n')" "$2"
     $1
-    exit_code=$?
-    if [ $exit_code -eq 0 ]; then
+    exit_code="$?"
+    if [ "$exit_code" -eq 0 ]; then
         printf "$ok_text\n"
     else
         printf "$fail_text"
@@ -38,16 +38,26 @@ run_it() {
 }
 
 loop_it() {
-    while true
-    do
-        if run_it "$1" "$2"
-        then
+    while true; do
+        if run_it "$1" "$2"; then
             break
         fi
         sleep 1m
         printf "\r"
     done
 }
+# Parse options
+while getopts s name; do
+    case "$name" in
+        (s)
+            silent=1
+            ;;
+        (?)
+            exit 2
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
 
 case "$1" in
     (isp)
@@ -73,17 +83,9 @@ case "$1" in
         ;;
 esac
 
-## Parse options
-#while getopts s name; do
-#    case "$name" in
-#        (?)
-#            exit 2
-#            ;;
-#    esac
-#done
-
 echo "Llego el intenet"
-if [ "$1" = "silent" ] || [ "$2" = "silent" ]; then
-    exit 0
+if [ "${silent:-0}" -eq 1 ]; then
+    exit
 fi
+
 mpv "$HOME/music/Newton/Newton - Streamline.mp3" --no-terminal

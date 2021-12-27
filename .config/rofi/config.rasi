@@ -1,4 +1,4 @@
 configuration {
     font: "Hack 10";
-    theme: "gruvbox-dark";
 }
+@theme "gruvbox-dark"

@@ -60,7 +60,7 @@ hc keybind $Mod-Control-Up      resize up +$resizestep
 hc keybind $Mod-Control-Right   resize right +$resizestep
 
 # tags
-tag_names=( hw web media dev sys files creative office other )
+tag_names=( work web media dev sys files creative office other )
 tag_keys=( {1..9} 0 )
 
 hc rename default "${tag_names[0]}" || true

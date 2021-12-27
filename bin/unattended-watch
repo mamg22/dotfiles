@@ -28,10 +28,15 @@ while true; do
 
     # Check network state again, if down in the two checks, break
     current_state="$(cat /sys/class/net/$iface/operstate)"
-    [ "$current_state" = "down" ] && [ "$old_state" = "down" ] && reason="Network down" && break
+    if [ "$current_state" = "down" ] && [ "$old_state" = "down" ]; then
+        reason="Network down"
+        break
+    fi
 done
 
-echoerr "Preparing $action: $reason"
+datetime="$(date)"
+
+echoerr "Preparing $action: $reason at $datetime"
 echoerr "5 seconds to cancel"
 
 sleep 5

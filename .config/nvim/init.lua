@@ -111,6 +111,7 @@ vim.api.nvim_set_keymap('n', '<Leader>bn', [[<Cmd>bn<CR>]], mapopts)
 vim.api.nvim_set_keymap('n', '<Leader>bp', [[<Cmd>bp<CR>]], mapopts)
 vim.api.nvim_set_keymap('n', '<Leader>y', [["+y]], mapopts)
 vim.api.nvim_set_keymap('n', '<Leader>Y', [["+Y]], mapopts)
+vim.api.nvim_set_keymap('v', '<Leader>y', [["+y]], mapopts)
 
 -- Disable space / leader key
 vim.api.nvim_set_keymap('n', '<Space>', '<Nop>', mapopts)

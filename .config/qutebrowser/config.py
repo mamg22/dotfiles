@@ -83,6 +83,7 @@ searchengines = {
     'cpp':     'https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}',
     'ud':      'https://www.urbandictionary.com/define.php?term={}',
     'kym':     'https://knowyourmeme.com/search?q={}',
+    'mdn':     'https://developer.mozilla.org/en-US/search?q={}',
 
     # Reddit
     'r':       'https://www.reddit.com/search?q={}',

@@ -38,7 +38,7 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 # Force english manpages
 export MANOPT="-L en"
 
-export BAT_THEME="gruvbox"
+export BAT_THEME="gruvbox-dark"
 
 # Fix java gui apps
 export _JAVA_AWT_WM_NONREPARENTING=1

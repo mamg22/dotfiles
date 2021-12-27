@@ -33,8 +33,16 @@ setopt histignorespace histignoredups
 setopt histreduceblanks
 setopt correct
 
-PROMPT="%F{12}[%F{14}%n@%m%F{12}](%F{14}%~%F{12})%f
-%(?..%F{9})%#%f "
+# Load version control information
+autoload -Uz vcs_info
+precmd() { vcs_info; }
+
+zstyle ':vcs_info:git:*' formats '%F{12}{%F{14}%b%F{12}}%f'
+ 
+setopt PROMPT_SUBST
+
+PROMPT='%F{12}[%F{14}%n@%m%F{12}](%F{14}%~%F{12})%f${vcs_info_msg_0_}
+%(?..%F{9})%#%f '
 #RPROMPT='%(?;;[%F{red}%B%?%b%f])'
 
 # Aliases
@@ -52,7 +60,6 @@ alias la='ls -A'
 alias l='ls -CF'
 
 alias za='zathura --fork >/dev/null 2>&1'
-alias ytdl='youtube-dl'
 
 alias sc='systemctl'
 alias scu='systemctl --user'
@@ -72,12 +79,12 @@ alias a2='aria2c'
 alias pmpv='mpv --no-cache --no-video --save-position-on-quit'
 alias vmpv='mpv --quiet'
 alias mpva='ud mpv --ytdl-format=bestaudio'
-alias mpvap='ud mpv --ytdl-format=bestaudio --pause'
-alias mpvw='ud mpv --ytdl-format=worst'
-alias mpvwp='ud mpv --ytdl-format=worst --pause'
+alias mpvap='mpva --pause'
+alias mpvw='ud mpv --ytdl-format="worst[ext!=3gp]"'
+alias mpvwp='mpvw --pause'
 alias mpvp='mpv --pause'
 
-alias ytba='ud youtube-dl -f bestaudio -o "%(title)s.%(ext)s"'
+alias ytba='ud yt-dlp -f bestaudio -o "%(title)s.%(ext)s"'
 
 alias nb='newsboat'
 alias nbr='newsboat -x reload'
@@ -92,6 +99,14 @@ alias ffprobe='ffprobe -hide_banner'
 alias ffplay='ffplay -hide_banner'
 
 # End of aliases
+
+# Bindings
+
+# Make zsh's vi mode better
+bindkey "^?" backward-delete-char
+bindkey "^W" backward-kill-word 
+bindkey "^H" backward-delete-char
+bindkey "^U" backward-kill-line            
 
 # Ignore lines from including them in history
 # See zshmisc(1), SPECIAL FUNCTIONS section
@@ -115,13 +130,9 @@ zshaddhistory()
 
     # TODO: What about using `set --`, so the arguments are put in $1..$n
     case "$line" in
-        # ls and aliases without arguments
-        (l|l[s.al])
-            return 2
-            ;;
         # Common programs and aliases (without any arguments)
         (nb|nbr|nbdp|pysr|htop|nnn|exit|ncm|ncmpcpp|uni|pw-top|nettest|nvim| \
-         mktest|reboot|poweroff|reset|xev|rehash|make|unattended-watch)
+         mktest|reboot|poweroff|reset|xev|rehash|make|unattended-watch|l|l[s.al])
             return 2
             ;;
         ("vq -"[de])
@@ -174,6 +185,8 @@ nnn()
 {
     # Run the real nnn and forward args
     command nnn "$@"
+    # Store nnn's status code, to be later returned
+    local nnn_exit="$?"
 
     # Glob the cd-on-quit file
     #  N = Nullglob, return nothing on failed glob instead of error
@@ -186,6 +199,7 @@ nnn()
     if [ "$nnn_cdfile" ]; then
         . "$nnn_cdfile"
     fi
+    return "$nnn_exit"
 }
 
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
