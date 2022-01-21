@@ -10,7 +10,6 @@ output_dir="$xdg_videos_dir"
 filename_format="%(uploader)s/%(title)s-%(id)s.%(ext)s"
 format='webm'
 resolution=480
-info_dir=~/.cache/yd
 
 ### End of configuration
 
@@ -30,57 +29,13 @@ Available options:
                     Currently only supports mp4 and webm as formats
     -F              Show available formats and exit
     -h              Display this help and exit
-    -j              Print json data filename and exit
-                    Specify twice to only generate filename, print it and
-                    don't download anything
     -o YTDLFORMAT   Use YTDLFORMAT as the filename format passed to yt-dlp
     -r RESOLUTION   Minimum video resolution to download
     -s SUBLANGS     Subtitle languages to download
-    -X              Remove cache file generated for the given url
-                    Specify twice to exit after removing the cache file
     -y YTDLOPTIONS  Pass YTDLOPTIONS directly to yt-dlp
                     Multiple uses append to the other options
 
 EOF
-}
-
-hash_url()
-{
-    printf "%s" "$1" | md5sum | cut -d' ' -f1
-}
-
-get_json_filename()
-{
-    url="$1"
-
-    # Hash the url, so it is able to continue if interrupted
-    url_hash="$(hash_url "$url")"
-    json_info="$info_dir/$url_hash.info.json"
-
-    echo "$json_info"
-}
-
-# Get the information json instead of downloading again every time
-get_info_json()
-{
-    json_info="$(get_json_filename "$1")"
-
-    # Get a file descriptor and lock it
-    # Seems to introduce a bug, testing without it
-    # exec 9>"$json_info"
-    # flock 9
-
-    # Only download if doesn't exist, is too small to be valid or isn't valid json
-    while [ ! -e "$json_info" ] ||
-        [ "$(stat -c %s "$json_info")" -lt 1024 ] ||
-        jc -e . "$json_info" >/dev/null 2>&1; do
-        # Remove any json information that failed to download
-        rm -f "$json_info"
-        untildone yt-dlp --dump-single-json --skip-download -- "$url" > "$json_info"
-    done
-    # Unlock the file
-    # flock -u 9
-    echo "$json_info"
 }
 
 download()
@@ -90,15 +45,13 @@ download()
     url="$3"
     subs="$4"
     opts="$5"
-    # Get the json info location
-    info="$(get_info_json "$url")"
-    untildone yt-dlp -f "$format" -o "$output" --load-info-json "$info" --add-metadata \
+    untildone yt-dlp -f "$format" -o "$output" --add-metadata \
         $subs \
         $opts -- "$url"
 }
 
 # Parse arguments
-while getopts acC:f:Fhjo:r:s:Xy: name; do
+while getopts acC:f:Fho:r:s:y: name; do
     case "$name" in
         (a)
             audio_only=1
@@ -119,10 +72,6 @@ while getopts acC:f:Fhjo:r:s:Xy: name; do
             usage >&2
             exit 0
             ;;
-        (j) 
-            [ "$print_json_filename" = 1 ] && print_only_filename=1
-            print_json_filename=1
-            ;;
         (o)
             filename_format="$OPTARG"
             ;;
@@ -131,10 +80,6 @@ while getopts acC:f:Fhjo:r:s:Xy: name; do
             ;;
         (s)
             subtitles="$OPTARG"
-            ;;
-        (X)
-            [ "$remove_cache_file" = 1 ] &&  exit_after_remove=1
-            remove_cache_file=1
             ;;
         (y)
             ytdl_opts="$ytdl_opts $OPTARG"
@@ -155,27 +100,11 @@ if [ -z "$url" ]; then
     exit 1
 fi
 
-# Make the info cache directory
-[ ! -e "$info_dir" ] && mkdir -p "$info_dir"
-
 # Determine the output filename
 output_format="$output_dir/$filename_format"
 
-if [ -n "$remove_cache_file" ]; then
-    echo Clearing information cache for "$url"
-    rm "$(get_json_filename "$url")"
-    [ "$exit_after_remove" ] && exit 0
-fi
-
 if [ -n "$show_formats" ]; then
-    yt-dlp --load-info-json "$(get_info_json "$url")" -F -- "$url"
-    exit 0
-fi
-
-if [ -n "$print_json_filename" ]; then
-    [ "$print_only_filename" ] && get_json_filename "$url" && exit 0
-
-    echo "$(get_info_json "$url")"
+    yt-dlp -F -- "$url"
     exit 0
 fi
 

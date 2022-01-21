@@ -4,6 +4,10 @@ queue=~/.cache/vq-queue
 preview_file="/tmp/vq-preview"
 download_lock="/tmp/vq-download-lock"
 
+preview_format="Title: %(title)s
+Uploader: %(uploader)s
+Duration: %(duration_string)s"
+
 isatty()
 {
     # True if file descriptor 0 (stdin) is a terminal
@@ -71,47 +75,10 @@ download()
                 yd $resolution $format $subtitles "$url" && flock "$queue" sed -i 1d "$queue"
 
                 notify-send "Video downloader" "Finished downloading $url"
-                unset resolution
-                unset format
+                unset resolution format subtitles
             done
     done
     flock -u 9
-}
-
-format_seconds()
-{
-    h="$((${1}/3600))"
-    m="$(((${1}%3600)/60))"
-    s="$((${1}%60))"
-    if [ "$h" -eq 0 ]; then
-        printf "%02d:%02d\n" $m $s
-    else
-        printf "%02d:%02d:%02d\n" $h $m $s
-    fi
-}
-
-get_duration()
-{
-    duration="$(jq -j .duration "$1")"
-    format_seconds "$duration"
-}
-
-get_title()
-{
-    jq -j .title "$1" | tr -d '\n'
-}
-
-get_uploader()
-{
-    jq -j .uploader "$1"
-}
-
-get_formats()
-{
-    # TODO: Keep testing with:
-    # jq -j '.formats[] | [([ .format_id, .ext] | join(":"))] | join(":")' "$(yd -j 'https://www.youtube.com/watch?v=_ijnXe4ATT8')"
-    # To recreate something like youtube-dl -F $url
-    yd -F "$1"
 }
 
 generate_preview()
@@ -119,12 +86,7 @@ generate_preview()
     url="$1"
     [ "$url" ] || return
 
-    file="$(yd -j "$url")"
-    printf "\e[1mTitle: %s\e[0m\nUploader: %s\nDuration: %s\n%s\n" \
-        "$(get_title "$file")" \
-        "$(get_uploader "$file")" \
-        "$(get_duration "$file")" \
-        "$(get_formats "$url")"
+    yt-dlp --print "$preview_format" -F "$url"
 }
 
 preview()
