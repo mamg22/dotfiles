@@ -1,7 +1,6 @@
 #!/bin/sh
 
 queue=~/.cache/vq-queue
-preview_file="/tmp/vq-preview"
 download_lock="/tmp/vq-download-lock"
 
 preview_format="Title: %(title)s

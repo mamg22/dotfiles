@@ -4,3 +4,7 @@ mainbox {
     children: [ listview ];
     padding: 2px;
 }
+
+listview {
+    lines: 7;
+}

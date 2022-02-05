@@ -1,0 +1,18 @@
+#!/bin/sh
+
+target_hook="polybar-lower"
+
+herbstclient --idle 'reload|rule' | {
+    while read -r type value winid; do
+        case "$type" in
+            (reload)
+                break
+                ;;
+            (rule)
+                if [ "$value" = "$target_hook" ]; then
+                    herbstclient lower "$winid"
+                fi
+                ;;
+        esac
+    done
+}

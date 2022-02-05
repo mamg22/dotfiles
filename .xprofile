@@ -24,8 +24,9 @@ redshift &
 # systemctl --user start kdeconnect.service &
 setsid /usr/libexec/kdeconnectd &
 
-# Allow sxhkd to grab the power key
-systemd-inhibit --what=handle-power-key \
+# Allow programs to grab the power key
+systemd-inhibit \
+    --what="handle-power-key" \
     --who="Power Key inhibitor for X" \
     --why="Disable power key behaviour so X programs can use it" \
     sh -c 'while true; do sleep 2419200; done' &

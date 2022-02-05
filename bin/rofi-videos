@@ -1,13 +1,31 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 videos_dir="$(xdg-user-dir VIDEOS)"
 
-videos="$(find "$videos_dir" -type f | sort)"
-videos_pretty="$(echo "$videos" | sed "s|$videos_dir/||; s/-.\{11\}\..*$//")"
+find_videos() {
+    find "$videos_dir" -type f \
+        \( -name "*.mp4" -o -name "*.webm" -o -name ".3gp" \) \
+        | sort
+}
 
-pick="$(echo "$videos_pretty" | rofi -width -120 -dmenu -l 20 -i -p "Video")" 
-[ -z "$pick" ] && exit
+pretty_name() {
+    name="$1"
+    name="${name#$videos_dir/}"
+    name="${name%.*}"
+    echo "$name"
+}
 
-video="$(echo "$videos" | fgrep "$pick" | head -1)"
+select_video() {
+    for video_file in "${videos[@]}"; do
+        pretty_name "$video_file"
+    done | rofi -theme-str 'window {width: 120ch;}' -l 20 -dmenu  -i -p "Video" -format i
+}
 
-echo "$video" | tr '\n' '\0' | xargs -0 -I{} -r mpv --quiet --force-window "{}"
+readarray -t videos < <(find_videos)
+
+index="$(select_video)"
+[ "${index:--1}" -eq -1 ] && exit
+
+video="${videos[$index]}"
+
+mpv --quiet --force-window "$video"

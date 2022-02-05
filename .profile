@@ -43,3 +43,12 @@ export BAT_THEME="gruvbox-dark"
 # Fix java gui apps
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
+
+export NNN_PLUG=''
+
+nnn_plug()
+{
+    NNN_PLUG="$NNN_PLUG$1;"
+}
+
+nnn_plug 'b:-!bat --paging always $nnn*'

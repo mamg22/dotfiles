@@ -28,14 +28,14 @@ if __name__ == '__main__':
     u_host = host - 2
 
     print(f"IP: {addr}\nMask: {mask}\n"
-            f"SR: {sr} ({bit_sr} bit) {u_sr} usable\n"
-            f"Host: {host} ({bit_host} bit) {u_host} usable",
-            file=sys.stderr)
+          f"SR: {sr} ({bit_sr} bit) {u_sr} usable\n"
+          f"Host: {host} ({bit_host} bit) {u_host} usable",
+          file=sys.stderr)
 
     for i in range(sr):
         if i < 15 or i == sr - 1:
-            print( addr,
-                   addr + 1,
-                   addr + host - 2,
-                   addr + host - 1, sep=",")
+            print(addr,
+                  addr + 1,
+                  addr + host - 2,
+                  addr + host - 1, sep=",")
         addr += host

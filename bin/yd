@@ -7,7 +7,7 @@
 xdg_videos_dir="$(xdg-user-dir VIDEOS)"
 
 output_dir="$xdg_videos_dir"
-filename_format="%(uploader)s/%(title)s-%(id)s.%(ext)s"
+filename_format="%(uploader)s/%(title)s.%(ext)s"
 format='webm'
 resolution=480
 

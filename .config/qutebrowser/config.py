@@ -1,3 +1,10 @@
+# Silence some linting/LSP warnings and errors
+# pylint: disable=C0111
+from qutebrowser.config.configfiles import ConfigAPI  # noqa: F401
+from qutebrowser.config.config import ConfigContainer  # noqa: F401
+config: ConfigAPI = config  # noqa: F821 pylint: disable=E0602,C0103
+c: ConfigContainer = c  # noqa: F821 pylint: disable=E0602,C0103
+
 config.load_autoconfig(True)
 
 c.aliases = {
@@ -19,8 +26,9 @@ c.completion.web_history.exclude = [
 
 c.confirm_quit = ["multiple-tabs", "downloads"]
 
-c.content.headers.accept_language = 'es-VE,es,en'
+c.content.headers.accept_language = 'es-VE,es,en-US,en'
 c.content.autoplay = False
+c.content.prefers_reduced_motion = True
 
 c.editor.command = ['st', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
 
@@ -118,14 +126,20 @@ c.url.start_pages = '~/any/startpage/index.html'
 # Disable mouse wheel zoom
 c.zoom.mouse_divider = 0
 
+# Always prefer english content for specific sites
+# TODO: Somehow redirect already localized urls to en-US
+config.set('content.headers.accept_language', 'en-US,en;q=0.9', 'developer.mozilla.org')
+
 tab_rotate = [
     'config-cycle --temp --print tabs.position top right',
     'config-cycle --temp tabs.title.format "{audio}{index}: {current_title}" "{aligned_index}"',
     'config-cycle --temp tabs.title.alignment left center',
 ]
 
+
 def join_commands(command_list):
     return ' ;; '.join(command_list)
+
 
 # Toggle GUI parts
 config.bind('xr', join_commands(tab_rotate))
@@ -139,7 +153,6 @@ config.bind(';c', 'hint comment')
 config.bind(';C', 'hint --rapid comment')
 
 # Suspend tabs
-#config.bind('xs', 'spawn --userscript suspend')
 config.bind('xs', 'open qute://back')
 
 # Use google search

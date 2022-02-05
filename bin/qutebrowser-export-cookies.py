@@ -16,19 +16,19 @@ data_dir = home_dir + '/.local/share/qutebrowser'
 # Use custom path if provided as argument
 if len(argv) > 1:
     data_dir = argv[1]
-    
+
 cookies_path = data_dir + "/webengine/Cookies"
 export_cookies_txt_path = data_dir + "/webengine/Cookies.txt"
 
 with sqlite3.connect(cookies_path) as conn:
     conn = sqlite3.connect(cookies_path)
-    c=conn.cursor()
+    c = conn.cursor()
 
     print("Opened database ({%s) successfully" % cookies_path)
 
     cursor = c.execute("select host_key, path, is_secure, expires_utc, name, value from cookies")
     with open(export_cookies_txt_path, "w") as cookies:
-        ftstr = ["FALSE","TRUE"]
+        ftstr = ["FALSE", "TRUE"]
 
         cookies.write("""\
 # Netscape HTTP Cookie File
@@ -41,8 +41,8 @@ with sqlite3.connect(cookies_path) as conn:
             if item_3_3 == 0:
                 item_3 = "0"
             else:
-                item_3 = str(round(int(item[3]) / 1000000 - 1164473600 ))
+                item_3 = str(round(int(item[3]) / 1000000 - 1164473600))
 
-            cookies.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ( 
-                item[0], ftstr[item[0].startswith('.')], 
-                item[1],ftstr[item[2]], item_3, item[4], item[5]))
+            cookies.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (
+                item[0], ftstr[item[0].startswith('.')],
+                item[1], ftstr[item[2]], item_3, item[4], item[5]))

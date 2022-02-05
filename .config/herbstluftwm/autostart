@@ -107,12 +107,12 @@ hc keybind $Mod-c cycle
 hc keybind $Mod-i jumpto urgent
 
 # Volume and brightness control
-hc keybind XF86AudioRaiseVolume spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-volume.pl'
-hc keybind XF86AudioLowerVolume spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-volume.pl'
-hc keybind XF86AudioMute spawn sh -c 'pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-volume.pl'
+hc keybind XF86AudioRaiseVolume spawn setsid sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-volume.pl'
+hc keybind XF86AudioLowerVolume spawn setsid sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-volume.pl'
+hc keybind XF86AudioMute spawn setsid sh -c 'pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-volume.pl'
 
-hc keybind XF86MonBrightnessUp spawn sh -c 'brightnessctl set 10%+ && notify-brightness'
-hc keybind XF86MonBrightnessDown spawn sh -c 'brightnessctl set 10%- && notify-brightness'
+hc keybind XF86MonBrightnessUp spawn setsid sh -c 'brightnessctl set 10%+ && notify-brightness'
+hc keybind XF86MonBrightnessDown spawn setsid sh -c 'brightnessctl set 10%- && notify-brightness'
 
 # Rofi scripts
 hc keybind $Mod-Pause spawn rofi-power
@@ -121,8 +121,19 @@ hc keybind $Mod-Alt-v spawn rofi-videos
 hc keybind $Mod-Alt-Shift-v spawn rofi-podcasts
 hc keybind $Mod-Print spawn rofi-screenshot
 
+# Toggle polybar for the current monitor
+hc keybind $Mod-Ctrl-b \
+    substitute MONITOR_NAME monitors.focus.name \
+    sprintf MONITOR_PAD_UP monitors.by-name.%c.pad_up MONITOR_NAME \
+    sprintf SHOW_CMD "echo cmd:show >/tmp/polybar-bar.%c" MONITOR_NAME \
+    sprintf HIDE_CMD "echo cmd:hide >/tmp/polybar-bar.%c" MONITOR_NAME \
+    or , and . compare MONITOR_PAD_UP = 0 \
+             . chain : pad MONITOR_NAME 24 \
+                     : spawn sh -c SHOW_CMD \
+       , chain : pad MONITOR_NAME 0 \
+               : spawn sh -c HIDE_CMD
+
 # Other keybinds
-hc keybind $Mod-Ctrl-b spawn hlwm-polybar-toggle
 hc keybind $Mod-Alt-e spawn kdeconnect-send-files
 hc keybind $Mod-Alt-apostrophe spawn $TERMINAL -e tmux new-session -s enqueue vq -nc
 
@@ -158,6 +169,8 @@ hc keybind Ctrl-Shift-period spawn dunstctl context
 hc keybind $Mod-Alt-f spawn thunar
 hc keybind $Mod-Alt-b spawn qutebrowser
 hc keybind $Mod-Alt-z spawn zathura
+hc keybind $Mod-Alt-t spawn telegram-desktop
+hc keybind $Mod-Alt-1 spawn st -c htop-popup htop
 
 # theme
 hc attr theme.tiling.reset 1
@@ -216,9 +229,13 @@ hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 
+hc rule windowtype='_NET_WM_WINDOW_TYPE_DOCK' hook='polybar-lower'
+
 hc rule class='qutebrowser' tag=web
 hc rule class~'Gimp.*' tag=creative
 hc rule class='Thunar' tag=files
+
+hc rule class='htop-popup' floating=on floatplacement=center floating_geometry=1000x400+0+0
 
 hc set tree_style '╾│ ├└╼─┐'
 
@@ -228,14 +245,25 @@ hc unlock
 # do multi monitor setup here, e.g.:
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
 # or simply:
-# hc detect_monitors
+hc detect_monitors
+
+declare -A monitor_names
+monitor_names=(
+    "0" "main"
+    "1" "alt"
+)
+
+for monitor_id in "${!monitor_names[@]}"; do
+    hc try rename_monitor "$monitor_id" "${monitor_names[$monitor_id]}"
+done
 
 # find the panel
 #panel=~/.config/herbstluftwm/panel.sh
 #[ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
-#for monitor in $(hc list_monitors | cut -d: -f1) ; do
-#    # start it on each monitor
-#    "$panel" "$monitor" &
-#done
+for monitor in $(hc list_monitors | cut -d: -f1) ; do
+    # start it on each monitor
+    ~/.config/polybar/launch.sh "${monitor_names[$monitor]}"
+done
 
-~/.config/polybar/launch.sh
+setsid hlwm-polybar-lower &
+

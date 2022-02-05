@@ -8,6 +8,7 @@ bindkey -v
 
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle :compinstall filename '/home/marco/.zshrc'
+zstyle ':completion:*' use-cache true
 
 # Initialize completion and avoid regenerating cache unless older than 24h
 # Also zcompile it for a little faster loading
@@ -20,16 +21,18 @@ Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
 # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-3109177
 
 if [ "$Zcompdump"(N.mh+24) ]; then
-    printf "Regenerating completion cache"
+    regen_msg="Regenerating completion cache"
+    printf "%s" "$regen_msg"
     compinit
     compdump
     zcompile "$Zcompdump"
-    printf "\r"
+    printf "\r%s\r" "${regen_msg//?/ }"
+    unset regen_msg
 else
     compinit -C;
 fi
 
-setopt histignorespace histignoredups
+setopt histignorespace histignoredups hist_ignore_all_dups
 setopt histreduceblanks
 setopt correct
 
@@ -37,27 +40,41 @@ setopt correct
 autoload -Uz vcs_info
 precmd() { vcs_info; }
 
-zstyle ':vcs_info:git:*' formats '%F{12}{%F{14}%b%F{12}}%f'
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats '%F{green} %b%f'
  
 setopt PROMPT_SUBST
 
-PROMPT='%F{12}[%F{14}%n@%m%F{12}](%F{14}%~%F{12})%f${vcs_info_msg_0_}
-%(?..%F{9})%#%f '
-#RPROMPT='%(?;;[%F{red}%B%?%b%f])'
+# Setup prompt
+# Anonymous function for scoping
+() {
+    local userhost='%B%F{red}%n%F{white}@%F{red}%m%f%b'
+    local dir='%B%F{yellow}%~%f%b'
+    local vcs='${vcs_info_msg_0_}'
+    local symbol='%(?..%B%F{9})%#%b%f'
+    
+    local nnn="%F{yellow}${NNNLVL:+nnn:$NNNLVL }%f"
+
+PROMPT="$userhost $dir $nnn$vcs
+$symbol "
+}
+
+setopt TRANSIENT_RPROMPT
+RPROMPT='%(?;;[%F{red}%B%?%b%f])'
 
 # Aliases
 
 alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 alias pyac="source bin/activate"
 alias pysr="python3 -m http.server"
-
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 alias za='zathura --fork >/dev/null 2>&1'
 
@@ -107,6 +124,13 @@ bindkey "^?" backward-delete-char
 bindkey "^W" backward-kill-word 
 bindkey "^H" backward-delete-char
 bindkey "^U" backward-kill-line            
+
+# Allow shift-Tab to go back in completion
+bindkey "^[[Z" reverse-menu-complete
+
+# Named directories
+hash -d -- uni=~/Documentos/uni
+hash -d -- cur=~uni/cur
 
 # Ignore lines from including them in history
 # See zshmisc(1), SPECIAL FUNCTIONS section

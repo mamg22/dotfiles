@@ -10,15 +10,12 @@ download-retries 10
 download-path "~/podcasts/%n"
 download-filename-format "%F - %t.%e"
 
-bind-key ^O open-all-unread-in-browser-and-mark-read
-
 bind-key j down
 bind-key k up
 bind-key J next-feed articlelist
 bind-key K prev-feed articlelist
-bind-key G end
-bind-key g home
 
+bind-key ^O open-all-unread-in-browser-and-mark-read
 bind-key | delete-article
 
 macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser %u"
@@ -26,3 +23,5 @@ macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser %u"
 browser "qutebrowser %u"
 
 notify-program "~/bin/newsboat-notify"
+
+keep-articles-days 30
