@@ -31,36 +31,20 @@ return require('packer').startup({function()
         'nvim-telescope/telescope-fzf-native.nvim',
         run = 'make',
     }
+    use 'nvim-telescope/telescope-file-browser.nvim'
 
     use {
         'hoob3rt/lualine.nvim',
         requires = {'kyazdani42/nvim-web-devicons', opt = true}
     }
 
-
-    --use 'ludovicchabant/vim-gutentags'
-    --use {
-    --    'majutsushi/tagbar',
-    --    cmd = {"Tagbar", "TagbarClose", "TagbarCurrentTag", "TagbarDebug",
-    --    "TagbarDebugEnd", "TagbarForceUpdate", "TagbarGetTypeConfig",
-    --    "TagbarJump", "TagbarJumpNext", "TagbarJumpPrev", "TagbarOpen",
-    --    "TagbarOpenAutoClose", "TagbarSetFoldlevel", "TagbarShowTag",
-    --    "TagbarToggle", "TagbarTogglePause"},
-    --}
-
-    -- use 'itchyny/lightline.vim'
-
-    --use {
-    --    'cespare/vim-toml',
-    --    ft = 'toml',
-    --}
     use {
         'aklt/plantuml-syntax',
         ft = 'plantuml',
     }
 
     use 'gruvbox-community/gruvbox'
-    -- use {"ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+    -- use "ellisonleao/gruvbox.nvim"
 
     use {
         'ThePrimeagen/vim-be-good',
@@ -72,16 +56,11 @@ return require('packer').startup({function()
     }
 
     use 'windwp/nvim-autopairs'
-
-    --use {
-    --    'nvim-neorg/neorg',
-    --    branch = 'unstable',
-    --}
 end,
     config = {
         max_jobs = 2,
         git = {
             clone_timeout = 1200
-        }
+        },
     }
 })
