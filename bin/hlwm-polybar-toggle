@@ -1,25 +1,34 @@
 #!/bin/sh
 
-polybar_name="polybar-main_LVDS1"
-padding="top"
+monitor_name="${1}"
+if [ -z "$monitor_name" ]; then
+    echo >&2 "No monitor name provided"
+    exit 1
+fi
+
+action="${2}"
+if [ -z "$action" ]; then
+    echo >&2 "No action provided"
+    exit 2
+fi
+
+polybar_pipe_prefix="/tmp/polybar-bar."
+polybar_pipe_name="${polybar_pipe_prefix}${monitor_name}"
+
 visible_padding="24"
 hidden_padding="0"
 
-state="$(xwininfo -name "$polybar_name")"
+send_msg() {
+    echo "${1}" >"$polybar_pipe_name"
+}
 
-printf "$state" | awk -F':' '
-/Map State/ {
-    gsub("\\s", "", $2)
-    if ($2 == "IsUnMapped") {
-        exit 0
-    }
-    exit 1
-}'
-
-if [ "$?" -eq 1 ]; then
-    polybar-msg cmd hide &
-    herbstclient pad "" "$hidden_padding"
+if [ "$action" = "hide" ]; then
+    send_msg cmd:hide &
+    herbstclient pad "$monitor_name" "$hidden_padding"
+elif [ "$action" = "show" ]; then
+    herbstclient pad "$monitor_name" "$visible_padding" &
+    send_msg cmd:show
 else
-    herbstclient pad "" "$visible_padding" &
-    polybar-msg cmd show
+    echo >&2 "Invalid action"
+    exit 3
 fi
