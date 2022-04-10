@@ -10,6 +10,8 @@ download-retries 10
 download-path "~/podcasts/%n"
 download-filename-format "%F - %t.%e"
 
+scrolloff 4
+
 bind-key j down
 bind-key k up
 bind-key J next-feed articlelist

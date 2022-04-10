@@ -46,7 +46,7 @@ hc keybind $Mod-Shift-l     shift right
 hc keybind $Mod-u       split   bottom  0.5
 hc keybind $Mod-o       split   right   0.5
 # let the current frame explode into subframes
-hc keybind $Mod-Control-space split explode
+hc keybind $Mod-Control-e split explode
 
 # resizing frames and floating clients
 resizestep=0.02
@@ -82,6 +82,7 @@ hc keybind $Mod-r remove
 hc keybind $Mod-s floating toggle
 hc keybind $Mod-f fullscreen toggle
 hc keybind $Mod-Shift-f set_attr clients.focus.floating toggle
+hc keybind $Mod-Shift-d set_attr clients.focus.decorated toggle
 hc keybind $Mod-Shift-m set_attr clients.focus.minimized true
 hc keybind $Mod-Control-m jumpto last-minimized
 hc keybind $Mod-p pseudotile toggle
@@ -125,16 +126,16 @@ hc keybind $Mod-Print spawn rofi-screenshot
 hc keybind $Mod-Ctrl-b \
     substitute MONITOR_NAME monitors.focus.name \
     sprintf MONITOR_PAD_UP monitors.by-name.%c.pad_up MONITOR_NAME \
-    sprintf SHOW_CMD "echo cmd:show >/tmp/polybar-bar.%c" MONITOR_NAME \
-    sprintf HIDE_CMD "echo cmd:hide >/tmp/polybar-bar.%c" MONITOR_NAME \
+    sprintf POLYBAR_PID_ATTR panels.my_polybar_%c MONITOR_NAME \
+    substitute POLYBAR_PID POLYBAR_PID_ATTR \
     or , and . compare MONITOR_PAD_UP = 0 \
              . chain : pad MONITOR_NAME 24 \
-                     : spawn sh -c SHOW_CMD \
-       , chain : pad MONITOR_NAME 0 \
-               : spawn sh -c HIDE_CMD
+                     : spawn polybar-msg -p POLYBAR_PID cmd show \
+       , chain : spawn polybar-msg -p POLYBAR_PID cmd hide \
+               : pad MONITOR_NAME 0
 
 # Other keybinds
-hc keybind $Mod-Alt-e spawn kdeconnect-send-files
+hc keybind $Mod-Alt-e spawn kdeconnect-send
 hc keybind $Mod-Alt-apostrophe spawn $TERMINAL -e tmux new-session -s enqueue vq -nc
 
 # Media control
@@ -172,6 +173,10 @@ hc keybind $Mod-Alt-z spawn zathura
 hc keybind $Mod-Alt-t spawn telegram-desktop
 hc keybind $Mod-Alt-1 spawn st -c htop-popup htop
 
+# My left control is broken, so I'm using keyd(1) to set it as Ctrl/Esc
+# This is a little reminder to not use it
+hc keybind Alt-Ctrl-Shift-Mod4-F1 spawn notify-send 'Use CapsLock'
+
 # theme
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
@@ -186,13 +191,18 @@ hc set frame_transparent_width 5
 hc set frame_gap 4
 
 hc attr theme.title_height 15
-hc attr theme.title_font 'Dejavu Sans:pixelsize=12'  # example using Xft
+hc attr theme.title_when always
+hc attr theme.title_font 'DejaVu Sans:pixelsize=12'  # example using Xft
 # hc attr theme.title_font '-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
-hc attr theme.padding_top 2  # space below the title's baseline (i.e. text depth)
+hc attr theme.title_depth 3  # space below the title's baseline
 hc attr theme.active.color '#345F0C'
 hc attr theme.title_color '#ffffff'
 hc attr theme.normal.color '#323232'
 hc attr theme.urgent.color '#7811A1'
+hc attr theme.tab_color '#1F1F1F'
+hc attr theme.active.tab_color '#2B4F0A'
+hc attr theme.active.tab_outer_color '#6C8257'
+hc attr theme.active.tab_title_color '#ababab'
 hc attr theme.normal.title_color '#898989'
 hc attr theme.inner_width 1
 hc attr theme.inner_color black
@@ -208,7 +218,7 @@ for state in active urgent normal ; do
     hc substitute C theme.${state}.inner_color \
         attr theme.${state}.outer_color C
 done
-hc attr theme.active.outer_width 1
+hc attr theme.tiling.outer_width 1
 hc attr theme.background_color '#141414'
 
 hc set window_gap 0
@@ -216,6 +226,8 @@ hc set frame_padding 0
 hc set smart_window_surroundings off
 hc set smart_frame_surroundings on
 hc set mouse_recenter_gap 0
+
+hc set hide_covered_windows on
 
 # rules
 hc unrule -F
@@ -228,8 +240,7 @@ hc rule floatplacement=smart
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
-
-hc rule windowtype='_NET_WM_WINDOW_TYPE_DOCK' hook='polybar-lower'
+hc rule fixedsize floating=on
 
 hc rule class='qutebrowser' tag=web
 hc rule class~'Gimp.*' tag=creative
@@ -257,13 +268,17 @@ for monitor_id in "${!monitor_names[@]}"; do
     hc try rename_monitor "$monitor_id" "${monitor_names[$monitor_id]}"
 done
 
-# find the panel
-#panel=~/.config/herbstluftwm/panel.sh
-#[ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
+# Setup polybar, quit old instances
+polybar-msg cmd quit
 for monitor in $(hc list_monitors | cut -d: -f1) ; do
-    # start it on each monitor
-    ~/.config/polybar/launch.sh "${monitor_names[$monitor]}"
-done
+    monitor_name="${monitor_names[$monitor]}"
+    old_barpid="$(hc get_attr "panels.my_polybar_$monitor_name")"
 
-setsid hlwm-polybar-lower &
+    # start it on each monitor
+    barpid="$(~/.config/polybar/launch.sh "${monitor_name}")"
+
+    # Store pid for bar toggle keybind
+    hc chain . silent new_attr int "panels.my_polybar_$monitor_name" \
+             . set_attr "panels.my_polybar_$monitor_name" "${barpid}"
+done
 

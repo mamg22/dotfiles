@@ -34,7 +34,7 @@ ls.config.set_config({
 	enable_autosnippets = false,
 })
 
-ls.snippets = {
+ls.add_snippets(nil, {
     sh = {
         s("#!", {
             c(1, {
@@ -115,6 +115,6 @@ ls.snippets = {
             t({"", "\tesac", "done", "shift $((OPTIND - 1))"}),
         }),
     }
-}
+})
 
 ls.filetype_extend("zsh", {"sh"})

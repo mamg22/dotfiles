@@ -1,0 +1,61 @@
+#!/bin/sh
+
+filelist="/tmp/kdeconnect-sendfiles.$$"
+notification_name="KDEConnect Send Files"
+
+cleanup() {
+    rm -f "$filelist"
+}
+trap cleanup EXIT
+
+isatty() {
+    test -t 0
+}
+
+deviceid="$(kdeconnect-get-device)"
+
+if [ -z "$deviceid" ]; then
+    exit 2
+fi
+
+if [ "$#" -gt 0 ]; then
+    printf "%s\n" "$@" > "$filelist"
+else
+    # Truncate filelist and set as nnn selection file, avoid possible issues with
+    # other nnn instances
+    : > "$filelist"
+    export NNN_SEL="$filelist.tmp"
+
+    if isatty; then
+        nnn -o -p"$filelist"
+    else
+        $TERMINAL -c floating-st -t "${0##*/}" \
+            -e nnn -o -p"$filelist"
+    fi
+fi
+
+# Exit on empty selection
+[ ! -s "$filelist" ] && exit 0
+filecount=0
+failcount=0
+
+while read line; do
+    filecount="$((filecount + 1))"
+    if ! kdeconnect-cli -d "$deviceid" --share "$line"; then
+        failcount="$((failcount + 1))"
+    fi
+done < "$filelist"
+
+if [ "$failcount" -eq 0 ]; then
+    msg="Sent $filecount files"
+elif [ "$failcount" -eq "$filecount" ]; then
+    msg="Failed to send all files"
+else
+    msg="Sent $((filecount - failcount)) files, $failcount failed"
+fi
+
+if isatty; then
+    echo >&2 "${0##*/}: $msg"
+else
+    notify-send "$notification_name" "$msg"
+fi

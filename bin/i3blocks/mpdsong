@@ -1,2 +1,0 @@
-#!/bin/sh
-mpc current --format '♪ [[[%artist% - ]%title%]|[%file%]]' --wait

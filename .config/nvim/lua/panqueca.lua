@@ -5,7 +5,7 @@
 
     NOTE: This is a work in progress
 
-    USAGE: 
+    USAGE:
     panqueca = require('panqueca')
     panqueca.setup({
         shifts = {
@@ -103,7 +103,7 @@ local function find_next_value(val)
             return next_val
         end
     end
-    
+
     return nil
 end
 

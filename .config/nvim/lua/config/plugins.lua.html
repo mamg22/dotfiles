@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/.config/nvim/lua/config/plugins.lua.html</title>
+<meta name="Generator" content="Vim/8.0">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="lua">
+<meta name="settings" content="number_lines,use_css,pre_wrap,no_foldcolumn,expand_tabs,line_ids,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="gruvbox">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #ebdbb2; background-color: #282828; }
+body { font-family: monospace; color: #ebdbb2; background-color: #282828; }
+* { font-size: 1em; }
+.String { color: #b8bb26; }
+.Comment { color: #928374; }
+.GruvboxRed { color: #fb4934; }
+.LineNr { color: #7c6f64; }
+.GruvboxAqua { color: #8ec07c; }
+.GruvboxBlue { color: #83a598; }
+.GruvboxOrange { color: #fe8019; }
+.GruvboxPurple { color: #d3869b; }
+-->
+</style>
+
+<script>
+<!--
+
+/* function to open any folds containing a jumped-to line before jumping to it */
+function JumpToLine()
+{
+  var lineNum;
+  lineNum = window.location.hash;
+  lineNum = lineNum.substr(1); /* strip off '#' */
+
+  if (lineNum.indexOf('L') == -1) {
+    lineNum = 'L'+lineNum;
+  }
+  var lineElem = document.getElementById(lineNum);
+  /* Always jump to new location even if the line was hidden inside a fold, or
+   * we corrected the raw number to a line ID.
+   */
+  if (lineElem) {
+    lineElem.scrollIntoView(true);
+  }
+  return true;
+}
+if ('onhashchange' in window) {
+  window.onhashchange = JumpToLine;
+}
+
+-->
+</script>
+</head>
+<body onload='JumpToLine();'>
+<pre id='vimCodeElement'>
+<span id="L1" class="LineNr"> 1 </span><span class="Comment">-- Bootstrapping</span>
+<span id="L2" class="LineNr"> 2 </span><span class="GruvboxRed">local</span> fn = vim.fn
+<span id="L3" class="LineNr"> 3 </span><span class="GruvboxRed">local</span> install_path = fn.stdpath(<span class="String">'data'</span>)..<span class="String">'/site/pack/packer/start/packer.nvim'</span>
+<span id="L4" class="LineNr"> 4 </span><span class="GruvboxRed">if</span> fn.empty(fn.glob(install_path)) &gt; <span class="GruvboxPurple">0</span> <span class="GruvboxRed">then</span>
+<span id="L5" class="LineNr"> 5 </span>  packer_bootstrap = fn.system(<span class="GruvboxOrange">{</span><span class="String">'git'</span>, <span class="String">'clone'</span>, <span class="String">'--depth'</span>, <span class="String">'1'</span>,
+<span id="L6" class="LineNr"> 6 </span>  <span class="String">'<a href="https://github.com/wbthomason/packer.nvim">https://github.com/wbthomason/packer.nvim</a>'</span>, install_path<span class="GruvboxOrange">}</span>)
+<span id="L7" class="LineNr"> 7 </span><span class="GruvboxRed">end</span>
+<span id="L8" class="LineNr"> 8 </span>
+<span id="L9" class="LineNr"> 9 </span><span class="GruvboxRed">return</span> <span class="GruvboxBlue">require</span>(<span class="String">'packer'</span>).startup(<span class="GruvboxOrange">{</span><span class="GruvboxAqua">function</span>()
+<span id="L10" class="LineNr">10 </span>    use <span class="String">'wbthomason/packer.nvim'</span>
+<span id="L11" class="LineNr">11 </span>
+<span id="L12" class="LineNr">12 </span>    use <span class="String">'hrsh7th/nvim-cmp'</span>
+<span id="L13" class="LineNr">13 </span>    use <span class="String">'hrsh7th/cmp-buffer'</span>
+<span id="L14" class="LineNr">14 </span>    use <span class="String">'hrsh7th/cmp-nvim-lua'</span>
+<span id="L15" class="LineNr">15 </span>    use <span class="String">'hrsh7th/cmp-path'</span>
+<span id="L16" class="LineNr">16 </span>    use <span class="String">'hrsh7th/cmp-nvim-lsp'</span>
+<span id="L17" class="LineNr">17 </span>    use <span class="String">'saadparwaiz1/cmp_luasnip'</span>
+<span id="L18" class="LineNr">18 </span>
+<span id="L19" class="LineNr">19 </span>    use <span class="String">'neovim/nvim-lspconfig'</span>
+<span id="L20" class="LineNr">20 </span>
+<span id="L21" class="LineNr">21 </span>    use <span class="String">'L3MON4D3/LuaSnip'</span>
+<span id="L22" class="LineNr">22 </span>
+<span id="L23" class="LineNr">23 </span>    <span class="Comment">-- Disable for now, got performance issues in my crappy laptop</span>
+<span id="L24" class="LineNr">24 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L25" class="LineNr">25 </span>        <span class="String">'nvim-treesitter/nvim-treesitter'</span>,
+<span id="L26" class="LineNr">26 </span>        run = <span class="String">':TSUpdate'</span>,
+<span id="L27" class="LineNr">27 </span>        requires = <span class="GruvboxOrange">{</span>
+<span id="L28" class="LineNr">28 </span>            <span class="String">'nvim-treesitter/playground'</span>,
+<span id="L29" class="LineNr">29 </span>        <span class="GruvboxOrange">}</span>,
+<span id="L30" class="LineNr">30 </span>        opt = <span class="GruvboxPurple">true</span>,
+<span id="L31" class="LineNr">31 </span>    <span class="GruvboxOrange">}</span>
+<span id="L32" class="LineNr">32 </span>
+<span id="L33" class="LineNr">33 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L34" class="LineNr">34 </span>        <span class="String">'nvim-telescope/telescope.nvim'</span>,
+<span id="L35" class="LineNr">35 </span>        requires = <span class="GruvboxOrange">{</span>
+<span id="L36" class="LineNr">36 </span>            <span class="GruvboxOrange">{</span><span class="String">'nvim-lua/plenary.nvim'</span><span class="GruvboxOrange">}</span>
+<span id="L37" class="LineNr">37 </span>        <span class="GruvboxOrange">}</span>
+<span id="L38" class="LineNr">38 </span>    <span class="GruvboxOrange">}</span>
+<span id="L39" class="LineNr">39 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L40" class="LineNr">40 </span>        <span class="String">'nvim-telescope/telescope-fzf-native.nvim'</span>,
+<span id="L41" class="LineNr">41 </span>        run = <span class="String">'make'</span>,
+<span id="L42" class="LineNr">42 </span>    <span class="GruvboxOrange">}</span>
+<span id="L43" class="LineNr">43 </span>    use <span class="String">'nvim-telescope/telescope-file-browser.nvim'</span>
+<span id="L44" class="LineNr">44 </span>
+<span id="L45" class="LineNr">45 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L46" class="LineNr">46 </span>        <span class="String">'hoob3rt/lualine.nvim'</span>,
+<span id="L47" class="LineNr">47 </span>        requires = <span class="GruvboxOrange">{</span><span class="String">'kyazdani42/nvim-web-devicons'</span>, opt = <span class="GruvboxPurple">true</span><span class="GruvboxOrange">}</span>
+<span id="L48" class="LineNr">48 </span>    <span class="GruvboxOrange">}</span>
+<span id="L49" class="LineNr">49 </span>
+<span id="L50" class="LineNr">50 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L51" class="LineNr">51 </span>        <span class="String">'aklt/plantuml-syntax'</span>,
+<span id="L52" class="LineNr">52 </span>        ft = <span class="String">'plantuml'</span>,
+<span id="L53" class="LineNr">53 </span>    <span class="GruvboxOrange">}</span>
+<span id="L54" class="LineNr">54 </span>
+<span id="L55" class="LineNr">55 </span>    use <span class="String">'gruvbox-community/gruvbox'</span>
+<span id="L56" class="LineNr">56 </span>    <span class="Comment">-- use &quot;ellisonleao/gruvbox.nvim&quot;</span>
+<span id="L57" class="LineNr">57 </span>
+<span id="L58" class="LineNr">58 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L59" class="LineNr">59 </span>        <span class="String">'ThePrimeagen/vim-be-good'</span>,
+<span id="L60" class="LineNr">60 </span>        cmd = <span class="String">'VimBeGood'</span>,
+<span id="L61" class="LineNr">61 </span>    <span class="GruvboxOrange">}</span>
+<span id="L62" class="LineNr">62 </span>    use <span class="GruvboxOrange">{</span>
+<span id="L63" class="LineNr">63 </span>        <span class="String">'alec-gibson/nvim-tetris'</span>,
+<span id="L64" class="LineNr">64 </span>        cmd = <span class="String">'Tetris'</span>,
+<span id="L65" class="LineNr">65 </span>    <span class="GruvboxOrange">}</span>
+<span id="L66" class="LineNr">66 </span>
+<span id="L67" class="LineNr">67 </span>    use <span class="String">'windwp/nvim-autopairs'</span>
+<span id="L68" class="LineNr">68 </span>
+<span id="L69" class="LineNr">69 </span>    <span class="Comment">-- Bootstrap</span>
+<span id="L70" class="LineNr">70 </span>    <span class="GruvboxRed">if</span> packer_bootstrap <span class="GruvboxRed">then</span>
+<span id="L71" class="LineNr">71 </span>        <span class="GruvboxBlue">require</span>(<span class="String">'packer'</span>).sync()
+<span id="L72" class="LineNr">72 </span>    <span class="GruvboxRed">end</span>
+<span id="L73" class="LineNr">73 </span>
+<span id="L74" class="LineNr">74 </span><span class="GruvboxAqua">end</span>,
+<span id="L75" class="LineNr">75 </span>    config = <span class="GruvboxOrange">{</span>
+<span id="L76" class="LineNr">76 </span>        max_jobs = <span class="GruvboxPurple">2</span>,
+<span id="L77" class="LineNr">77 </span>        git = <span class="GruvboxOrange">{</span>
+<span id="L78" class="LineNr">78 </span>            clone_timeout = <span class="GruvboxPurple">1200</span>
+<span id="L79" class="LineNr">79 </span>        <span class="GruvboxOrange">}</span>,
+<span id="L80" class="LineNr">80 </span>    <span class="GruvboxOrange">}</span>
+<span id="L81" class="LineNr">81 </span><span class="GruvboxOrange">}</span>)
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

@@ -6,8 +6,6 @@
 // ==/UserScript==
 
 function remove_yt(ev) {
-    console.log(ev.type);
-
     var src_regex = /^https:\/\/www\.youtube\.com\/embed.*/;
     var iframes = document.getElementsByTagName('iframe');
 
@@ -19,27 +17,10 @@ function remove_yt(ev) {
     }
 }
 
-function remove_jq(ev) {
-    console.log(ev.type);
-    var src_regex = /.*jquery.*/;
-    var scripts = document.getElementsByTagName('script');
-
-    /*
-    for (var script of scripts) {
-        if (src_regex.test(script.src)) {
-            console.log(script);
-            script.remove();
-        }
-    }
-    */
-}
-
 function remove_header(ev) {
-    console.log(ev.type);
     var header = document.querySelector('.logo-cliente-bold');
     header.remove();
 }
 
 window.addEventListener('DOMContentLoaded', remove_yt);
-window.addEventListener('DOMContentLoaded', remove_jq);
 window.addEventListener('DOMContentLoaded', remove_header);

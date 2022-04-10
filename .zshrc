@@ -12,38 +12,44 @@ zstyle ':completion:*' use-cache true
 
 # Initialize completion and avoid regenerating cache unless older than 24h
 # Also zcompile it for a little faster loading
-autoload -Uz compinit
-
-Zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
-
+#
 # This is a modified version of
 # https://gist.github.com/ctechols/ca1035271ad134841284
 # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-3109177
 
-if [ "$Zcompdump"(N.mh+24) ]; then
-    regen_msg="Regenerating completion cache"
-    printf "%s" "$regen_msg"
-    compinit
-    compdump
-    zcompile "$Zcompdump"
-    printf "\r%s\r" "${regen_msg//?/ }"
-    unset regen_msg
-else
-    compinit -C;
-fi
+autoload -Uz compinit
 
-setopt histignorespace histignoredups hist_ignore_all_dups
-setopt histreduceblanks
+() {
+    local zcompdump="${ZDOTDIR:-${HOME}}/.zcompdump"
+    local regen_msg="Regenerating completion cache"
+    if [ "$zcompdump"(N.mh+24) ]; then
+        printf "%s" "$regen_msg"
+        compinit
+        compdump
+        zcompile "$zcompdump"
+        printf "\r%s\r" "${regen_msg//?/ }"
+    else
+        compinit -C;
+    fi
+}
+
+setopt hist_ignore_space hist_ignore_dups hist_ignore_all_dups
+setopt hist_reduce_blanks
 setopt correct
+
+# Reduce wait after <Esc> (maybe other keys) is pressed
+# This makes <Esc><any key> work when typed quickly
+KEYTIMEOUT=1
 
 # Load version control information
 autoload -Uz vcs_info
 precmd() { vcs_info; }
 
 zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats '%F{green} %b%f'
+zstyle ':vcs_info:git:*' formats '%B%F{green} %b%f%%b'
  
 setopt PROMPT_SUBST
+setopt TRANSIENT_RPROMPT
 
 # Setup prompt
 # Anonymous function for scoping
@@ -59,8 +65,76 @@ PROMPT="$userhost $dir $nnn$vcs
 $symbol "
 }
 
-setopt TRANSIENT_RPROMPT
-RPROMPT='%(?;;[%F{red}%B%?%b%f])'
+# Setup rprompt
+() {
+    local mode='${_zmode:+ $_zmode}'
+    local exitcode='%(?;;[%F{red}%B%?%b%f])'
+
+    RPROMPT="$exitcode$mode"
+    RPROMPT2="$exitcode$mode"
+}
+
+# Show vi mode in prompt
+
+function zle-line-init zle-keymap-select {
+    local mode
+    local color
+    case "$KEYMAP" in
+        (vicmd)
+            mode="COMMAND"
+            color="green"
+            ;;
+        (main|viins)
+            if [[ "$ZLE_STATE" == *overwrite* ]]; then
+                mode="REPLACE"            
+                color="red"
+            else
+                mode="INSERT"            
+                color="blue"
+            fi
+            ;;
+            # TODO: Figure out a way to show VISUAL too
+            # There's $MARK, but the number remains even after ending visual
+            # selection (maybe wrap the visual mode functions?)
+            #
+            # $NUMERIC is a nice one to have too, but haven't figured a way to
+            # have it without messing up the prompt position because of
+            # multiple `zle reset-prompt`
+        (*)
+            mode="$KEYMAP"
+            color="yellow"
+            ;;
+    esac
+    _zmode="[%B%F{$color}$mode%f%b]"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+# WIP: Show count in prompt
+
+#function update-zcount {
+#    local format="[%B%F{magenta}$NUMERIC%f%b]"
+#    _zcount="${NUMERIC:+$format}"
+#}
+#
+#function my-digit-argument {
+#    zle .digit-argument
+#    update-zcount
+#    zle reset-prompt
+#}
+#
+#function my-vi-digit-or-beginning-of-line {
+#    zle .vi-digit-or-beginning-of-line
+#    update-zcount
+#    zle reset-prompt
+#}
+#zle -N my-digit-argument
+#zle -N my-vi-digit-or-beginning-of-line
+#
+#bindkey -R -M vicmd 1-9 my-digit-argument
+#bindkey -M vicmd 0 my-vi-digit-or-beginning-of-line
 
 # Aliases
 
@@ -115,6 +189,12 @@ alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
 alias ffplay='ffplay -hide_banner'
 
+alias kdec='kdeconnect-cli -d "$(kdeconnect-get-device)"'
+alias kdes='kdeconnect-send'
+
+alias dnfdlup='sudo untildone dnf upgrade --downloadonly -y'
+alias dnfc='dnf -C'
+
 # End of aliases
 
 # Bindings
@@ -128,9 +208,17 @@ bindkey "^U" backward-kill-line
 # Allow shift-Tab to go back in completion
 bindkey "^[[Z" reverse-menu-complete
 
+# Search through hitory with current text
+bindkey "^[[A" up-line-or-search
+bindkey "^[[B" down-line-or-search
+
 # Named directories
 hash -d -- uni=~/Documentos/uni
 hash -d -- cur=~uni/cur
+hash -d -- t1=~uni/t1
+hash -d -- t2=~uni/t2
+hash -d -- t3=~uni/t3
+hash -d -- t4=~uni/t4
 
 # Ignore lines from including them in history
 # See zshmisc(1), SPECIAL FUNCTIONS section
@@ -176,23 +264,65 @@ mkcd()
 
 uni()
 {
+    local mindepth=1
+    local maxdepth=9999
+    local trayecto
+    while getopts swt: name; do
+        case "$name" in
+            (s) # Subject
+                maxdepth=1
+            ;;
+            (w) # Work
+                mindepth=2
+                maxdepth=2
+            ;;
+            (t)
+                # Trayecto (year)
+                trayecto="$OPTARG"
+                if [ "$trayecto" -lt 0 ] || [ "$trayecto" -gt 4 ]; then
+                    echo >&2 "Invalid trayecto"
+                    return 4
+                fi
+                # I prefix them with a "t"
+                trayecto="t$trayecto"
+                ;;
+            (?)
+                return 3
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    local query="$1"
+
+    # TODO: Cambiar el comando por un array y desenrollarlo in line
+    # ademas de construirlo con mas detalles (excluir?)
+
     if ! command -v xdg-user-dir >/dev/null; then
         echo "xdg-user-dir is not installed" >&2
         return 1
     fi
 
-    local unidir="$(xdg-user-dir DOCUMENTS)/uni/cur"
+    local unidir="$(xdg-user-dir DOCUMENTS)/uni/${trayecto:-cur}"
     if ! [ -d "$unidir" ]; then
-        cat <<ERRMSG >&2
+        echo >&2 "\
 \$unidir ($unidir) doesn't exist. Check:
 * Is the DOCUMENTS xdg directory defined?
-* \$unidir exists and is a directory or link to a directory
-ERRMSG
+* \$unidir exists and is a directory or link to a directory"
         return 2
     fi
 
-    local target="$(find "$unidir/" -mindepth 1 -type d -printf '%P\n' |
-        fzf --height 40% --preview="ls --color=always $unidir/{}" || return 0)"
+    local findcmd=(
+        find "$unidir/" -mindepth "$mindepth" -maxdepth "$maxdepth" 
+        -type d -printf '%P\n'
+    )
+
+    local fzfcmd=(
+        fzf --height 40% --preview="ls --color=always $unidir/{}"
+        -q "$query"
+    )
+
+
+    local target="$("${findcmd[@]}" | "${fzfcmd[@]}" || return 0)"
     [ "$target" ] || return 0
     cd "$unidir/$target"
 }
@@ -207,25 +337,39 @@ mktest()
 # Wrapper enabling cd-on-quit
 nnn()
 {
+    # cd-on-quit file location
+    local nnn_cdfile="$HOME/.config/nnn/.lastd"
+
     # Run the real nnn and forward args
     command nnn "$@"
     # Store nnn's status code, to be later returned
     local nnn_exit="$?"
 
-    # Glob the cd-on-quit file
+    # Glob the cd-on-quit file with these flags:
     #  N = Nullglob, return nothing on failed glob instead of error
     #  . = Plain files
     #  m = Modification time
     #  s = seconds
     # -1 = 1 second or earlier
-    # Using an array, since globs aren't expanding when setting as a string
-    local nnn_cdfile=("$HOME/.config/nnn/.lastd"(N.ms-1))
-    if [ "$nnn_cdfile" ]; then
+    #
+    # Succesfull glob will return the filename, proving true
+    # Failed glob returns nothing, ending up as `[ ]`, which is false
+    if [ "$nnn_cdfile"(N.ms-1) ]; then
         . "$nnn_cdfile"
     fi
     return "$nnn_exit"
 }
 
-#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
-[ -f /usr/share/fzf/shell/key-bindings.zsh ] &&
-    source /usr/share/fzf/shell/key-bindings.zsh || true
+# Fetch/Pull pull requests
+gprfetch() {
+    git fetch upstream "refs/pull/$1/head:pr$1"
+}
+
+gprpull() {
+    git pull upstream "refs/pull/$1/head:pr$1"
+}
+
+() {
+    local fzf_file="/usr/share/fzf/shell/key-bindings.zsh"
+    [ -f "$fzf_file" ] && source "$fzf_file" || true
+}

@@ -33,6 +33,7 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCY1kMZp36IQSyNx_9h4mpCg "yo
 https://www.youtube.com/feeds/videos.xml?channel_id=UCRUULstZRWS1lDvJBzHnkXA "youtube" "~Matt and Tom"
 https://www.youtube.com/feeds/videos.xml?channel_id=UChrYe70o7NmDioL02PRVWVg "youtube" "~MattKC"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCeiYXex_fwgYDonaTcSIk6w "youtube" "~MinuteEarth"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCA0g3liRXdpqyhxiQiE55tA "youtube" "~MinuteFood"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCUHW94eEFW7hkUMVaZz4eDg "youtube" "~minutephysics"
 https://www.youtube.com/feeds/videos.xml?channel_id=UC3M9CX5HWSw25k5QL3FkDEA "youtube" "~Punch Deck"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCW6MNdOsqv2E9AjQkv9we7A "youtube" "~PwnFunction"
@@ -44,6 +45,7 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCd3dNckv1Za2coSaHGHl5aA "yo
 https://www.youtube.com/feeds/videos.xml?channel_id=UCADySP7Hy8TxgfDEe2GZQyw "youtube" "~The Retro Programmer"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCUK0HBIBWgM2c4vsPhkYY4w "youtube" "~The Slow Mo Guys"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCBa659QWEk1AI4Tg--mrJ2A "youtube" "~Tom Scott"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCHC4G4X-OR5WkY-IquRGa3Q "youtube" "~Tom Scott plus"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCO-zhhas4n_kAPHaeLe1qnQ "youtube" "~The Technical Difficulties"
 https://www.youtube.com/feeds/videos.xml?channel_id=UC06E4Y_-ybJgBUMtXx8uNNw "youtube" "~TheBackyardScientist"
 https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw "youtube" "~ThePrimeagen"
@@ -60,3 +62,7 @@ https://github.com/herbstluftwm/herbstluftwm/commits.atom "software"
 https://github.com/baskerville/bspwm/commits.atom "software"
 https://github.com/qutebrowser/qutebrowser/commits.atom "software"
 https://github.com/nsxiv/nsxiv/commits.atom "software"
+
+" "
+
+http://secretariauptamca.blogspot.com/feeds/posts/default "university"

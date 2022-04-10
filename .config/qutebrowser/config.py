@@ -7,6 +7,11 @@ c: ConfigContainer = c  # noqa: F821 pylint: disable=E0602,C0103
 
 config.load_autoconfig(True)
 
+services = {
+    "invidious": "https://vid.puffyan.us",
+    "nitter": "https://nitter.net",
+}
+
 c.aliases = {
     'w': 'session-save',
     'q': 'quit',
@@ -105,10 +110,10 @@ searchengines = {
     'ghr':     'https://github.com/{unquoted}',
 
     # Nitter & invidious
-    'nt':      'https://nitter.kavin.rocks/search?q={}',
+    'nt':      services["nitter"] + '/search?q={}',
     # Nitter handle
-    'nth':     'https://nitter.kavin.rocks/{unquoted}',
-    'iv':      'https://invidious.kavin.rocks/search?q={}',
+    'nth':     services["nitter"] + '/{unquoted}',
+    'iv':      services["invidious"] + '/search?q={}',
 
     # Other
     'yt':      'https://www.youtube.com/results?search_query={}',
@@ -162,5 +167,8 @@ config.bind('<Alt-Shift-o>', 'set-cmd-text -s :open -t g')
 # Yank github repo as "user/repo"
 config.bind('yg', 'spawn --output-messages --userscript yank-github-repo')
 config.bind('yG', 'spawn --output-messages --userscript yank-github-repo --primary')
+
+# Clear selection highlight
+config.bind('<Ctrl-l>', 'jseval --quiet window.getSelection().removeAllRanges()')
 
 config.source("colors.py")

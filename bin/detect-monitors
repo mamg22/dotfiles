@@ -1,0 +1,17 @@
+#!/bin/sh
+
+laptop_mon="LVDS1"
+external_mon="VGA1"
+
+vga_connected() {
+    xrandr | grep -Fq "$external_mon connected"
+}
+
+if vga_connected; then
+    echo >&2 "Enabling external monitor"
+    xrandr --output "$external_mon" --auto --right-of "$laptop_mon"
+else
+    echo >&2 "Disabling external monitor"
+    xrandr --output "$external_mon" --off
+fi
+

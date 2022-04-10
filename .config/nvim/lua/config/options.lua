@@ -11,7 +11,7 @@ vim.opt.scrolloff = 4
 vim.opt.showcmd = true
 vim.opt.showmode = false
 
-vim.opt.hlsearch = false
+-- vim.opt.hlsearch = false
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true
@@ -32,3 +32,6 @@ if vim.env.TERM == "linux" then
     vim.opt.cursorline = false
     vim.cmd([[colorscheme default]])
 end
+
+-- Disable (for now), because of performance issues
+vim.g.loaded_matchparen = 1

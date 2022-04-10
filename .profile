@@ -51,4 +51,4 @@ nnn_plug()
     NNN_PLUG="$NNN_PLUG$1;"
 }
 
-nnn_plug 'b:-!bat --paging always $nnn*'
+nnn_plug 'b:-!bat --paging always ''$nnn''*'
