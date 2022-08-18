@@ -1,29 +1,17 @@
 #!/bin/sh
 
 /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
-systemctl --user start X-online.target
+systemctl --user start X-online.target &
 
-detect-monitors
 xrdb .Xresources &
-#$HOME/.fehbg &
-nitrogen --restore
+nitrogen --restore &
 setxkbmap -layout latam,us -variant ,altgr-intl -option -option grp:ctrls_toggle &
-# xsettingsd &
-# xfce4-power-manager &
-# lxpolkit &
+lxpolkit &
 picom --experimental-backends >/dev/null 2>&1 &
-# pcmanfm -d &
+thunar --daemon &
 dunst &
-# unclutter &
 redshift &
-
-# Regenerate dmenu cache
-# rm ~/.cache/dmenu_run; dmenu_path >/dev/null 2>&1 &
-
-# Start kdeconnect
-# Enabling the unit doesn't work right now
-# systemctl --user start kdeconnect.service &
-setsid /usr/libexec/kdeconnectd &
+kdeconnect-indicator &
 
 # Allow programs to grab the power key
 systemd-inhibit \

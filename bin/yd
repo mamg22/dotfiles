@@ -8,7 +8,7 @@ xdg_videos_dir="$(xdg-user-dir VIDEOS)"
 
 output_dir="$xdg_videos_dir"
 filename_format="%(uploader)s/%(title)s.%(ext)s"
-format='webm'
+format='mp4'
 resolution=480
 
 ### End of configuration
@@ -47,6 +47,7 @@ download()
     opts="$5"
     untildone yt-dlp -f "$format" -o "$output" --add-metadata \
         $subs \
+        -S "+fps" \
         $opts -- "$url"
 }
 
@@ -118,7 +119,7 @@ if [ "$format" = 'mp4' ]; then
     aformat='mp4a'
 fi
 
-format_str="worstvideo[height>=$resolution][vcodec*=$vformat]+bestaudio[acodec*=$aformat]/worst[height>=$resolution]" 
+format_str="bestvideo[height<=$((resolution+100))][vcodec*=$vformat]+bestaudio[acodec*=$aformat]/worst[height>=$resolution]" 
 
 if [ -n "$audio_only" ]; then
     format_str="bestaudio[acodec*=$aformat]/worst"

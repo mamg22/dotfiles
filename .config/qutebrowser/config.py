@@ -5,6 +5,8 @@ from qutebrowser.config.config import ConfigContainer  # noqa: F401
 config: ConfigAPI = config  # noqa: F821 pylint: disable=E0602,C0103
 c: ConfigContainer = c  # noqa: F821 pylint: disable=E0602,C0103
 
+from os.path import expanduser
+
 config.load_autoconfig(True)
 
 services = {
@@ -27,6 +29,7 @@ c.completion.web_history.exclude = [
     'qute://pdfjs/*',
     '*://uptamca.terna.net/index.php',
     'https://invidious.kavin.rocks/videoplayback',
+    'file://' + expanduser('~/any/startpage/index.html'),
 ]
 
 c.confirm_quit = ["multiple-tabs", "downloads"]
@@ -51,8 +54,8 @@ c.hints.selectors['any'] = ['*']
 c.hints.uppercase = True
 
 c.qt.force_software_rendering = 'qt-quick'
-c.qt.low_end_device_mode = 'always'
-c.qt.process_model = 'process-per-site'
+c.qt.chromium.low_end_device_mode = 'always'
+c.qt.chromium.process_model = 'process-per-site'
 
 c.scrolling.smooth = False
 
@@ -128,6 +131,8 @@ searchengines['DEFAULT'] = searchengines['g']
 c.url.searchengines = searchengines
 c.url.start_pages = '~/any/startpage/index.html'
 
+c.window.title_format = '{private}{perc}{current_title}{title_sep}qutebrowser'
+
 # Disable mouse wheel zoom
 c.zoom.mouse_divider = 0
 
@@ -170,5 +175,11 @@ config.bind('yG', 'spawn --output-messages --userscript yank-github-repo --prima
 
 # Clear selection highlight
 config.bind('<Ctrl-l>', 'jseval --quiet window.getSelection().removeAllRanges()')
+
+for res in [100, 200, 300, 400]:
+    config.bind(f";v{str(res)[0]}", 
+                f"hint links spawn --output-messages --userscript video-queue {{hint-url}} {res}")
+    config.bind(f";V{str(res)[0]}", 
+                f"hint --rapid links spawn --output-messages --userscript video-queue {{hint-url}} {res}")
 
 config.source("colors.py")

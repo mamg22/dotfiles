@@ -15,6 +15,7 @@ return require('packer').startup({function()
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'saadparwaiz1/cmp_luasnip'
+    use '~/dev/projects/cmp-syntax'
 
     use 'neovim/nvim-lspconfig'
 
@@ -65,6 +66,14 @@ return require('packer').startup({function()
     }
 
     use 'windwp/nvim-autopairs'
+
+    use 'monaqa/dial.nvim'
+
+    use 'gpanders/editorconfig.nvim'
+
+    use 'vim-pandoc/vim-pandoc-syntax'
+
+    use 'lervag/vimtex'
 
     -- Bootstrap
     if packer_bootstrap then

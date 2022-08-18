@@ -27,3 +27,4 @@ ghg https://gist.github.com/
 copr https://copr.fedorainfracloud.org/
 tw https://twitter.com/home
 isp http://192.168.110.1/status
+pydoc file:///usr/share/doc/python3-docs/html/index.html

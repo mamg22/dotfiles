@@ -1,12 +1,22 @@
-vim.cmd([[
-augroup filespecific
-    autocmd!
-    autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
-    "autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
-augroup END
+local globalaugroup = vim.api.nvim_create_augroup("globalaugroup",{})
+local filespecific = vim.api.nvim_create_augroup("filespecific",{})
 
-augroup globalaugroup
-    autocmd!
-    autocmd TextYankPost * lua vim.highlight.on_yank()
-augroup END
-]])
+vim.api.nvim_create_autocmd({"BufWritePost"}, {
+    pattern = {"*Xresources", "*Xdefaults"},
+    command = "!xrdb %",
+    group = filespecific,
+})
+
+vim.api.nvim_create_autocmd({"BufNewFile", "BufFilePre", "BufRead"}, {
+    pattern = {"*.md"},
+    command = "set filetype=markdown.pandoc",
+    group = filespecific,
+})
+
+vim.api.nvim_create_autocmd({"TextYankPost"}, {
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+    group = globalaugroup,
+})
+

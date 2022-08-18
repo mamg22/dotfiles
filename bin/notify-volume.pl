@@ -18,7 +18,6 @@ my $mute;
 foreach my $line (@info_lines) {
     if ($line =~ /^\s*Mute:/) {
         $mute = $line =~ s/.*\b(yes|no)\b$/$1/r;
-        print $mute;
     }
     if ($line =~ /^\s*Volume:/) {
         $volume = $line =~ s/.*\/\s*(\d+)%\s*\/.*/$1/r;

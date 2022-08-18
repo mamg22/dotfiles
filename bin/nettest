@@ -3,18 +3,20 @@
 ok_text="[\033[32m OK \033[0m]"
 fail_text="[\033[31mFAIL\033[0m]"
 
+isp_ip="192.168.39.1"
+
 isp_test() {
-    curl -s 192.168.110.1 >/dev/null 2>&1
+    curl -s "$isp_ip" >/dev/null 2>&1
 }
 isp_test_text="Testing ISP connection"
 
 dns_test() {
-    host google.com >/dev/null 2>&1
+    resolvectl query --cache=false google.com >/dev/null 2>&1
 }
 dns_test_text="Testing DNS connection"
 
 web_test() {
-    response="$(curl -s 'http://192.168.110.1/status' -w '%{http_code}' -o /dev/null)"
+    response="$(curl -s "http://$isp_ip/status" -w '%{http_code}' -o /dev/null)"
     if [ "$?" -ne 0 ]; then
         return 1
     fi
@@ -92,4 +94,4 @@ if [ "${silent:-0}" -eq 1 ]; then
     exit
 fi
 
-mpv "$HOME/music/Newton/Newton - Streamline.mp3" --no-terminal
+mpv "$HOME/Música/Newton/Newton - Streamline.mp3" --no-terminal

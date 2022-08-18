@@ -11,7 +11,7 @@ cmp.setup {
         end
     },
 
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
@@ -21,7 +21,7 @@ cmp.setup {
             c = cmp.mapping.close(),
         }),
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    },
+    }),
 
     sources = {
         { name = 'nvim_lsp' },
@@ -30,5 +30,15 @@ cmp.setup {
         { name = 'path' },
         { name = 'buffer' },
     },
+
+    --[[
+    formatting = {
+        format = {
+            menu = {
+                buffer = "[buf]",
+            }
+        },
+    },
+    ]]
 }
 

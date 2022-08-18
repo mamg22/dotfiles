@@ -31,13 +31,14 @@ device=""
 if [ "$device_count" -eq 0 ]; then
     msg "No devices connected"
     exit 1
-elif [ "$device_count" -eq 1 ]; then
-    device="$device_list"
-elif [ "$device_count" -ge 2 ]; then
-    msg "More than one device connected, select one"
+#elif [ "$device_count" -eq 1 ]; then
+#    device="$device_list"
+elif [ "$device_count" -ge 1 ]; then
+    #msg "More than one device connected, select one"
+    msg "Select a device"
     if isatty; then
         device="$(echo "$device_list" | fzf --prompt "Device: " \
-        --header "More than one device connected, select one" \
+        --header "Select a device" \
         --height 10)"
     else
         device="$(echo "$device_list" | rofi -dmenu -p "Device")"

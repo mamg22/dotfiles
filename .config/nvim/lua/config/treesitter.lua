@@ -1,3 +1,4 @@
+-- TODO: Enable, but only for some filetypes?
 -- Disable for now, too slow performance in my crappy laptop
 --[[
 require('nvim-treesitter.configs').setup{

@@ -1,8 +1,8 @@
-color info cyan default
-color listnormal default default
-color listnormal_unread white default bold
-color listfocus cyan default standout
-color listfocus_unread cyan default bold standout
+#color info cyan default
+#color listnormal default default
+#color listnormal_unread white default bold
+#color listfocus cyan default standout
+#color listfocus_unread cyan default bold standout
 
 download-timeout 60
 download-retries 10
@@ -21,9 +21,33 @@ bind-key ^O open-all-unread-in-browser-and-mark-read
 bind-key | delete-article
 
 macro e set browser "vq -n" ; open-in-browser ; set browser "qutebrowser %u"
+macro s set browser "kdeconnect-send" ; open-in-browser ; set browser "qutebrowser %u"
 
 browser "qutebrowser %u"
 
 notify-program "~/bin/newsboat-notify"
 
 keep-articles-days 30
+
+# From /usr/share/doc/newsboat/contrib/colorschemes/gruvbox
+#
+# Newsboat colour scheme to work with the Gruvbox palette
+# Inspired by the vim theme https://github.com/morhetz/gruvbox
+# Tested with the Kitty gruvbox terminal colour scheme
+# https://github.com/wdomitrz/kitty-gruvbox-theme
+
+#color background          color223   color0
+#color listnormal          color223   color0
+color listnormal_unread   color2     color0
+color listfocus           color223   color237
+color listfocus_unread    color223   color237
+color info                color8     color0
+color article             color223   color0
+
+# highlights
+highlight article "^(Feed|Link):.*$" color11 default bold
+highlight article "^(Title|Date|Author):.*$" color11 default bold
+highlight article "https?://[^ ]+" color2 default underline
+highlight article "\\[[0-9]+\\]" color2 default bold
+highlight article "\\[image\\ [0-9]+\\]" color2 default bold
+highlight feedlist "^─.*$" color6 color6 bold

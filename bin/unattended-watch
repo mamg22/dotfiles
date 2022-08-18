@@ -8,6 +8,15 @@
 #
 # Also supports suspend when the network disconnects.
 
+hidecursor() {
+    printf "\e[?25l"
+}
+showcursor() {
+    printf "\e[?25h"
+}
+
+trap showcursor EXIT
+
 echoerr() { echo "$@" >&2; }
 
 iface="${2:-wlp7s0}"
@@ -37,9 +46,16 @@ done
 datetime="$(date)"
 
 echoerr "Preparing $action: $reason at $datetime"
-echoerr "5 seconds to cancel"
+printf "5 seconds to cancel" >&2
 
-sleep 5
+hidecursor
+for i in 4 3 2 1 0; do
+    sleep 1
+    printf " %d...\b\b\b\b\b" "$i" >&2
+done
+showcursor
+
+echoerr
 
 echoerr "Syncing filesystems"; sync; sync; sync; sleep 1
 

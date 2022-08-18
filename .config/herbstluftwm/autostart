@@ -72,6 +72,7 @@ for i in "${!tag_names[@]}" ; do
         hc keybind "$Mod-Shift-$key" move_index "$i"
     fi
 done
+hc add hidden
 
 # cycle through tags
 hc keybind $Mod-period use_index +1 --skip-visible
@@ -114,6 +115,9 @@ hc keybind XF86AudioMute spawn setsid sh -c 'pactl set-sink-mute @DEFAULT_SINK@ 
 
 hc keybind XF86MonBrightnessUp spawn setsid sh -c 'brightnessctl set 10%+ && notify-brightness'
 hc keybind XF86MonBrightnessDown spawn setsid sh -c 'brightnessctl set 10%- && notify-brightness'
+
+# aka F13
+hc keybind $Mod-Alt-Pause spawn xset dpms force off
 
 # Rofi scripts
 hc keybind $Mod-Pause spawn rofi-power
@@ -171,11 +175,37 @@ hc keybind $Mod-Alt-f spawn thunar
 hc keybind $Mod-Alt-b spawn qutebrowser
 hc keybind $Mod-Alt-z spawn zathura
 hc keybind $Mod-Alt-t spawn telegram-desktop
-hc keybind $Mod-Alt-1 spawn st -c htop-popup htop
+hc keybind $Mod-Alt-1 spawn roxterm --class=htop-popup -e htop
 
-# My left control is broken, so I'm using keyd(1) to set it as Ctrl/Esc
-# This is a little reminder to not use it
-hc keybind Alt-Ctrl-Shift-Mod4-F1 spawn notify-send 'Use CapsLock'
+### Scratchpad terminal
+
+scratchpad_keys=( F1 F2 F3 F4 F5 )
+idx=0
+# For each client:
+#     get the name of their tag and class attributes
+#     check if it's the scratchpad comparing its class
+#     if thats true:
+#         get the client's tag and the focused tag
+#         store the consequence for switching to the current tag
+#         if both tags are the same: hide it
+#         otherwise: bring it
+for key in "${scratchpad_keys[@]}"; do
+    hc keybind "$Mod-$key" \
+        chain : spawn tmux select-window -t "scratch:$idx" \
+              : foreach CLIENT clients --unique \
+                    sprintf TAGATTR "%c.tag" CLIENT \
+                    sprintf CLASSATTR "%c.class" CLIENT \
+                    sprintf WINIDATTR "%c.winid" CLIENT \
+                    substitute CLIENTTAG TAGATTR \
+                    substitute CLIENTWID WINIDATTR \
+                    substitute CURTAG tags.focus.name \
+                    sprintf CURTAGBRING "tag=%s" tags.focus.name \
+                    and _ compare CLASSATTR = "scratchpad" \
+                        _ or , and . compare TAGATTR = CURTAG \
+                                   . apply_tmp_rule CLIENTWID tag=hidden \
+                             , apply_tmp_rule --all windowrole=terminal-scratchpad CURTAGBRING
+    let idx++
+done
 
 # theme
 hc attr theme.tiling.reset 1
@@ -192,8 +222,7 @@ hc set frame_gap 4
 
 hc attr theme.title_height 15
 hc attr theme.title_when always
-hc attr theme.title_font 'DejaVu Sans:pixelsize=12'  # example using Xft
-# hc attr theme.title_font '-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
+hc attr theme.title_font 'IBM Plex Sans Text:size=10'
 hc attr theme.title_depth 3  # space below the title's baseline
 hc attr theme.active.color '#345F0C'
 hc attr theme.title_color '#ffffff'
@@ -247,15 +276,15 @@ hc rule class~'Gimp.*' tag=creative
 hc rule class='Thunar' tag=files
 
 hc rule class='htop-popup' floating=on floatplacement=center floating_geometry=1000x400+0+0
+hc rule class='scratchpad' floating=on floatplacement=center tag=hidden
+hc rule windowrole='terminal-scratchpad' floating=on floatplacement=center tag=hidden
 
 hc set tree_style '╾│ ├└╼─┐'
 
 # unlock, just to be sure
 hc unlock
 
-# do multi monitor setup here, e.g.:
-# hc set_monitors 1280x1024+0+0 1280x1024+1280+0
-# or simply:
+detect-monitors 
 hc detect_monitors
 
 declare -A monitor_names
@@ -282,3 +311,8 @@ for monitor in $(hc list_monitors | cut -d: -f1) ; do
              . set_attr "panels.my_polybar_$monitor_name" "${barpid}"
 done
 
+if ! hc silent get_attr my_loaded 2>/dev/null; then
+    hc new_attr bool my_loaded true
+    ~/.xprofile &
+    #roxterm -g 110x30 --role terminal-scratchpad -e scratcher &
+fi

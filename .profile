@@ -30,7 +30,7 @@ export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 
 export EDITOR="nvim"
 export BROWSER="qutebrowser"
-export TERMINAL="st"
+export TERMINAL="roxterm"
 
 export QT_QPA_PLATFORMTHEME=qt5ct
 #export QT_STYLE=Adwaita-dark
@@ -52,3 +52,5 @@ nnn_plug()
 }
 
 nnn_plug 'b:-!bat --paging always ''$nnn''*'
+
+export NNN_OPTS='e'
